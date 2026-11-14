@@ -53,10 +53,10 @@
   } @else if (products().length > 0) {
     <p class="result-count" aria-live="polite">{{ products().length }} {{ products().length === 1 ? 'producto' : 'productos' }}</p>
     <div class="product-grid">
-      @for (product of products(); track product.id) {
+      @for (product of products(); track product.id; let index = $index) {
         <article class="product-card">
           <div class="product-image-wrap">
-            <img [src]="productImage(product)" [alt]="product.nombre" loading="lazy" />
+            <img [src]="productImage(product)" [alt]="product.nombre" width="300" height="450" [attr.loading]="index < 12 ? 'eager' : 'lazy'" decoding="async" />
             <span class="product-category">{{ product.categoria?.nombre || 'Sureño' }}</span>
           </div>
           <div class="product-info">
@@ -87,6 +87,9 @@
               <strong>No configurado</strong>
             </div>
             <p class="order-pending">Los precios y pedidos estarán disponibles cuando MS04 y MS03 estén habilitados.</p>
+            <a class="detail-link" [href]="'/catalogo/producto/' + product.id" (click)="openProduct(product.id, $event)">
+              Ver detalles <span aria-hidden="true">→</span>
+            </a>
           </div>
         </article>
       }

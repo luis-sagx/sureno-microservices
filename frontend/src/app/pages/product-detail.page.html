@@ -1,0 +1,70 @@
+<section class="product-detail-page">
+  <div class="page-container">
+    <a class="detail-back-link" routerLink="/catalogo"><span aria-hidden="true">←</span> Volver al catálogo</a>
+
+    @if (loading()) {
+      <div class="detail-state" role="status" data-product-detail-loading>
+        <span class="loading-line" aria-hidden="true"></span>
+        <p>Cargando detalle del producto…</p>
+      </div>
+    } @else if (error()) {
+      <div class="detail-state" role="alert">
+        <p class="eyebrow">Catálogo Sureño</p>
+        <h1>No encontramos este producto</h1>
+        <p>{{ error() }}</p>
+        <a class="button-secondary" routerLink="/catalogo">Volver al catálogo</a>
+      </div>
+    } @else if (product(); as item) {
+      <article class="product-detail" aria-labelledby="product-detail-title">
+        <div class="product-detail-image">
+          <img [src]="productImage()" [alt]="item.nombre" width="600" height="900" fetchpriority="high" />
+          <span class="detail-category">{{ item.categoria?.nombre || 'Sureño' }}</span>
+        </div>
+
+        <div class="product-detail-copy">
+          <p class="eyebrow">{{ item.categoria?.nombre || 'Nuestro catálogo' }}</p>
+          <h1 id="product-detail-title">{{ item.nombre }}</h1>
+          <p class="detail-volume">{{ item.volumen_ml ? item.volumen_ml + ' ml' : 'Volumen no especificado' }}</p>
+          @if (item.descripcion) {
+            <p class="detail-description">{{ item.descripcion }}</p>
+          }
+
+          <p class="detail-availability" [class.is-unavailable]="!item.disponible" [attr.aria-label]="item.disponible ? 'Disponibilidad por confirmar' : 'Producto no disponible'">
+            <span aria-hidden="true"></span>
+            {{ item.disponible ? 'Disponibilidad por confirmar' : 'No disponible' }}
+          </p>
+
+          @if (allowedPresentations().length > 0) {
+            <div class="detail-presentation field">
+              <label for="detail-presentation">Presentación</label>
+              <select
+                id="detail-presentation"
+                [value]="selectedPresentation()?.tipo"
+                (change)="selectPresentation($any($event.target).value)"
+              >
+                @for (presentation of allowedPresentations(); track presentation.id) {
+                  <option [value]="presentation.tipo">
+                    {{ presentation.tipo === 'UNIDAD' ? 'Unidad' : 'Caja completa (' + presentation.unidades_por_presentacion + ' unidades)' }}
+                  </option>
+                }
+              </select>
+              @if (isApprovedBusiness()) {
+                <small>Las cuentas B2B aprobadas consultan cajas completas.</small>
+              } @else {
+                <small>Como cliente particular puedes consultar unidades o cajas.</small>
+              }
+            </div>
+          } @else {
+            <p class="detail-presentation-unavailable">No hay presentaciones activas para este perfil.</p>
+          }
+
+          <div class="detail-price">
+            <span>Precio</span>
+            <strong>Precio no configurado</strong>
+          </div>
+          <p class="detail-order-note">Los precios y pedidos todavía no están habilitados. Sureño confirmará la disponibilidad y el precio cuando MS04 y MS03 estén activos.</p>
+        </div>
+      </article>
+    }
+  </div>
+</section>

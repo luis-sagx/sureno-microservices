@@ -1,23 +1,11 @@
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Component, OnInit, PLATFORM_ID, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from '../core/auth.service';
 import { CatalogApiService } from '../core/catalog-api.service';
 import { Category, Product, Presentation } from '../core/api';
-
-const productImageFiles: Record<string, string> = {
-  'Aguardiente Diamante': 'aguardiente-diamante',
-  'Blue Vodka': 'vodka-blue',
-  'Media Caña Sureña': 'cana-surena-media',
-  'Caña Sureña': 'cana-surena',
-  'Cocktail Sabor a Durazno': 'coctel-durazno',
-  'Cocktail Sabor a Maracuyá': 'coctel-maracuya',
-  'Licor de Cannabis': 'cannabis',
-  'Media Ron Oro': 'licor-oro-media',
-  'Ron Oro': 'licor-oro',
-  'Vodka Seco Glacial': 'vodka-glacial',
-  'Whisky Red Diez': 'wisky-red-diez',
-};
+import { productImagePath } from '../core/product-media';
 
 @Component({
   selector: 'app-catalog-page',
@@ -27,6 +15,8 @@ const productImageFiles: Record<string, string> = {
 })
 export class CatalogPage implements OnInit {
   private readonly api = inject(CatalogApiService);
+  private readonly document = inject(DOCUMENT);
+  private readonly router = inject(Router);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   protected readonly auth = inject(AuthService);
   protected readonly categories = signal<Category[]>([]);
@@ -101,11 +91,17 @@ export class CatalogPage implements OnInit {
   }
 
   protected productImage(product: Product) {
-    const file = productImageFiles[product.nombre];
-    if (!file) return '/logo-isotipo.png';
-    return this.selectedPresentation(product)?.tipo === 'CAJA'
-      ? `/img-mayoreo/caja-${file}.webp`
-      : `/img-minorista/${file}.webp`;
+    return productImagePath(product, this.selectedPresentation(product));
+  }
+
+  protected openProduct(id: string, event: MouseEvent): void {
+    event.preventDefault();
+    if (!this.isBrowser) return;
+    const windowRef = this.document.defaultView;
+    windowRef?.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    void this.router
+      .navigate(['/catalogo/producto', id])
+      .then(() => windowRef?.scrollTo({ top: 0, left: 0, behavior: 'instant' }));
   }
 
   protected get isApprovedBusiness() {

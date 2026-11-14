@@ -15,6 +15,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/catalog.page').then((module) => module.CatalogPage),
   },
   {
+    path: 'catalogo/producto/:id',
+    loadComponent: () => import('./pages/product-detail.page').then((module) => module.ProductDetailPage),
+  },
+  {
     path: 'login',
     loadComponent: () => import('./pages/login.page').then((module) => module.LoginPage),
   },
