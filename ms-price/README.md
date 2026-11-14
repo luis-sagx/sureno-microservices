@@ -23,7 +23,7 @@ Las migraciones son repetibles. La carga inicial hace correspondencia por nombre
 - `GET /prices/admin/promotions`, `POST /prices/admin/promotions`, `PATCH /prices/admin/promotions/:id`, `DELETE /prices/admin/promotions/:id`
 - `GET /prices/admin/promotions/:id/history`
 
-Las operaciones de administración verifican la sesión y rol `ADMIN` en MS01. Segmento/precio de B2B sólo aplica a caja de 12. Promociones admiten porcentaje y monto fijo, sólo B2B; no se acumulan: se escoge el mayor ahorro y se limita al importe de la línea. El precio público de caja, cuando se configure, debe ser estrictamente menor que doce precios unitarios durante todo su período. Se guardan actor y fecha en auditorías de tarifas y promociones. `promotion_changes` amplía el ERD original, que no contemplaba auditoría de promociones. Referencias a MS01/MS02 son UUID externos sin claves foráneas entre servicios.
+Las operaciones de administración verifican la sesión y rol `ADMIN` en MS01. Sólo un `401` explícito de MS01 se considera sesión anónima; una caída, respuesta 5xx o respuesta inválida del servicio de identidad falla con `503` y no degrada la cotización a B2C. Segmento/precio de B2B sólo aplica a caja de 12. Promociones admiten porcentaje y monto fijo, sólo B2B; no se acumulan: se escoge el mayor ahorro y se limita al importe de la línea. El precio público de caja, cuando se configure, debe ser estrictamente menor que doce precios unitarios durante todo su período. Los cambios de tarifa/promoción y su auditoría se escriben en una única transacción; los cambios guardan actor y fecha. `promotion_changes` amplía el ERD original, que no contemplaba auditoría de promociones. Referencias a MS01/MS02 son UUID externos sin claves foráneas entre servicios.
 
 ## Verificación
 

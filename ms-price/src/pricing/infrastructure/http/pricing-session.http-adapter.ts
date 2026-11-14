@@ -1,5 +1,6 @@
 import { ForbiddenException, UnauthorizedException } from '@nestjs/common';
 import type { PricingCredentials, PricingPrincipal, PricingSessionPort } from '../../application/pricing-session.port.js';
+import { PricingError } from '../../domain/pricing-error.js';
 
 export class PricingSessionHttpAdapter implements PricingSessionPort {
   constructor(private readonly baseUrl = process.env.AUTH_SERVICE_URL ?? 'http://localhost:3001') {}
@@ -7,11 +8,17 @@ export class PricingSessionHttpAdapter implements PricingSessionPort {
     if (!credentials.cookie && !credentials.authorization) return null;
     try {
       const response = await fetch(`${this.baseUrl}/sessions/me`, { headers: this.headers(credentials) });
-      if (!response.ok) return null;
+      if (response.status === 401) return null;
+      if (!response.ok) throw new PricingError('unavailable', 'El servicio de autenticación no está disponible.');
       const body = await response.json() as { userId?: string; roles?: string[] };
-      if (!body.userId || !Array.isArray(body.roles)) return null;
+      if (!body.userId || !Array.isArray(body.roles)) {
+        throw new PricingError('unavailable', 'El servicio de autenticación devolvió una sesión inválida.');
+      }
       return { userId: body.userId, roles: body.roles };
-    } catch { return null; }
+    } catch (error) {
+      if (error instanceof PricingError) throw error;
+      throw new PricingError('unavailable', 'No se pudo verificar la sesión con el servicio de autenticación.');
+    }
   }
   async requireAdmin(credentials: PricingCredentials): Promise<PricingPrincipal> {
     const principal = await this.resolveOptional(credentials);
