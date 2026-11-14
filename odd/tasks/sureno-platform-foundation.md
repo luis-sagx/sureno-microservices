@@ -27,9 +27,11 @@ The Angular app is still the starter screen, `ms-auth` and `ms-catalog` are Nest
 - B2B requires an approved business account and may request full cases only. Pending/rejected B2B requests do not receive wholesale benefits.
 - B2C may select units or cases and must meet the $10 minimum after discounts and before delivery. A billing RUC does not grant B2B pricing.
 - Product availability is manually confirmed; unavailable products cannot be newly requested. Persisted order price snapshots are a future MS03 responsibility.
+- Split MS01 into identity/registration and session/authorization work units so each behavior has a focused RED→GREEN cycle; both units are required for the requested complete auth service.
 - Do not invent products or approved prices. Reuse actual product records/media from the reference project; reuse its public retail values where present. Any B2B/discount value not available in local source data remains unavailable/clearly unconfigured until MS04 owns it.
 - Support viewport widths down to 360px. Preserve Angular SSR/prerender compatibility.
 - Do not fetch or transfer assets from an external service. Reference assets are local. Reference fonts are not currently found as local files; use CSS font fallbacks if no local copies are available.
+- Dependency-install authorization: on 2026-11-13 the user authorized installing required public packages from `https://registry.npmjs.org` without stored credentials and updating the MS01/MS02 lockfiles as part of “continúa con todo”. Limit network use to required package installs.
 
 ## Acceptance criteria
 
@@ -48,8 +50,9 @@ The Angular app is still the starter screen, `ms-auth` and `ms-catalog` are Nest
 
 ## Delivery and review
 
-- Forecast: approximately 2,800 authored changed lines across the four work units, excluding copied/generated binary assets. This exceeds the advisory ~400-line delivery budget.
+- Forecast at start: approximately 3,200 authored changed lines across the five work units, excluding copied/generated binary assets. Actual branch delta is 6,903 authored lines (6,339 additions and 564 deletions; binary assets excluded). This exceeds the advisory ~400-line delivery budget.
 - Delivery strategy: `feature-branch-chain`, selected by the user on 2026-11-13 with the instruction to keep the work on one branch. Keep all work units on `feat/sureno-microservices-foundation` and record slice boundaries here. No push, PR, or merge is authorized by this task.
+- Slices: slice 1 contains SF-01 (`217ca74`); slice 2 contains SF-02 (`7e12c6c`) and SF-02B (`708ff7a`); slice 3 contains SF-03 (`3e9a919`), SF-03R (`02a28a8`), and SF-03C (`bec28ab`); slice 4 contains SF-04 (`d1bd40d`). The post-commit TypeORM ESM startup defect and product pagination truncation were regression-tested and corrected. PRs are not created; all work is on the same feature branch.
 - Receipt-driven review: `gentle-ai` is not installed in this environment; no native review assessment or review was run. Do not claim review approval.
 - Branch: `feat/sureno-microservices-foundation`; branch point is the existing `main` HEAD. Existing user-provided untracked requirements document must remain untouched.
 
@@ -60,33 +63,55 @@ The Angular app is still the starter screen, `ms-auth` and `ms-catalog` are Nest
 - [x] Add PostgreSQL and MongoDB services, isolated service databases/credentials, init scripts, persistence, health checks, environment example, and startup documentation.
 - Route: **delegated direct**. Trigger evidence: Compose, SQL/JS initialization, environment template, and docs are multiple non-trivial files; a writer is required.
 - Checks: TDD RED observed before implementation (`node --test infra/tests/database-provisioning.test.mjs`: 0/2; required artifacts absent); GREEN observed after implementation (2/2). `docker compose --env-file .env.example config --quiet`, PostgreSQL shell syntax, MongoDB JS syntax, and env ignore checks passed. PostgreSQL 17 booted healthy; verified all five databases/owners, app roles are non-superuser/non-createdb, each role can connect to only its own DB, and `auth_app` can connect to `auth_db` but not `catalog_db`. MongoDB runtime verification is pending because `mongo:8.0` is not cached locally; no remote image pull was performed.
-- Commit: pending.
+- Commit: `217ca74` — `feat(infra): provision service-owned databases`.
 
-### SF-02 — MS01 Users/Auth
+### SF-02 — MS01 identity and registration
 
-- [ ] Implement persistence/migrations, registration, login/logout/session inactivity, role/guard support, personal and business account states, manual admin review, validation, and API documentation.
-- Route: **delegated direct**. Trigger evidence: multiple non-trivial modules/entities/DTOs/guards/controllers/migrations/tests/docs.
-- Checks: add focused Vitest coverage first and observe RED; run focused tests to GREEN, then refactor; run build/lint.
-- Commit: pending.
+- [x] Implement persistence/migrations, personal registration, business-account requests, adult-age validation, password hashing, and validation.
+- Route: **delegated direct**. Trigger evidence: multiple non-trivial modules/entities/DTOs/controllers/migrations/tests/docs.
+- Checks: Vitest RED observed before implementation (4 registration cases returned expected 404); GREEN observed after implementation (`pnpm test`: 5/5 initially, then 6/6 after malformed optional-field regression was added). `pnpm exec vitest run src/identity/registration-validation.spec.ts` passed 1/1; `pnpm build`, `pnpm lint`, and `git diff --check` passed. The focused correction test observed RED first (TypeError for numeric `nombre_comercial`) then GREEN (BadRequestException). PostgreSQL started via Compose and tests ran with the example environment; container stopped afterward, volume retained.
+- Commit: `7e12c6c` — `feat(auth): add identity registration`.
+
+### SF-02B — MS01 sessions, roles, and business review
+
+- [x] Implement login/logout, signed sessions, inactivity enforcement, role/guard support, manual admin review/approval, and API documentation.
+- Route: **delegated direct**. Trigger evidence: multiple non-trivial auth/session/guard/controller/DTO/test/docs files.
+- Checks: focused Vitest RED observed before implementation: six new session/review API scenarios returned 404 while the existing 12 passed. GREEN: `pnpm test` passed (4 files, 12 tests); `pnpm build`, `pnpm lint`, and `git diff --check` passed. During implementation, corrected the TypeORM UPDATE RETURNING response normalization and serialized Vitest files to avoid shared migration races. PostgreSQL stopped afterward; volume retained.
+- Commit: `708ff7a` — `feat(auth): add signed sessions and admin review`.
 
 ### SF-03 — MS02 Catalog
 
-- [ ] Implement PostgreSQL persistence/migrations, catalog browse/search/filter, protected administration and availability audit; import locally available reference products/media while preserving MS04 price ownership.
+- [x] Implement PostgreSQL persistence/migrations, catalog browse/search/filter, protected administration and availability audit; import locally available reference products/media while preserving MS04 price ownership. The post-commit ESM startup defect and pagination issue were corrected in SF-03R below.
 - Route: **delegated direct**. Trigger evidence: multiple non-trivial modules/entities/DTOs/controllers/migrations/import/tests/docs.
-- Checks: add focused Vitest coverage first and observe RED; run focused tests to GREEN, then refactor; run build/lint and seed/import smoke checks.
-- Commit: pending.
+- Checks: Vitest RED observed first (3 new API tests failed with missing-route 404s; starter test passed). GREEN: `pnpm test` 2 files/4 tests; `pnpm build`, `pnpm lint`, and `git diff --check` passed. PostgreSQL smoke verified `catalog_db` owner `catalog_app`, six seeded categories, 11 reference products and 22 presentations, and no price field in Product; the temporary test fixtures were isolated. PostgreSQL stopped afterward; volume retained. Dependencies were available from the local pnpm store; no network install was needed.
+- Commit: `3e9a919` — `feat(catalog): add persisted product catalog`.
+
+### SF-03R — MS02 runtime initialization correction
+
+- [x] Add a focused startup regression test, correct the TypeORM ESM circular relation initialization, and verify live Nest startup plus database/API smoke.
+- Route: **delegated direct**. Trigger evidence: the runtime defect spans relation entity metadata and a startup regression check.
+- Checks: regression RED observed before correction: the test built and spawned `dist/main.js`, failing on `Cannot access 'Product' before initialization`; emitted relation metadata was changed to avoid circular class references while keeping TypeORM target callbacks. The test also exposed one-to-many join pagination truncation; listing now loads paged products and fetches presentations in one batched query. GREEN: `pnpm test` 5/5 (including build+native startup regression), `pnpm build`, `pnpm lint`, `git diff --check` passed. Live smoke: MS01 login 201, cookie authorized MS02 admin listing 200, public Caña search 200 with two results and no price fields. Services and PostgreSQL stopped; volume retained.
+- Commit: `02a28a8` — `fix(catalog): support native ESM relation metadata`.
+
+### SF-03C — Clean up catalog API test fixtures
+
+- [x] Delete test-created product rows after the catalog API integration test and remove existing leaked fixtures from the local catalog database.
+- Route: **direct inline**. Trigger evidence: one already-understood test cleanup file plus a targeted cleanup of the two known rows created by that test.
+- Checks: RED observed in the live catalog (13 rows, including two test fixtures); GREEN after `pnpm test` (5/5) with cleanup and a live catalog query confirming only the 11 seeded reference products remain.
+- Commit: `bec28ab` — `test(catalog): clean up api fixtures`.
 
 ### SF-04 — Angular pages and reference assets
 
-- [ ] Add app routes and the login, sign-up, Inicio, Quiénes somos, and Catálogo pages; copy approved local brand/product assets; implement responsive design and profile-aware purchase rules/error states.
+- [x] Add app routes and the login, sign-up, Inicio, Quiénes somos, and Catálogo pages; copy approved local brand/product assets; implement responsive design and profile-aware purchase rules/error states.
 - Route: **delegated direct**. Trigger evidence: route shell, page components, shared styles, auth/catalog API clients, tests, and many local assets are multiple non-trivial files.
-- Checks: add component/service tests first and observe RED; run `ng test` to GREEN, then refactor; run `ng build` and verify responsive/layout behavior.
-- Commit: pending.
+- Checks: TDD RED observed (`npx ng test --watch=false`: 2 new navigation/brand tests failed because routes/nav were absent; starter test passed). GREEN: `npx ng test --watch=false` passed 3/3; `npx ng build` succeeded and prerendered five routes; `git diff --check` passed. Build retains a non-fatal Angular component-style budget warning (`catalog.page.css` 5.39 KB vs 4 KB warning threshold); browser console also warns the source product photos are large. Chrome visual checks at 360×900 and 1440×1000 showed no horizontal overflow. Live frontend through the same-origin proxy rendered 11 catalog products with local photos after cleanup; page showed no configured prices and no order action. Live catalog listing/search and MS01 auth integration were independently verified in SF-03R.
+- Commit: `d1bd40d` — `feat(frontend): add branded public and auth pages`.
 
 ## Progress and next step
 
 - Exploration complete. Target CodeGraph is not initialized; `gentle-ai` is unavailable, so the required targeted filesystem fallback was used after CodeGraph status failed.
 - User confirmed that the reference catalog's products should be reused.
 - User explicitly enabled TDD. User selected one feature branch (`feature-branch-chain`) for this feature.
-- SF-01 is implemented and its checks have been observed; commit and final task-document evidence are pending.
-- Next: commit SF-01, record its commit identity in this document and its Engram mirror, then continue with SF-02.
+- SF-01, SF-02, SF-02B, SF-03, SF-03R, SF-03C, and SF-04 are implemented, verified, and committed. MongoDB runtime startup remains unverified because `mongo:8.0` is not cached locally and image downloads were outside the explicitly authorized npm registry scope.
+- The user authorized required public npm package installs for MS01/MS02 from `https://registry.npmjs.org`, without stored credentials.
+- Next: decide whether to authorize pulling `mongo:8.0` from Docker Hub for a MongoDB startup smoke; then configure actual secrets and the production reverse proxy/gateway when deployment infrastructure is selected. The source implementation is complete on the local feature branch.
