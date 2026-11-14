@@ -56,6 +56,27 @@ describe('SignupPage registration validation', () => {
     expect(root.textContent).not.toContain('Enviando');
   });
 
+  it('reserves a validation slot for each field before and after errors appear', () => {
+    const fixture = TestBed.createComponent(SignupPage);
+    fixture.detectChanges();
+    const root = fixture.nativeElement as HTMLElement;
+    const fieldCount = root.querySelectorAll('.signup-form .field').length;
+    const validationSlots = () => root.querySelectorAll('.signup-form .field-error');
+
+    expect(validationSlots()).toHaveLength(fieldCount);
+    expect(
+      [...validationSlots()].every((slot) => slot.classList.contains('min-h-[3em]')),
+    ).toBe(true);
+
+    root.querySelector('form')!.dispatchEvent(
+      new Event('submit', { bubbles: true, cancelable: true }),
+    );
+    fixture.detectChanges();
+
+    expect(validationSlots()).toHaveLength(fieldCount);
+    expect(root.textContent).toContain('Ingresa una cédula');
+  });
+
   it('lets the user reveal and hide the password without changing its value', () => {
     const fixture = TestBed.createComponent(SignupPage);
     fixture.detectChanges();

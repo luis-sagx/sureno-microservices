@@ -97,9 +97,7 @@
               (blur)="markTouched('cedula')"
               [(ngModel)]="form.cedula"
             />
-            @if (fieldError('cedula')) {
-              <small class="field-error" role="alert">{{ fieldError('cedula') }}</small>
-            }
+            <small class="field-error block min-h-[3em] leading-snug" role="alert" [attr.aria-hidden]="fieldError('cedula') ? null : 'true'">{{ fieldError('cedula') }}</small>
           </div>
           <div class="field">
             <label for="telefono">Teléfono</label>
@@ -115,9 +113,7 @@
               (blur)="markTouched('telefono')"
               [(ngModel)]="form.telefono"
             />
-            @if (fieldError('telefono')) {
-              <small class="field-error" role="alert">{{ fieldError('telefono') }}</small>
-            }
+            <small class="field-error block min-h-[3em] leading-snug" role="alert" [attr.aria-hidden]="fieldError('telefono') ? null : 'true'">{{ fieldError('telefono') }}</small>
           </div>
           <div class="field">
             <label for="nombres">Nombres</label>
@@ -131,9 +127,7 @@
               (blur)="markTouched('nombres')"
               [(ngModel)]="form.nombres"
             />
-            @if (fieldError('nombres')) {
-              <small class="field-error" role="alert">{{ fieldError('nombres') }}</small>
-            }
+            <small class="field-error block min-h-[3em] leading-snug" role="alert" [attr.aria-hidden]="fieldError('nombres') ? null : 'true'">{{ fieldError('nombres') }}</small>
           </div>
           <div class="field">
             <label for="apellidos">Apellidos</label>
@@ -147,9 +141,7 @@
               (blur)="markTouched('apellidos')"
               [(ngModel)]="form.apellidos"
             />
-            @if (fieldError('apellidos')) {
-              <small class="field-error" role="alert">{{ fieldError('apellidos') }}</small>
-            }
+            <small class="field-error block min-h-[3em] leading-snug" role="alert" [attr.aria-hidden]="fieldError('apellidos') ? null : 'true'">{{ fieldError('apellidos') }}</small>
           </div>
           <div class="field">
             <label for="fecha_nacimiento">Fecha de nacimiento</label>
@@ -164,9 +156,7 @@
               (blur)="markTouched('fecha_nacimiento')"
               [(ngModel)]="form.fecha_nacimiento"
             />
-            @if (fieldError('fecha_nacimiento')) {
-              <small class="field-error" role="alert">{{ fieldError('fecha_nacimiento') }}</small>
-            }
+            <small class="field-error block min-h-[3em] leading-snug" role="alert" [attr.aria-hidden]="fieldError('fecha_nacimiento') ? null : 'true'">{{ fieldError('fecha_nacimiento') }}</small>
           </div>
           <div class="field">
             <label for="email_contacto">Correo (opcional)</label>
@@ -180,9 +170,7 @@
               (blur)="markTouched('email_contacto')"
               [(ngModel)]="form.email_contacto"
             />
-            @if (fieldError('email_contacto')) {
-              <small class="field-error" role="alert">{{ fieldError('email_contacto') }}</small>
-            }
+            <small class="field-error block min-h-[3em] leading-snug" role="alert" [attr.aria-hidden]="fieldError('email_contacto') ? null : 'true'">{{ fieldError('email_contacto') }}</small>
           </div>
         </div>
 
@@ -201,9 +189,7 @@
                   (blur)="markTouched('razon_social')"
                   [(ngModel)]="form.razon_social"
                 />
-                @if (fieldError('razon_social')) {
-                  <small class="field-error" role="alert">{{ fieldError('razon_social') }}</small>
-                }
+                <small class="field-error block min-h-[3em] leading-snug" role="alert" [attr.aria-hidden]="fieldError('razon_social') ? null : 'true'">{{ fieldError('razon_social') }}</small>
               </div>
               <div class="field">
                 <label for="nombre_comercial">Nombre comercial (opcional)</label
@@ -224,11 +210,7 @@
                   (blur)="markTouched('direccion_negocio')"
                   [(ngModel)]="form.direccion_negocio"
                 />
-                @if (fieldError('direccion_negocio')) {
-                  <small class="field-error" role="alert">{{
-                    fieldError('direccion_negocio')
-                  }}</small>
-                }
+                <small class="field-error block min-h-[3em] leading-snug" role="alert" [attr.aria-hidden]="fieldError('direccion_negocio') ? null : 'true'">{{ fieldError('direccion_negocio') }}</small>
               </div>
             </div>
           </div>
@@ -248,9 +230,7 @@
               (blur)="markTouched('username')"
               [(ngModel)]="form.username"
             />
-            @if (fieldError('username')) {
-              <small class="field-error" role="alert">{{ fieldError('username') }}</small>
-            }
+            <small class="field-error block min-h-[3em] leading-snug" role="alert" [attr.aria-hidden]="fieldError('username') ? null : 'true'">{{ fieldError('username') }}</small>
           </div>
           <div class="field">
             <label for="password">Contraseña (12 caracteres mínimo)</label>
@@ -280,9 +260,7 @@
                 </svg>
               </button>
             </div>
-            @if (fieldError('password')) {
-              <small class="field-error" role="alert">{{ fieldError('password') }}</small>
-            }
+            <small class="field-error block min-h-[3em] leading-snug" role="alert" [attr.aria-hidden]="fieldError('password') ? null : 'true'">{{ fieldError('password') }}</small>
           </div>
         </div>
 
