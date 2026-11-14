@@ -76,11 +76,11 @@ The signup page currently checks only whether required fields are present and wh
 
 ### REG-04 — Stable validation layout and conditional B2B RUC UI
 
-- [ ] Reserve stable inline-error space so validation messages do not shift signup fields; add a responsive component/style regression check first.
+- [x] Reserve stable inline-error space so validation messages do not shift signup fields; add a responsive component/style regression check first.
 - Route: delegated direct; changes signup template/styles and specs.
 - TDD: enabled; `./node_modules/.bin/ng test --watch=false` and build in `frontend`.
-- Verification evidence: pending.
-- Commit: pending.
+- TDD: RED showed eight fields with no validation slots before errors were displayed; GREEN keeps one reserved slot for every field. Frontend suite passed 71/71, Angular build passed, and `git diff --check` passed.
+- Commit: `414159f` — `fix(auth): keep signup validation layout stable`.
 
 ## Progress and next step
 
@@ -89,4 +89,6 @@ The signup page currently checks only whether required fields are present and wh
 - REG-02 now performs client-side field validation before any request, exposes field messages, supports show/hide password, and reports a friendly timeout after 15 seconds while always releasing the loading state.
 - Verification: frontend suite 69/69 and build passed. MS01 suite 45/45, build, and lint passed when run with `.env.example` settings; an initial verification without environment values failed two integration test suites because database credentials and `AUTH_SESSION_SECRET` were absent. The MS01 migration was applied to the local database.
 - User review follow-up: the validation messages changed signup row heights and B2B asks for the RUC twice. REG-03 now shows a conditional RUC label, accepts one business RUC field/request property, and maps it to both domain records; B2C keeps its cédula/personal-RUC behavior.
-- Next: complete REG-04 by TDD so inline errors use reserved space without shifting the signup grid.
+- REG-04 keeps an accessible, two-line validation area reserved under each field; messages no longer insert new layout height.
+- Final verification: frontend 71/71 tests/build passed; MS01 46/46 tests, build, and lint passed using `.env.example` settings. No validation work remains; pre-existing uncommitted user edits to validation copy and unrelated Angular layout/configuration files remain unstaged and untouched.
+- Next: no implementation remains for the signup validation follow-up.
