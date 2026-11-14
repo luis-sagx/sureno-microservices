@@ -4,9 +4,10 @@ import { Component, DestroyRef, OnInit, PLATFORM_ID, computed, inject, signal } 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AuthService } from '../core/auth.service';
-import { CatalogApiService } from '../core/catalog-api.service';
-import { Presentation, Product } from '../core/api';
-import { productImagePath } from '../core/product-media';
+import { CatalogApiService } from '../features/catalog/data-access/catalog-api.service';
+import { Presentation, Product } from '../features/catalog/models/catalog.models';
+import { productImagePath } from '../features/catalog/domain/product-media';
+import { getAllowedPresentations, selectPresentation } from '../features/catalog/domain/presentation-rules';
 import { RevealOnScrollDirective } from '../core/reveal-on-scroll.directive';
 
 const UUID_PATTERN = /^[\da-f]{8}-(?:[\da-f]{4}-){3}[\da-f]{12}$/i;
@@ -29,14 +30,10 @@ export class ProductDetailPage implements OnInit {
   protected readonly error = signal('');
   protected readonly selectedType = signal<Presentation['tipo']>('UNIDAD');
   protected readonly allowedPresentations = computed(() => {
-    const active = (this.product()?.presentaciones ?? []).filter((presentation) => presentation.activo);
-    return this.auth.isApprovedBusiness()
-      ? active.filter((presentation) => presentation.tipo === 'CAJA')
-      : active;
+    return getAllowedPresentations(this.product()?.presentaciones ?? [], this.auth.isApprovedBusiness());
   });
   protected readonly selectedPresentation = computed(() =>
-    this.allowedPresentations().find((presentation) => presentation.tipo === this.selectedType()) ??
-    this.allowedPresentations()[0],
+    selectPresentation(this.allowedPresentations(), this.selectedType(), 'UNIDAD'),
   );
   protected readonly productImage = computed(() => {
     const product = this.product();

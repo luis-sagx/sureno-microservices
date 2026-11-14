@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { AuthApiService } from '../core/auth-api.service';
-import { BusinessRegistrationPayload, RegistrationPayload } from '../core/api';
+import { AuthApiService } from '../features/auth/data-access/auth-api.service';
+import { BusinessRegistrationPayload, RegistrationPayload } from '../features/auth/models/auth.models';
 import { ThemeService } from '../core/theme.service';
 
 @Component({

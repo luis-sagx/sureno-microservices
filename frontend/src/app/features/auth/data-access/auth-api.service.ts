@@ -1,13 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import {
-  AUTH_API,
-  BusinessRegistrationPayload,
-  LoginPayload,
-  LoginResponse,
-  RegistrationPayload,
-} from './api';
+import { BusinessRegistrationPayload, LoginPayload, LoginResponse, RegistrationPayload } from '../models/auth.models';
+
+const AUTH_API = '/api/auth';
 
 @Injectable({ providedIn: 'root' })
 export class AuthApiService {

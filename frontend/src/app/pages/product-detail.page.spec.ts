@@ -7,7 +7,7 @@ import { RenderMode } from '@angular/ssr';
 import { routes } from '../app.routes';
 import { serverRoutes } from '../app.routes.server';
 import { AuthService } from '../core/auth.service';
-import { Product } from '../core/api';
+import { Product } from '../features/catalog/models/catalog.models';
 
 const productId = '98765432-1234-4234-8234-123456789012';
 const businessProductId = '98765432-1234-4234-8234-123456789013';

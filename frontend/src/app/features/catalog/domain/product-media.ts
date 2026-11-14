@@ -1,4 +1,4 @@
-import { Product, Presentation } from './api';
+import { Product, Presentation } from '../models/catalog.models';
 
 const productImageFiles: Record<string, string> = {
   'Aguardiente Diamante': 'aguardiente-diamante',

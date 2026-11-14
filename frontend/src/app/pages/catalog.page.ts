@@ -3,9 +3,10 @@ import { Component, OnInit, PLATFORM_ID, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../core/auth.service';
-import { CatalogApiService } from '../core/catalog-api.service';
-import { Category, Product, Presentation } from '../core/api';
-import { productImagePath } from '../core/product-media';
+import { CatalogApiService } from '../features/catalog/data-access/catalog-api.service';
+import { Category, Product, Presentation } from '../features/catalog/models/catalog.models';
+import { productImagePath } from '../features/catalog/domain/product-media';
+import { getAllowedPresentations, selectPresentation } from '../features/catalog/domain/presentation-rules';
 import { RevealOnScrollDirective } from '../core/reveal-on-scroll.directive';
 
 @Component({
@@ -71,19 +72,14 @@ export class CatalogPage implements OnInit {
   }
 
   protected allowedPresentations(product: Product): Presentation[] {
-    const active = product.presentaciones.filter((presentation) => presentation.activo);
-    return this.auth.isApprovedBusiness()
-      ? active.filter((presentation) => presentation.tipo === 'CAJA')
-      : active;
+    return getAllowedPresentations(product.presentaciones, this.auth.isApprovedBusiness());
   }
 
   protected selectedPresentation(product: Product): Presentation | undefined {
     const allowed = this.allowedPresentations(product);
     const selected = this.selectedTypes()[product.id];
-    return allowed.find((presentation) => presentation.tipo === selected) ??
-      allowed.find((presentation) =>
-        this.auth.isApprovedBusiness() ? presentation.tipo === 'CAJA' : presentation.tipo === 'UNIDAD',
-      ) ?? allowed[0];
+    const defaultType = this.auth.isApprovedBusiness() ? 'CAJA' : 'UNIDAD';
+    return selectPresentation(allowed, selected, defaultType);
   }
 
   protected selectPresentation(product: Product, type: 'UNIDAD' | 'CAJA') {

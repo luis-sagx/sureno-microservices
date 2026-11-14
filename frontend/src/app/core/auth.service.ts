@@ -1,8 +1,8 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Injectable, PLATFORM_ID, inject, signal } from '@angular/core';
 import { Observable, catchError, map, of, tap } from 'rxjs';
-import { AuthUser, LoginPayload } from './api';
-import { AuthApiService } from './auth-api.service';
+import { AuthUser, LoginPayload } from '../features/auth/models/auth.models';
+import { AuthApiService } from '../features/auth/data-access/auth-api.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {

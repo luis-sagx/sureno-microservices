@@ -1,7 +1,9 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CATALOG_API, CatalogQuery, Category, Product, ProductPage } from './api';
+import { CatalogQuery, Category, Product, ProductPage } from '../models/catalog.models';
+
+const CATALOG_API = '/api/catalog';
 
 @Injectable({ providedIn: 'root' })
 export class CatalogApiService {
