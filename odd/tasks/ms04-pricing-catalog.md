@@ -1,5 +1,7 @@
 # MS04 pricing and catalog integration
 
+Repository task file: `odd/tasks/ms04-pricing-catalog.md`
+
 ## Objective
 
 Implement MS04 (prices and promotions) in `ms-price` with the repository's required hexagonal architecture and PostgreSQL ownership, then integrate price quotes into the Angular catalog and product detail screens.
@@ -50,9 +52,9 @@ The requirements call for public unit and box prices, approved-business box tari
 ## Delivery and review
 
 - Route: **delegated direct** for both work units. MS04 spans domain/application/ports, adapters, migrations, HTTP API, and tests; frontend integration spans catalog models/data-access/facade/pages/templates/specs. Mandatory writer delegation applies.
-- Forecast: approximately 3,500 authored changed lines across two work units (forecast updated after MP-01 actual; MP-02 estimated at about 600 lines; tests and docs included; generated output excluded). This exceeds the advisory per-task size heuristic, but the work is kept in two coherent behavior units.
+- Forecast: actual feature delta: 3,397 authored changed lines (3,253 additions, 144 deletions; generated output excluded), within the updated approximately 3,500-line forecast. This exceeds the advisory per-task size heuristic, but the work is kept in two coherent behavior units.
 - Strategy: `feature-branch-chain` on the existing `feat/sureno-microservices-foundation` branch, following the user's one-branch instruction. No remote delivery is authorized.
-- Work-unit commits: MP-01 `b8f3220` and correction `2ad8870`; MP-02 pending.
+- Work-unit commits: MP-01 `b8f3220` plus correction `2ad8870`; MP-02 `7dcc5ec`. Same user-selected branch; no push or PR.
 - Receipt-driven review: disabled/unmanaged unless an existing user-owned switch says otherwise; do not enable it. `gentle-ai` is unavailable in the current environment.
 
 ## Tasks
@@ -68,14 +70,16 @@ The requirements call for public unit and box prices, approved-business box tari
 
 ### MP-02 — Angular catalog price integration
 
-- [ ] Add typed quote client/models and feature facade integration; display price, promotion/discount, and unconfigured states on product cards and product detail while respecting verified client presentation choices.
+- [x] Add typed quote client/models and feature facade integration; display price, promotion/discount, and unconfigured states on product cards and product detail while respecting verified client presentation choices.
 - Route: **delegated direct**. Trigger evidence: the feature spans Angular models, HTTP client/facade, two pages/templates/styles, and behavior tests.
-- TDD: add failing quote-rendering/role/loading/error tests before implementation; observe RED, then GREEN and REFACTOR.
-- Checks: `cd frontend && pnpm exec ng test --watch=false` and `pnpm exec ng build`; browser smoke at mobile/desktop widths and with B2C/B2B API fixtures.
-- Commit: pending.
+- TDD: RED observed first for missing quote client/facade/model and for a live-order presentation mismatch (selector said CAJA while price/image were UNIDAD). GREEN/REFACTOR after binding the selector to the quote/image presentation and adding loading/error/role/unconfigured behavior tests.
+- Checks: `pnpm exec ng test --watch=false` was blocked by the user's pnpm minimum-release-age policy (`postcss@8.5.33`). Using the installed Angular CLI directly, `./node_modules/.bin/ng test --watch=false` passed 13 spec files/53 tests and `./node_modules/.bin/ng build` passed with five prerendered routes. Browser smoke at desktop/mobile used live MS02/MS04 and confirmed B2C unit prices, selected presentation alignment, and `/api/prices` proxy. B2B segment gating passed component fixtures; live B2B browser smoke was unavailable because MS01 was offline. `git diff --check` passed. CSS budget warnings remain: catalog 6.02 KB, detail 4.43 KB, home 6.44 KB (home warning predates MP-02).
+- Route evidence: delegated direct because frontend models, API client, facade, proxy, two pages/templates/styles, and tests are multiple non-trivial files.
+- Commit: `7dcc5ec` — `feat(catalog): display live prices and promotions`.
 
 ## Progress and next step
 
-- Requirements and current service boundaries were explored with CodeGraph and targeted mapping. The user approved the pricing/promotion policy on 2026-11-14. MP-01 is implemented and committed, including the exact local source tariffs; B2C box prices remain unconfigured. Live Postgres migration, reference seed, and B2C quote endpoint were verified.
-- Existing user edits in Angular package configuration/feature restructuring are outside this feature's commits and must remain untouched.
-- Next: implement MP-02 via a delegated writer against the shipped `/prices/quotes` contract, verify the UI at mobile/desktop widths with B2C/B2B fixtures, then record its commit and update this tracker/mirror.
+- Requirements and service boundaries were explored with CodeGraph and targeted mapping. The user approved the pricing/promotion policy on 2026-11-14. MP-01 and MP-02 are implemented and committed. The importer provides explicit source unit and B2B case rates; B2C case price remains unconfigured until administration sets it. Live Postgres migration, reference seed, B2C quote endpoint, frontend proxy, and desktop/mobile B2C rendering were verified.
+- Existing user edits in Angular package configuration/feature restructuring remain outside these commits. In particular, `frontend/angular.json`, the user requirements file, root `AGENTS.md`, and `.codegraph/` were not staged.
+- Remaining verification limitation: no live B2B browser session because MS01 was offline; the component/e2e fixtures verify approved-role gating. The frontend pnpm test command is blocked by the user's minimum-release-age policy for `postcss@8.5.33`; the installed Angular CLI passed the same test/build tasks directly.
+- Next: confirm imported commercial tariffs with Sureño and run a live B2B browser smoke when MS01 is available. The user requested no MS03/order-minimum changes in this feature.
