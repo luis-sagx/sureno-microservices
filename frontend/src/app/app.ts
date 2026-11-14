@@ -1,5 +1,5 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from './core/auth.service';
 import { ThemeService } from './core/theme.service';
 
@@ -12,6 +12,7 @@ import { ThemeService } from './core/theme.service';
 export class App implements OnInit {
   protected readonly menuOpen = signal(false);
   protected readonly theme = inject(ThemeService);
+  private readonly router = inject(Router);
 
   constructor(protected readonly auth: AuthService) {}
 
@@ -26,5 +27,10 @@ export class App implements OnInit {
 
   protected toggleMenu() {
     this.menuOpen.update((open) => !open);
+  }
+
+  protected isAuthRoute() {
+    const path = this.router.url.split(/[?#]/, 1)[0];
+    return path === '/login' || path === '/registro';
   }
 }

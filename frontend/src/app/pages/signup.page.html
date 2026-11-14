@@ -1,7 +1,11 @@
 <section class="auth-layout signup-layout">
-  <div class="auth-photo" aria-hidden="true"></div>
-  <div class="auth-panel signup-panel">
-    <div class="auth-card signup-card">
+  <div class="auth-card signup-card" data-auth-card>
+      <a class="auth-store-link" routerLink="/">
+        <span aria-hidden="true">←</span> Volver a la tienda
+      </a>
+      <a class="auth-brand" routerLink="/" aria-label="Licorería Sureño — inicio">
+        <img src="/logo-text.webp" alt="Licorería Sureño" width="240" height="68" />
+      </a>
       <p class="eyebrow">Bienvenido a Sureño</p>
       <h1 class="section-title">Crear una cuenta.</h1>
       <p class="auth-description">Todos los clientes deben tener 18 años cumplidos. Las cuentas comerciales requieren revisión manual.</p>
@@ -53,6 +57,5 @@
       }
 
       <p class="auth-switch">¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a></p>
-    </div>
   </div>
 </section>

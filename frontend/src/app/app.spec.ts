@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { App } from './app';
 import { routes } from './app.routes';
 
@@ -52,6 +52,37 @@ describe('App', () => {
     expect(headings).toEqual(['Empresa', 'Legal', 'Soporte']);
     expect(compiled.querySelector('.footer-brand img[alt="Licorería Sureño"]')).toBeTruthy();
     expect(compiled.querySelector('.footer-legal')?.textContent).toContain('mayores de 18 años');
+  });
+
+  it('shows standalone account screens and restores the store shell when returning', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+    await fixture.whenStable();
+    await router.navigateByUrl('/login');
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    let compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('.site-header')).toBeNull();
+    expect(compiled.querySelector('.site-footer')).toBeNull();
+    expect(compiled.querySelector('[data-auth-card]')).toBeTruthy();
+    expect(compiled.querySelector('a.auth-store-link')?.getAttribute('href')).toBe('/');
+    expect(compiled.querySelector('input#username')).toBeTruthy();
+    expect(compiled.querySelector('input#password')).toBeTruthy();
+
+    await router.navigateByUrl('/registro');
+    await fixture.whenStable();
+    fixture.detectChanges();
+    compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('[data-auth-card]')).toBeTruthy();
+    expect(compiled.querySelector('input#cedula')).toBeTruthy();
+    expect(compiled.textContent).toContain('18 años cumplidos');
+
+    await router.navigateByUrl('/');
+    await fixture.whenStable();
+    fixture.detectChanges();
+    expect(compiled.querySelector('.site-header')).toBeTruthy();
+    expect(compiled.querySelector('.site-footer')).toBeTruthy();
   });
 
   it('declares the requested public pages and account routes', () => {

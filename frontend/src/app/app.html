@@ -1,3 +1,4 @@
+@if (!isAuthRoute()) {
 <header class="site-header">
   <div class="header-inner">
     <a class="brand" routerLink="/" aria-label="Licorería Sureño — inicio" (click)="closeMenu()">
@@ -55,11 +56,13 @@
     </div>
   </div>
 </header>
+}
 
 <main id="contenido-principal">
   <router-outlet></router-outlet>
 </main>
 
+@if (!isAuthRoute()) {
 <footer class="site-footer">
   <div class="footer-inner">
     <div class="footer-brand">
@@ -86,3 +89,4 @@
     <span class="footer-since">Desde 1998</span>
   </div>
 </footer>
+}

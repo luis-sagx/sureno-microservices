@@ -65,10 +65,11 @@ The current site has a wide, tall catalog introduction and verbose product cards
 
 ### SVR-03 — Login and registration presentation
 
-- [ ] Restyle both auth pages into the requested centered account experience while preserving auth form behavior.
-- Check: focused Angular tests (RED/GREEN/REFACTOR), `npm run build`, `git diff --check`.
-- Route: delegated direct; shared auth styles and both page templates are multiple non-trivial files.
-- Commit: pending.
+- [x] Restyle both auth pages into the requested centered account experience while preserving auth form behavior. The shell hides nav/footer on auth routes and restores it on public routes; both screens include local logo and return link.
+- Check: RED observed (route test failed because header remained visible); GREEN `npm test -- --watch=false` passed (6 files, 30 tests); `npm run build` passed and prerendered 5 routes; `git diff --check` passed. Auth CSS remains under budget; only the existing catalog CSS warning remains. Prerendered login/register HTML includes the return link and omits nav/footer. Form state, API behavior, and validation are unchanged.
+- Route: delegated direct; route shell, auth styles, both page templates, and tests span multiple files.
+- Commit: pending parent escalation because `.git` is read-only in the sandbox.
+- Receipt-driven review: disabled/unmanaged; no native assessment or approval claimed.
 
 ### SVR-04 — Compact catalog and product cards
 
@@ -83,4 +84,5 @@ The current site has a wide, tall catalog introduction and verbose product cards
 - Business rules permit removing the generic infrastructure notice but require preserving truthful availability and price states.
 - SVR-01 implementation, checks, and work-unit commit are complete.
 - SVR-02 implementation, checks, and work-unit commit are complete.
-- Next: implement SVR-03.
+- SVR-03 implementation and checks are complete; its work-unit commit and commit identity record remain.
+- Next: close SVR-03, then implement SVR-04.
