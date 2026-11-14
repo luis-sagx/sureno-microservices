@@ -60,7 +60,7 @@ The first pass used the screenshots without auditing the reference's active desi
 - [x] Copied the active reference's local Latin WOFF2 subsets into the target, defined EB Garamond/Hanken Grotesk font faces, aligned light/dark color and type tokens to runtime reference values, and added a small Angular-native reveal primitive with reduced-motion behavior.
 - Check: RED observed in reveal directive tests before implementation; GREEN `npm test -- --watch=false` (34/34); `npm run build` passed; local font assets exist at the declared public paths; `git diff --check` passed. A parallel build attempt hit `listen EPERM`; the sequential build passed. Existing catalog CSS budget warning (5.20 KB vs 4 KB) remains.
 - Route: delegated direct; global tokens, font assets, and reusable animation behavior span multiple files.
-- Commit: pending.
+- Commit: `9c5e256` (`feat(frontend): load reference visual system`).
 
 ### SVR-01 — Shared navigation and footer (reopened by user feedback)
 
@@ -100,4 +100,4 @@ The first pass used the screenshots without auditing the reference's active desi
 - Reference Home order is Hero, categories, full Heritage, trust, HORECA. The target had an abbreviated Heritage band after HORECA.
 - Existing auth theme persistence works, but auth CSS hardcodes dark values and the standalone routes hide the header toggle.
 - Previous SVR-01 through SVR-04 commits remain in history; user feedback reopens their visual acceptance. No unrelated completed work is invalidated.
-- SVR-05 is implemented and verified; its work-unit commit is pending. The reopened page corrections are in progress through delegated writers and will be committed task by task after this foundation slice.
+- SVR-05 is implemented, verified, and committed as `9c5e256`. The reopened page corrections are in progress through delegated writers and will be committed task by task after this foundation slice.
