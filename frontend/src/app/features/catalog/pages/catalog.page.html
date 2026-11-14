@@ -1,42 +1,56 @@
-<section class="catalog-intro" data-catalog-intro>
-  <div class="page-container">
-    <p class="eyebrow">La colección</p>
-    <h1 class="display-title">Catálogo de <em>productos.</em></h1>
+<section class="catalog-intro border-b border-[var(--line)]" data-catalog-intro>
+  <div class="page-container pt-[clamp(2rem,4.5vw,3.75rem)] pb-6">
+    <p class="eyebrow mb-[0.8rem]">La colección</p>
+    <h1 class="display-title max-w-[20ch] !text-[clamp(2.8rem,6.5vw,6rem)] !leading-none">
+      Catálogo de <em class="text-[var(--gold)] font-normal">productos.</em>
+    </h1>
   </div>
 </section>
 
-<section class="catalog-content page-container">
+<section class="catalog-content page-container pt-6 pb-16">
   @if (isApprovedBusiness) {
-    <div class="notice profile-notice">
+    <div class="notice profile-notice mb-6">
       Cuenta B2B aprobada: puedes consultar presentaciones por caja completa. La tarifa mayorista
       aún no está configurada.
     </div>
   } @else if (auth.user()?.estado_solicitud === 'PENDING') {
-    <div class="notice profile-notice">
+    <div class="notice profile-notice mb-6">
       Tu solicitud comercial está pendiente de revisión. Mientras se revisa, no tienes acceso a
       beneficios B2B. Los pedidos aún no están habilitados.
     </div>
   } @else if (auth.user()?.estado_verificacion === 'PENDING') {
-    <div class="notice profile-notice">
+    <div class="notice profile-notice mb-6">
       Tu identidad está pendiente de verificación. Puedes consultar el catálogo; los pedidos
       requieren verificación aprobada.
     </div>
   }
 
-  <div class="catalog-tools">
-    <form class="search-form" (ngSubmit)="search()">
+  <div
+    class="catalog-tools mb-6 grid grid-cols-[minmax(0,1fr)_260px] items-end gap-4 max-[680px]:grid-cols-1"
+  >
+    <form
+      class="search-form flex min-w-0 border border-[var(--line-strong)] bg-[var(--surface)]"
+      (ngSubmit)="search()"
+    >
       <label class="visually-hidden" for="catalog-search">Buscar productos</label>
       <input
         id="catalog-search"
         name="q"
         type="search"
+        class="w-full min-w-0 min-h-12 border-0 px-[0.9rem] py-3 text-[var(--paper)] bg-transparent"
         placeholder="Buscar producto…"
         [(ngModel)]="query"
       />
-      <button type="submit" aria-label="Buscar">Buscar <span aria-hidden="true">→</span></button>
+      <button
+        class="flex-none border-0 px-4 text-[var(--gold)] bg-transparent text-[0.66rem] font-extrabold tracking-[0.14em] uppercase cursor-pointer"
+        type="submit"
+        aria-label="Buscar"
+      >
+        Buscar <span aria-hidden="true">→</span>
+      </button>
     </form>
     <div class="field category-filter">
-      <label for="category-filter">Categoría</label>
+      <label class="text-[0.6rem]" for="category-filter">Categoría</label>
       <select
         id="category-filter"
         name="category_id"
@@ -52,30 +66,55 @@
   </div>
 
   @if (loading()) {
-    <div class="catalog-state" role="status">
+    <div
+      class="catalog-state grid min-h-[220px] place-items-center content-center gap-[0.6rem] border border-dashed border-[var(--line-strong)] px-4 py-8 text-center"
+      role="status"
+    >
       <span class="loading-line"></span>
-      <p>Cargando catálogo…</p>
+      <p class="m-0 max-w-[46ch] text-[var(--muted)] leading-[1.65]">Cargando catálogo…</p>
     </div>
   } @else if (error()) {
-    <div class="catalog-state error-state" role="alert">
-      <h2>No pudimos cargar los productos</h2>
-      <p>{{ error() }}</p>
+    <div
+      class="catalog-state error-state grid min-h-[220px] place-items-center content-center gap-[0.6rem] border border-dashed border-[var(--line-strong)] px-4 py-8 text-center"
+      role="alert"
+    >
+      <h2 class="m-0 font-[var(--font-display)] text-[1.8rem] font-normal">
+        No pudimos cargar los productos
+      </h2>
+      <p class="m-0 max-w-[46ch] text-[var(--muted)] leading-[1.65]">{{ error() }}</p>
       <button class="button-secondary" type="button" (click)="loadCatalog()">Reintentar</button>
     </div>
   } @else if (hasLoaded() && products().length === 0) {
-    <div class="catalog-state empty-state">
-      <h2>No encontramos productos</h2>
-      <p>Prueba con otro nombre o selecciona una categoría diferente.</p>
+    <div
+      class="catalog-state empty-state grid min-h-[220px] place-items-center content-center gap-[0.6rem] border border-dashed border-[var(--line-strong)] px-4 py-8 text-center"
+    >
+      <h2 class="m-0 font-[var(--font-display)] text-[1.8rem] font-normal">
+        No encontramos productos
+      </h2>
+      <p class="m-0 max-w-[46ch] text-[var(--muted)] leading-[1.65]">
+        Prueba con otro nombre o selecciona una categoría diferente.
+      </p>
     </div>
   } @else if (products().length > 0) {
-    <p class="result-count" aria-live="polite">
+    <p
+      class="result-count m-0 mb-[0.9rem] text-[var(--secondary)] text-[0.65rem] font-bold tracking-[0.15em] uppercase"
+      aria-live="polite"
+    >
       {{ products().length }} {{ products().length === 1 ? 'producto' : 'productos' }}
     </p>
-    <div class="product-grid">
+    <div
+      class="product-grid grid grid-cols-3 gap-4 max-[980px]:grid-cols-2 max-[680px]:grid-cols-1"
+    >
       @for (product of products(); track product.id; let index = $index) {
-        <article class="product-card" appScrollReveal>
-          <div class="product-image-wrap">
+        <article
+          class="product-card min-w-0 border border-[var(--line)] bg-[var(--surface)]"
+          appScrollReveal
+        >
+          <div
+            class="product-image-wrap relative grid aspect-square place-items-center overflow-hidden bg-[var(--product-stage)] max-[680px]:aspect-[1.08/1]"
+          >
             <img
+              class="w-full h-full object-contain p-2"
               [src]="productImage(product)"
               [alt]="product.nombre"
               width="300"
@@ -83,20 +122,32 @@
               [attr.loading]="index < 12 ? 'eager' : 'lazy'"
               decoding="async"
             />
-            <span class="product-category">{{ product.categoria?.nombre || 'Sureño' }}</span>
+            <span
+              class="product-category absolute top-3 left-3 border border-[var(--line-strong)] px-[0.55rem] py-[0.42rem] text-[var(--secondary)] bg-[var(--product-badge)] text-[0.58rem] font-bold tracking-[0.12em] uppercase"
+              >{{ product.categoria?.nombre || 'Sureño' }}</span
+            >
           </div>
-          <div class="product-info">
-            <h2>{{ product.nombre }}</h2>
-            <p class="product-volume">
+          <div class="product-info p-[0.9rem]">
+            <h2 class="m-0 font-[var(--font-display)] text-[1.55rem] font-normal leading-[1.1]">
+              {{ product.nombre }}
+            </h2>
+            <p
+              class="product-volume mt-[0.45rem] mb-0 text-[var(--gold)] text-[0.64rem] font-bold tracking-[0.12em] uppercase"
+            >
               {{ product.volumen_ml ? product.volumen_ml + ' ml' : 'Presentación consultable' }}
             </p>
-            <div class="product-availability" [class.is-unavailable]="!product.disponible">
+            <div
+              class="product-availability mt-4 flex items-center gap-[0.45rem] text-[var(--muted)] text-[0.7rem]"
+              [class.is-unavailable]="!product.disponible"
+            >
               <span aria-hidden="true"></span
               >{{ product.disponible ? 'Disponibilidad por confirmar' : 'No disponible' }}
             </div>
 
             @if (allowedPresentations(product).length > 0) {
-              <div class="presentation-row">
+              <div
+                class="presentation-row mt-[0.7rem] flex min-h-[50px] items-center justify-between gap-3 border-y border-[var(--line)]"
+              >
                 <label [for]="'presentation-' + product.id">Presentación</label>
                 <select
                   [id]="'presentation-' + product.id"
@@ -116,21 +167,26 @@
                 </select>
               </div>
             } @else {
-              <p class="presentation-unavailable">
+              <p class="presentation-unavailable m-0 text-[var(--muted-dim)] text-[0.75rem]">
                 No hay presentaciones activas para este perfil.
               </p>
             }
 
             @let selectedQuote = quoteFor(product);
             @let quoteState = quoteStatus(product);
-            <div class="price-placeholder" aria-live="polite">
+            <div
+              class="price-placeholder mt-[0.8rem] flex items-baseline justify-between gap-2"
+              aria-live="polite"
+            >
               <span>Precio</span>
               @if (quoteState.loading) {
                 <strong role="status">Consultando precio…</strong>
               } @else if (quoteState.error) {
                 <strong class="price-state-error" role="alert">{{ quoteState.error }}</strong>
               } @else if (quoteProfileMismatch(product)) {
-                <strong class="price-state-error" role="alert">No se pudo confirmar el perfil del precio.</strong>
+                <strong class="price-state-error" role="alert"
+                  >No se pudo confirmar el perfil del precio.</strong
+                >
               } @else if (selectedQuote?.configured && selectedQuote.final_amount !== null) {
                 <div class="price-value">
                   @if (hasDiscount(selectedQuote.discount_amount)) {
@@ -138,7 +194,10 @@
                   }
                   <strong>{{ formatPrice(selectedQuote.final_amount) }}</strong>
                   @if (hasDiscount(selectedQuote.discount_amount)) {
-                    <small>{{ selectedQuote.promotion_name || 'Promoción' }} · ahorras {{ formatPrice(selectedQuote.discount_amount) }}</small>
+                    <small
+                      >{{ selectedQuote.promotion_name || 'Promoción' }} · ahorras
+                      {{ formatPrice(selectedQuote.discount_amount) }}</small
+                    >
                   }
                 </div>
               } @else {
@@ -158,16 +217,18 @@
     </div>
   }
 
-  <aside class="catalog-rule-note">
+  <aside class="catalog-rule-note mt-8 grid gap-[0.4rem] border-t border-[var(--line)] pt-4">
     @if (isApprovedBusiness) {
-      <p>Las cuentas B2B aprobadas solo pueden solicitar cajas completas.</p>
+      <p class="m-0 text-[var(--muted-dim)] text-[0.75rem] leading-[1.65]">
+        Las cuentas B2B aprobadas solo pueden solicitar cajas completas.
+      </p>
     } @else {
-      <p>
+      <p class="m-0 text-[var(--muted-dim)] text-[0.75rem] leading-[1.65]">
         Clientes particulares pueden consultar unidades o cajas. El mínimo B2C de $10 no se calcula
         porque las tarifas aún no están configuradas.
       </p>
     }
-    <p>
+    <p class="m-0 text-[var(--muted-dim)] text-[0.75rem] leading-[1.65]">
       Un RUC registrado para facturación no activa beneficios mayoristas. Los productos no
       disponibles no pueden agregarse a solicitudes nuevas.
     </p>
