@@ -7,6 +7,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import type { Request, Response } from 'express';
 import { createSessionCookie, SessionPrincipal, SessionService } from './session.service.js';
+import { SessionError } from './domain/session-error.js';
 
 export const REQUIRED_ROLES = 'sureno:required-roles';
 
@@ -40,7 +41,15 @@ export class SessionAuthGuard implements CanActivate {
     const token = extractSessionToken(request);
     if (!token) throw new UnauthorizedException('Debes iniciar sesión.');
 
-    const session = await this.sessions.authenticate(token);
+    let session;
+    try {
+      session = await this.sessions.authenticate(token);
+    } catch (error) {
+      if (error instanceof SessionError) {
+        throw new UnauthorizedException(error.message);
+      }
+      throw error;
+    }
     request.user = session.principal;
     response.setHeader('Set-Cookie', createSessionCookie(token, session.idleTimeoutMinutes));
     return true;

@@ -7,6 +7,7 @@ import {
   Post,
   Req,
   Res,
+  UseFilters,
   UseGuards,
 } from '@nestjs/common';
 import type { Request, Response } from 'express';
@@ -17,8 +18,10 @@ import {
 } from './session.service.js';
 import { extractSessionToken, SessionAuthGuard } from './session-auth.guard.js';
 import type { AuthenticatedRequest } from './session-auth.guard.js';
+import { SessionExceptionFilter } from './session-exception.filter.js';
 
 @Controller('sessions')
+@UseFilters(SessionExceptionFilter)
 export class SessionController {
   constructor(private readonly sessions: SessionService) {}
 
