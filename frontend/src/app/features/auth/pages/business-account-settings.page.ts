@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
@@ -13,63 +13,68 @@ import { BusinessAccountSettingsApiService } from '../data-access/business-accou
   templateUrl: './business-account-settings.page.html',
   styleUrl: './auth.page.css',
 })
-export class BusinessAccountSettingsPage implements OnInit {
+export class BusinessAccountSettingsPage {
   protected readonly auth = inject(AuthService);
   protected readonly theme = inject(ThemeService);
   private readonly api = inject(BusinessAccountSettingsApiService);
 
-  protected loading = true;
-  protected saving = false;
-  protected hasBusinessAccount = false;
-  protected businessAccountMissing = false;
+  protected readonly loading = signal(true);
+  protected readonly saving = signal(false);
+  protected readonly hasBusinessAccount = signal(false);
+  protected readonly businessAccountMissing = signal(false);
   protected nombreComercial = '';
-  protected error = '';
-  protected success = '';
+  protected readonly error = signal('');
+  protected readonly success = signal('');
+  private requestStarted = false;
 
-  ngOnInit() {
+  private readonly sessionEffect = effect(() => {
+    if (this.auth.restoring()) return;
     if (!this.auth.user()) {
-      this.loading = false;
+      this.loading.set(false);
       return;
     }
+    if (this.requestStarted) return;
+    this.requestStarted = true;
+
     this.api
       .getMyBusinessAccount()
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
         next: (account) => {
-          this.hasBusinessAccount = true;
+          this.hasBusinessAccount.set(true);
           this.nombreComercial = account.nombre_comercial ?? '';
         },
         error: (error: unknown) => {
           if (error instanceof HttpErrorResponse && error.status === 404) {
-            this.businessAccountMissing = true;
+            this.businessAccountMissing.set(true);
             return;
           }
-          this.error = 'No se pudo cargar la configuración de tu cuenta. Intenta nuevamente.';
+          this.error.set('No se pudo cargar la configuración de tu cuenta. Intenta nuevamente.');
         },
       });
-  }
+  });
 
   protected save() {
-    if (!this.hasBusinessAccount || this.saving) return;
-    this.saving = true;
-    this.error = '';
-    this.success = '';
+    if (!this.hasBusinessAccount() || this.saving()) return;
+    this.saving.set(true);
+    this.error.set('');
+    this.success.set('');
     const nombreComercial = this.nombreComercial.trim() || null;
     this.api
       .updateCommercialName(nombreComercial)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(finalize(() => this.saving.set(false)))
       .subscribe({
         next: (account) => {
           this.nombreComercial = account.nombre_comercial ?? '';
-          this.success = 'Se guardaron los cambios';
+          this.success.set('Se guardaron los cambios');
         },
         error: () => {
-          this.error = 'No se pudo guardar el nombre comercial.';
+          this.error.set('No se pudo guardar el nombre comercial.');
         },
       });
   }
 
   protected get businessAccountUnavailable() {
-    return !this.loading && this.businessAccountMissing && !!this.auth.user();
+    return !this.loading() && this.businessAccountMissing() && !!this.auth.user();
   }
 }

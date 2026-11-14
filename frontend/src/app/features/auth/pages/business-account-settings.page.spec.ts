@@ -17,6 +17,7 @@ const account = {
 describe('BusinessAccountSettingsPage', () => {
   let api: { getMyBusinessAccount: ReturnType<typeof vi.fn>; updateCommercialName: ReturnType<typeof vi.fn> };
   let user: ReturnType<typeof signal<{ userId: string; username: string; roles: string[] } | null>>;
+  let restoring: ReturnType<typeof signal<boolean>>;
 
   beforeEach(async () => {
     api = {
@@ -24,12 +25,13 @@ describe('BusinessAccountSettingsPage', () => {
       updateCommercialName: vi.fn((nombre_comercial: string | null) => of({ ...account, nombre_comercial })),
     };
     user = signal({ userId: 'user-1', username: 'negocio', roles: ['CUSTOMER'] });
+    restoring = signal(false);
     await TestBed.configureTestingModule({
       imports: [BusinessAccountSettingsPage],
       providers: [
         provideRouter([]),
         { provide: BusinessAccountSettingsApiService, useValue: api },
-        { provide: AuthService, useValue: { user } },
+        { provide: AuthService, useValue: { user, restoring } },
         { provide: ThemeService, useValue: { theme: () => 'light', toggle: vi.fn() } },
       ],
     }).compileComponents();
@@ -51,7 +53,7 @@ describe('BusinessAccountSettingsPage', () => {
     fixture.detectChanges();
 
     expect(api.updateCommercialName).toHaveBeenCalledWith('Mi Licorería');
-    expect((fixture.componentInstance as unknown as { success: string }).success).toBe('Se guardaron los cambios');
+    expect((fixture.componentInstance as unknown as { success: () => string }).success()).toBe('Se guardaron los cambios');
     expect(root.textContent).toContain('Se guardaron los cambios');
   });
 
@@ -82,6 +84,26 @@ describe('BusinessAccountSettingsPage', () => {
 
     expect(api.getMyBusinessAccount).not.toHaveBeenCalled();
     expect((fixture.nativeElement as HTMLElement).textContent).toContain('Inicia sesión para ver la configuración de tu cuenta.');
+  });
+
+  it('waits for session restoration before deciding whether to load account settings', async () => {
+    user.set(null);
+    restoring.set(true);
+    const fixture = TestBed.createComponent(BusinessAccountSettingsPage);
+    fixture.detectChanges();
+
+    expect(api.getMyBusinessAccount).not.toHaveBeenCalled();
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('Cargando configuración');
+    expect((fixture.nativeElement as HTMLElement).textContent).not.toContain('Inicia sesión');
+
+    user.set({ userId: 'user-1', username: 'negocio', roles: ['CUSTOMER'] });
+    restoring.set(false);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(api.getMyBusinessAccount).toHaveBeenCalledOnce();
+    expect((fixture.nativeElement as HTMLElement).querySelector<HTMLInputElement>('[name="nombre_comercial"]')?.value).toBe('Licorería Sureño');
   });
 
   it('shows an API error and preserves the current value after a failed save', async () => {

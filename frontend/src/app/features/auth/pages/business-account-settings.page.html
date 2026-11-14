@@ -3,7 +3,7 @@
     <p class="form-section-label mb-3">Mi cuenta</p>
     <h1 class="font-(family-name:--font-display) text-4xl text-[var(--paper)]">Datos del negocio</h1>
 
-    @if (loading) {
+    @if (loading()) {
       <p class="mt-8 text-[var(--muted)]" role="status">Cargando configuración…</p>
     } @else if (!auth.user()) {
       <div class="auth-card mt-8 rounded-sm p-6">
@@ -14,9 +14,9 @@
       <div class="auth-card mt-8 rounded-sm p-6">
         <p>Esta opción está disponible solo para cuentas de negocio.</p>
       </div>
-    } @else if (error && !hasBusinessAccount) {
+    } @else if (error() && !hasBusinessAccount()) {
       <div class="auth-card mt-8 rounded-sm p-6">
-        <p class="text-[var(--error)]" role="alert">{{ error }}</p>
+        <p class="text-[var(--error)]" role="alert">{{ error() }}</p>
       </div>
     } @else {
       <form class="auth-card mt-8 grid gap-6 rounded-sm p-6 sm:p-8" (ngSubmit)="save()">
@@ -31,14 +31,14 @@
             [(ngModel)]="nombreComercial"
           />
         </div>
-        @if (error) {
-          <p class="text-[var(--error)]" role="alert">{{ error }}</p>
+        @if (error()) {
+          <p class="text-[var(--error)]" role="alert">{{ error() }}</p>
         }
-        @if (success) {
-          <p class="text-[var(--gold)]" role="status">{{ success }}</p>
+        @if (success()) {
+          <p class="text-[var(--gold)]" role="status">{{ success() }}</p>
         }
-        <button class="button-primary" type="submit" [disabled]="saving">
-          {{ saving ? 'Guardando…' : 'Guardar cambios' }}
+        <button class="button-primary" type="submit" [disabled]="saving()">
+          {{ saving() ? 'Guardando…' : 'Guardar cambios' }}
         </button>
       </form>
     }
