@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../core/auth.service';
+import { ThemeService } from '../core/theme.service';
 
 @Component({
   selector: 'app-login-page',
@@ -12,6 +13,7 @@ import { AuthService } from '../core/auth.service';
 export class LoginPage {
   private readonly router = inject(Router);
   protected readonly auth = inject(AuthService);
+  protected readonly theme = inject(ThemeService);
   protected username = '';
   protected password = '';
   protected loading = false;

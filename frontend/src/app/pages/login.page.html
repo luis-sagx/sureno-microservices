@@ -1,8 +1,28 @@
 <section class="auth-layout">
   <div class="auth-card" data-auth-card>
-    <a class="auth-store-link" routerLink="/">
-      <span aria-hidden="true">←</span> Volver a la tienda
-    </a>
+    <div class="auth-topbar">
+      <a class="auth-store-link" routerLink="/">
+        <span aria-hidden="true">←</span> Volver a la tienda
+      </a>
+      <button
+        class="auth-theme-toggle"
+        type="button"
+        [attr.aria-label]="theme.theme() === 'light' ? 'Cambiar a modo oscuro' : 'Cambiar a modo claro'"
+        [attr.aria-pressed]="theme.theme() === 'dark'"
+        (click)="theme.toggle()"
+      >
+        @if (theme.theme() === 'light') {
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
+            <path d="M20.1 15.4A8.5 8.5 0 0 1 8.6 3.9 8.5 8.5 0 1 0 20.1 15.4Z" />
+          </svg>
+        } @else {
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="3.8" />
+            <path d="M12 2v2.2m0 15.6V22m10-10h-2.2M4.2 12H2m17.1-7.1-1.6 1.6M6.5 17.5l-1.6 1.6m14.2 0-1.6-1.6M6.5 6.5 4.9 4.9" />
+          </svg>
+        }
+      </button>
+    </div>
     <a class="auth-brand" routerLink="/" aria-label="Licorería Sureño — inicio">
       <img src="/logo-text.webp" alt="Licorería Sureño" width="240" height="68" />
     </a>

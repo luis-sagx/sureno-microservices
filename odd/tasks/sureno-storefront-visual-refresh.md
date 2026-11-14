@@ -80,7 +80,8 @@ The first pass used the screenshots without auditing the reference's active desi
 
 ### SVR-03 — Login and registration themes (reopened by user feedback)
 
-- [ ] Keep standalone account cards but make both light and dark themes available with a visible theme control; replace hardcoded colors with shared reference tokens and preserve all forms/API behavior.
+- [x] Kept standalone account cards and added visible, accessible theme controls on both login and registration. Controls use the persistent ThemeService; auth styles now use shared light/dark tokens and forms/API behavior is unchanged.
+- Check: the new auth route/theme persistence test passed for both routes; `npm run build` passed and prerendered five routes; `git diff --check` passed. The full suite still had a concurrent nav assertion failure (37 passed, 1 failed) at handoff; that failure is outside the auth files and is tracked under SVR-01.
 - Reopened because the user requires light and dark auth pages; the previous dark-only styles hid the only theme control.
 - Prior verification/commit: `035507b`; new checks pending.
 - Route: delegated direct; route shell, auth styles, both page templates, and tests span multiple files.
@@ -98,6 +99,6 @@ The first pass used the screenshots without auditing the reference's active desi
 
 - Reference audit confirms active runtime fonts/tokens are defined by `src/app/layout.tsx` and `src/app/globals.css`; local Latin WOFF2 build outputs exist under `.next/static/media`.
 - Reference Home order is Hero, categories, full Heritage, trust, HORECA. The target had an abbreviated Heritage band after HORECA.
-- Existing auth theme persistence works, but auth CSS hardcodes dark values and the standalone routes hide the header toggle.
+- Existing auth theme persistence now has visible controls on the standalone routes and token-driven light/dark styles.
 - Previous SVR-01 through SVR-04 commits remain in history; user feedback reopens their visual acceptance. No unrelated completed work is invalidated.
 - SVR-05 is implemented, verified, and committed as `9c5e256`. The reopened page corrections are in progress through delegated writers and will be committed task by task after this foundation slice.

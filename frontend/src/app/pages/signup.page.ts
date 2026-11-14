@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthApiService } from '../core/auth-api.service';
 import { BusinessRegistrationPayload, RegistrationPayload } from '../core/api';
+import { ThemeService } from '../core/theme.service';
 
 @Component({
   selector: 'app-signup-page',
@@ -12,6 +13,7 @@ import { BusinessRegistrationPayload, RegistrationPayload } from '../core/api';
 })
 export class SignupPage {
   private readonly api = inject(AuthApiService);
+  protected readonly theme = inject(ThemeService);
   protected accountType: 'individual' | 'business' = 'individual';
   protected loading = false;
   protected error = '';

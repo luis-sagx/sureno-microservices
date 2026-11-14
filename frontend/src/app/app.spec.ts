@@ -85,6 +85,39 @@ describe('App', () => {
     expect(compiled.querySelector('.site-footer')).toBeTruthy();
   });
 
+  it('offers the persistent theme control on both standalone account screens', async () => {
+    localStorage.clear();
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+    await fixture.whenStable();
+
+    await router.navigateByUrl('/login');
+    await fixture.whenStable();
+    fixture.detectChanges();
+    let compiled = fixture.nativeElement as HTMLElement;
+    let themeButton = compiled.querySelector<HTMLButtonElement>(
+      '.auth-theme-toggle[aria-label="Cambiar a modo oscuro"]',
+    );
+    expect(themeButton).toBeTruthy();
+    themeButton!.click();
+    fixture.detectChanges();
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    expect(localStorage.getItem('sureno-theme')).toBe('dark');
+
+    await router.navigateByUrl('/registro');
+    await fixture.whenStable();
+    fixture.detectChanges();
+    compiled = fixture.nativeElement as HTMLElement;
+    themeButton = compiled.querySelector<HTMLButtonElement>(
+      '.auth-theme-toggle[aria-label="Cambiar a modo claro"]',
+    );
+    expect(themeButton).toBeTruthy();
+    themeButton!.click();
+    fixture.detectChanges();
+    expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+    expect(localStorage.getItem('sureno-theme')).toBe('light');
+  });
+
   it('declares the requested public pages and account routes', () => {
     const paths = routes.map((route) => route.path);
     expect(paths).toContain('');
