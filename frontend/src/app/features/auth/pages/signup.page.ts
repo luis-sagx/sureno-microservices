@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { AuthApiService } from '../data-access/auth-api.service';
-import { BusinessRegistrationPayload, RegistrationPayload } from '../models/auth.models';
+import { AuthRegistrationApiService } from '../data-access/auth-registration-api.service';
+import { BusinessRegistrationPayload, RegistrationPayload } from '../models/registration.models';
 import { ThemeService } from '../../../core/theme.service';
 
 @Component({
@@ -12,7 +12,7 @@ import { ThemeService } from '../../../core/theme.service';
   styleUrl: './auth.page.css',
 })
 export class SignupPage {
-  private readonly api = inject(AuthApiService);
+  private readonly api = inject(AuthRegistrationApiService);
   protected readonly theme = inject(ThemeService);
   protected accountType: 'individual' | 'business' = 'individual';
   protected loading = false;

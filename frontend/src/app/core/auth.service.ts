@@ -1,12 +1,12 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Injectable, PLATFORM_ID, inject, signal } from '@angular/core';
 import { Observable, catchError, map, of, tap } from 'rxjs';
-import { AuthUser, LoginPayload } from '../features/auth/models/auth.models';
-import { AuthApiService } from '../features/auth/data-access/auth-api.service';
+import { AuthUser, LoginPayload } from './session.models';
+import { SessionApiService } from './session-api.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly api = inject(AuthApiService);
+  private readonly api = inject(SessionApiService);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly currentUser = signal<AuthUser | null>(null);
   private readonly resolving = signal(false);
