@@ -1,16 +1,34 @@
-<section class="home-hero">
-  <div class="hero-backdrop" aria-hidden="true"></div>
-  <div class="hero-content page-container">
-    <p class="eyebrow">Quito · tradición licorera desde 1998</p>
-    <h1 class="display-title">Licores para celebrar.<br /><em>Hechos en el sur.</em></h1>
-    <p class="hero-copy">Conoce los sabores de Sureño. Explora nuestras presentaciones por unidad y por caja completa.</p>
-    <div class="hero-actions">
-      <a class="button-primary" routerLink="/catalogo">Explorar catálogo <span aria-hidden="true">↗</span></a>
-      <a class="button-secondary" routerLink="/quienes-somos">Nuestra historia</a>
+<section
+  class="hero-sequence"
+  [class.is-reduced-motion]="reducedMotion()"
+  #heroSequence
+  data-hero-sequence
+>
+  <div class="home-hero" #heroStage data-hero-stage>
+    <div class="hero-backdrop" aria-hidden="true"></div>
+    <div class="hero-bottle-stage">
+      <img
+        class="hero-frame"
+        data-hero-frame
+        [src]="currentFrame()"
+        alt="Botella Sureño"
+        loading="eager"
+        decoding="async"
+      />
     </div>
-    <p class="hero-note">Compra y disponibilidad por confirmar · Servicio para mayores de 18 años</p>
+    <div class="hero-content page-container">
+      <p class="eyebrow">Quito · tradición licorera desde 1998</p>
+      <h1 class="display-title">Licores para celebrar.<br /><em>Hechos en el sur.</em></h1>
+      <p class="hero-copy">Conoce los sabores de Sureño. Explora nuestras presentaciones por unidad y por caja completa.</p>
+      <div class="hero-actions">
+        <a class="button-primary" routerLink="/catalogo">Explorar catálogo <span aria-hidden="true">↗</span></a>
+        <a class="button-secondary" routerLink="/quienes-somos">Nuestra historia</a>
+      </div>
+      <p class="hero-note">Compra y disponibilidad por confirmar · Servicio para mayores de 18 años</p>
+    </div>
+    <span class="hero-index" aria-hidden="true">01 / SUREÑO</span>
+    <span class="scroll-cue" aria-hidden="true">Desliza para descubrir <span>↓</span></span>
   </div>
-  <span class="hero-index" aria-hidden="true">01 / SUREÑO</span>
 </section>
 
 <section class="home-intro page-container">

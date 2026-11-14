@@ -1,7 +1,9 @@
 .home-hero {
-  position: relative;
   display: flex;
-  min-height: min(720px, calc(100svh - 76px));
+  position: sticky;
+  top: var(--header-height);
+  height: calc(100svh - var(--header-height));
+  min-height: 520px;
   align-items: center;
   overflow: hidden;
   border-bottom: 1px solid var(--line);
@@ -31,11 +33,6 @@
 
 .hero-content .eyebrow {
   margin-bottom: 1.8rem;
-}
-
-.hero-content h1 {
-  max-width: 900px;
-  text-wrap: balance;
 }
 
 .hero-content h1 em {
@@ -230,7 +227,7 @@
 
 @media (max-width: 760px) {
   .home-hero {
-    min-height: 620px;
+    min-height: 520px;
   }
 
   .hero-backdrop {

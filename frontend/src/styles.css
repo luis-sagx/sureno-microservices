@@ -21,6 +21,7 @@
   --auth-photo-overlay: linear-gradient(0deg, rgb(250 250 248 / 36%), rgb(250 250 248 / 12%));
   --product-stage: #f5f3ef;
   --product-badge: rgb(250 250 248 / 92%);
+  --header-height: 76px;
   --font-display: Georgia, 'Times New Roman', serif;
   --font-body: 'Hanken Grotesk', 'Segoe UI', Arial, sans-serif;
   font-family: var(--font-body);
@@ -253,5 +254,106 @@ img {
 
   .display-title {
     font-size: clamp(2.55rem, 12vw, 4rem);
+  }
+}
+
+@media (max-width: 700px) {
+  :root {
+    --header-height: 68px;
+  }
+}
+
+.hero-sequence {
+  height: 200svh;
+}
+
+.hero-sequence.is-reduced-motion {
+  height: auto;
+}
+
+.hero-sequence.is-reduced-motion .home-hero {
+  position: relative;
+  top: auto;
+  height: auto;
+  min-height: min(720px, calc(100svh - var(--header-height)));
+}
+
+.hero-bottle-stage {
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  right: max(3%, calc((100% - 1380px) / 2));
+  width: clamp(280px, 35vw, 480px);
+  height: 82%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.hero-frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.home-hero .hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.home-hero .hero-content h1 {
+  max-width: 770px;
+}
+
+.scroll-cue {
+  position: absolute;
+  right: max(1rem, calc((100% - 1280px) / 2));
+  bottom: 5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--muted-dim);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.scroll-cue > span {
+  color: var(--gold);
+  font-size: 1rem;
+}
+
+@media (max-width: 760px) {
+  .hero-bottle-stage {
+    top: auto;
+    right: 1rem;
+    bottom: 2.5rem;
+    width: clamp(145px, 42vw, 210px);
+    height: 38%;
+    transform: none;
+    opacity: 0.82;
+  }
+
+  .home-hero .hero-content h1 {
+    max-width: 100%;
+  }
+
+  .scroll-cue {
+    right: 1rem;
+    bottom: 1rem;
+    font-size: 0.55rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .hero-frame,
+  .featured-card > img {
+    transition: none;
   }
 }
