@@ -1,40 +1,13 @@
 .auth-layout {
-  display: grid;
-  flex: 1;
-  min-height: 100svh;
-  place-items: center;
-  padding: clamp(1rem, 4vw, 3rem);
   color: var(--paper);
   background: var(--background);
 }
 
 .auth-card {
-  width: min(100%, 640px);
   border: 1px solid var(--line-strong);
-  border-radius: 4px;
-  padding: clamp(1.35rem, 4vw, 2.9rem);
   color: var(--paper);
   background: var(--surface);
   box-shadow: 0 20px 70px rgb(0 0 0 / 12%);
-}
-
-.auth-topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.auth-store-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.65rem;
-  color: var(--muted);
-  font-size: 0.66rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-decoration: none;
-  text-transform: uppercase;
 }
 
 .auth-store-link:hover,
@@ -69,91 +42,9 @@
   stroke-width: 1.8;
 }
 
-.auth-brand {
-  display: flex;
-  justify-content: center;
-  margin: 2rem 0 2.3rem;
-}
-
-.auth-brand img {
-  display: block;
-  width: clamp(180px, 50%, 280px);
-  height: auto;
-}
-
-.auth-card > .eyebrow {
-  display: flex;
-  justify-content: center;
-  margin: 0 0 1rem;
-  color: var(--secondary);
-}
-
-.auth-card > .section-title {
-  color: var(--paper);
-  text-align: center;
-}
-
-.auth-description {
-  margin: 1rem 0 2rem;
-  color: var(--muted);
-  line-height: 1.7;
-  text-align: center;
-}
-
-.auth-form {
-  display: grid;
-  gap: 1.15rem;
-}
-
-.submit-button {
-  width: 100%;
-  min-height: 54px;
-  margin-top: 0.35rem;
-}
-
-.form-message {
-  margin: 0;
-  font-size: 0.9rem;
-  line-height: 1.55;
-}
-
-.auth-switch {
-  margin: 1.6rem 0 0;
-  border-top: 1px solid var(--line);
-  padding-top: 1.4rem;
-  color: var(--muted);
-  font-size: 0.9rem;
-  text-align: center;
-}
-
 .auth-switch a {
   color: var(--secondary);
   font-weight: 700;
-}
-
-.auth-age,
-.form-footnote {
-  margin: 1.5rem 0 0;
-  color: var(--muted-dim);
-  font-size: 0.76rem;
-  line-height: 1.65;
-  text-align: center;
-}
-
-.signup-card {
-  width: min(100%, 740px);
-}
-
-.signup-card .auth-brand {
-  margin-block: 1.5rem 1.8rem;
-}
-
-.signup-card .auth-description {
-  margin-bottom: 1.5rem;
-}
-
-.signup-form {
-  gap: 1.25rem;
 }
 
 .signup-form .field input[aria-invalid='true'] {
@@ -200,21 +91,6 @@
   stroke-width: 1.7;
 }
 
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-}
-
-.account-tabs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.5rem;
-  margin: 0 0 1.5rem;
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 0.75rem;
-}
-
 .account-tabs button {
   min-height: 46px;
   border: 1px solid var(--line);
@@ -233,13 +109,6 @@
   border-color: var(--gold);
   color: var(--gold);
   background: color-mix(in srgb, var(--gold), transparent 92%);
-}
-
-.business-fields {
-  display: grid;
-  gap: 1rem;
-  border-block: 1px solid var(--line);
-  padding-block: 1rem 1.2rem;
 }
 
 .form-section-label {
@@ -270,22 +139,6 @@
 }
 
 @media (max-width: 520px) {
-  .auth-layout {
-    padding: 0.75rem;
-  }
-
-  .auth-card {
-    padding: 1.25rem;
-  }
-
-  .auth-brand {
-    margin-block: 1.6rem 2rem;
-  }
-
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
-
   .account-tabs button {
     font-size: 0.6rem;
     letter-spacing: 0.06em;
