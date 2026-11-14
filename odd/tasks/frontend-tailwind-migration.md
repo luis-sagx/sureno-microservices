@@ -81,9 +81,9 @@ The user explicitly approved migrating the frontend gradually to Tailwind, begin
 - The reported SSR `AbortError` occurs when Angular's request signal is canceled. The local SSR source rejects that canceled request; direct requests to `/` and `/registro` returned HTTP 200. No route failure was reproduced.
 - Corrected all arbitrary font-family utilities using Tailwind v4's documented family-name hint. Official syntax reference: https://tailwindcss.com/docs/font-family.
 - Verified that the production build emits `.font-\(family-name\:--font-display\){font-family:var(--font-display)}` and the corresponding label utility; no generated `font-weight: var(--font-display)` or `font-weight: var(--font-label)` remains. The running dev server serves updated markup/CSS and returns HTTP 200 for Home and `/registro`.
-- TW-07 work-unit commit pending.
+- TW-07 work-unit commit: `5086290` (`fix(frontend): restore custom font family utilities`).
 - The local Engram v2 CLI accepted the full task copy as observation #121, but export shows `topic: null`; the requested topic-scoped mirror remains pending.
 
 ## Next step
 
-Commit TW-07 and record its identity. No PR or push was requested; retain unrelated working-tree changes untouched.
+Tailwind migration and the typography correction are complete. No PR or push was requested; retain unrelated working-tree changes untouched.
