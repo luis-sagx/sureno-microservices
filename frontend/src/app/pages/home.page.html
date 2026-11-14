@@ -1,0 +1,56 @@
+<section class="home-hero">
+  <div class="hero-backdrop" aria-hidden="true"></div>
+  <div class="hero-content page-container">
+    <p class="eyebrow">Quito · tradición licorera desde 1998</p>
+    <h1 class="display-title">Licores para celebrar.<br /><em>Hechos en el sur.</em></h1>
+    <p class="hero-copy">Conoce los sabores de Sureño. Explora nuestras presentaciones por unidad y por caja completa.</p>
+    <div class="hero-actions">
+      <a class="button-primary" routerLink="/catalogo">Explorar catálogo <span aria-hidden="true">↗</span></a>
+      <a class="button-secondary" routerLink="/quienes-somos">Nuestra historia</a>
+    </div>
+    <p class="hero-note">Compra y disponibilidad por confirmar · Servicio para mayores de 18 años</p>
+  </div>
+  <span class="hero-index" aria-hidden="true">01 / SUREÑO</span>
+</section>
+
+<section class="home-intro page-container">
+  <div class="intro-copy">
+    <p class="eyebrow">El catálogo</p>
+    <h2 class="section-title">Una colección<br />para cada ocasión.</h2>
+  </div>
+  <p class="intro-description">Desde nuestros aguardientes de tradición hasta cócteles frutales. Encuentra cada producto con sus presentaciones y disponibilidad informativa.</p>
+</section>
+
+<section class="featured-section">
+  <div class="featured-grid page-container">
+    @for (product of featured; track product.name; let index = $index) {
+      <a class="featured-card" routerLink="/catalogo" [queryParams]="{ q: product.name }">
+        <img [src]="product.image" [alt]="product.name" [attr.loading]="index === 0 ? 'eager' : 'lazy'" />
+        <span class="featured-shade" aria-hidden="true"></span>
+        <span class="featured-number">0{{ index + 1 }}</span>
+        <span class="featured-caption">
+          <span class="eyebrow">{{ product.category }}</span>
+          <strong>{{ product.name }}</strong>
+          <span class="featured-link">Ver producto <span aria-hidden="true">↗</span></span>
+        </span>
+      </a>
+    }
+  </div>
+  <div class="featured-cta page-container">
+    <a routerLink="/catalogo">Ver todos los productos <span aria-hidden="true">→</span></a>
+  </div>
+</section>
+
+<section class="heritage-band">
+  <div class="heritage-inner page-container">
+    <div>
+      <p class="eyebrow">Herencia · 1998</p>
+      <h2 class="section-title">Una historia nacida<br />en el sur de Quito.</h2>
+    </div>
+    <div class="heritage-detail">
+      <p>El sabor auténtico del sur de Quito, en cada botella. Una tradición que sigue creciendo con cada generación.</p>
+      <a routerLink="/quienes-somos">Conoce Sureño <span aria-hidden="true">→</span></a>
+    </div>
+    <img class="heritage-mark" src="/logo-isotipo.png" alt="" aria-hidden="true" loading="lazy" />
+  </div>
+</section>

@@ -1,0 +1,60 @@
+<section class="about-intro">
+  <div class="page-container about-intro-grid">
+    <div>
+      <p class="eyebrow">Quiénes somos</p>
+      <h1 class="display-title">Una historia nacida<br />en el <em>sur de Quito.</em></h1>
+      <p class="story-copy">El 22 de mayo de 1998 nace la idea de formar una pequeña industria licorera en el sur de la ciudad de Quito llamada <strong>Sureño</strong>, desarrollándose al principio artesanalmente. Con el transcurso del tiempo evolucionó como microempresa, cumpliendo siempre con normas INEN y procesos controlados por ARCSA.</p>
+      <p class="story-copy">Maximizamos la satisfacción de nuestros clientes y de todos los que conformamos la familia Sureño, superándonos cada día para estar a la altura de sus exigencias.</p>
+    </div>
+    <div class="about-seal" aria-label="Sureño, tradición desde 1998">
+      <span></span><img src="/logo-isotipo.png" alt="Isotipo de Sureño" width="180" height="180" />
+      <p>Desde 1998<br />Quito, Ecuador</p>
+    </div>
+  </div>
+</section>
+
+<section class="about-quote">
+  <div class="quote-backdrop" aria-hidden="true"></div>
+  <div class="page-container quote-content">
+    <p class="eyebrow">El sabor auténtico del sur</p>
+    <blockquote>“En cada botella destilamos tradición, pasión y el sabor de lo auténtico.”</blockquote>
+  </div>
+</section>
+
+<section class="purpose-section">
+  <div class="page-container">
+    <p class="eyebrow">Propósito</p>
+    <h2 class="section-title">Lo que nos mueve.</h2>
+    <div class="purpose-grid">
+      @for (item of purpose; track item.title) {
+        <article class="purpose-card">
+          <img [src]="item.image" [alt]="item.alt" loading="lazy" />
+          <div>
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.text }}</p>
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="about-products">
+  <div class="page-container">
+    <div class="products-heading">
+      <div>
+        <p class="eyebrow">Nuestro portafolio</p>
+        <h2 class="section-title">Tradición en cada botella.</h2>
+      </div>
+      <a routerLink="/catalogo">Conocer el catálogo <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="about-product-grid">
+      @for (product of products; track product.name) {
+        <figure>
+          <img [src]="product.image" [alt]="product.name" loading="lazy" />
+          <figcaption>{{ product.name }}</figcaption>
+        </figure>
+      }
+    </div>
+  </div>
+</section>

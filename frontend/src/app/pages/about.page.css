@@ -1,0 +1,262 @@
+.about-intro {
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.about-intro-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  align-items: center;
+  gap: 5rem;
+  padding-block: clamp(4rem, 9vw, 8rem);
+}
+
+.about-intro .eyebrow {
+  margin-bottom: 1.5rem;
+}
+
+.about-intro h1 em {
+  color: var(--gold);
+  font-weight: 400;
+}
+
+.story-copy {
+  max-width: 66ch;
+  margin: 1.6rem 0 0;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.story-copy strong {
+  color: var(--paper);
+}
+
+.about-seal {
+  position: relative;
+  display: grid;
+  min-height: 280px;
+  place-items: center;
+  align-content: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  aspect-ratio: 1;
+  color: var(--gold);
+  text-align: center;
+}
+
+.about-seal::before,
+.about-seal::after {
+  position: absolute;
+  inset: 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  content: '';
+}
+
+.about-seal::after {
+  inset: 2.2rem;
+  opacity: 0.6;
+}
+
+.about-seal img {
+  z-index: 1;
+  width: 34%;
+  height: auto;
+  object-fit: contain;
+}
+
+.about-seal p {
+  z-index: 1;
+  margin: 0.75rem 0 0;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1.8;
+  text-transform: uppercase;
+}
+
+.about-quote {
+  position: relative;
+  min-height: 300px;
+  display: grid;
+  align-items: center;
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+}
+
+.quote-backdrop {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgb(19 17 16 / 84%), rgb(19 17 16 / 70%)), url('/bg.webp') center / cover;
+  opacity: 0.85;
+}
+
+.quote-content {
+  position: relative;
+  max-width: 850px;
+  padding-block: 4rem;
+}
+
+.quote-content .eyebrow {
+  justify-content: center;
+}
+
+.quote-content blockquote {
+  margin: 1.2rem 0 0;
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.6rem);
+  font-style: italic;
+  line-height: 1.2;
+}
+
+.purpose-section,
+.about-products {
+  padding-block: clamp(4rem, 8vw, 7rem);
+}
+
+.purpose-section .section-title {
+  margin-top: 0.8rem;
+}
+
+.purpose-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.2rem;
+  margin-top: 2.5rem;
+}
+
+.purpose-card {
+  display: grid;
+  grid-template-columns: minmax(100px, 0.6fr) 1fr;
+  align-items: center;
+  gap: 1.5rem;
+  border: 1px solid var(--line);
+  padding: clamp(1rem, 3vw, 2rem);
+  background: var(--surface);
+}
+
+.purpose-card img {
+  width: 100%;
+  max-height: 210px;
+  object-fit: contain;
+}
+
+.purpose-card h3 {
+  margin: 0 0 0.6rem;
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 400;
+}
+
+.purpose-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+
+.about-products {
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.products-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.products-heading .eyebrow {
+  margin-bottom: 1rem;
+}
+
+.products-heading a {
+  flex: 0 0 auto;
+  color: var(--gold);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.about-product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.about-product-grid figure {
+  margin: 0;
+  border: 1px solid var(--line);
+  padding: 0.75rem;
+}
+
+.about-product-grid img {
+  display: block;
+  width: 100%;
+  height: 220px;
+  object-fit: contain;
+  background: var(--background);
+}
+
+.about-product-grid figcaption {
+  padding: 0.8rem 0.3rem 0.2rem;
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+}
+
+@media (max-width: 850px) {
+  .about-intro-grid {
+    grid-template-columns: minmax(0, 1fr) 210px;
+    gap: 2rem;
+  }
+
+  .about-seal {
+    min-height: 210px;
+  }
+
+  .purpose-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .about-intro-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-seal {
+    width: min(230px, 80%);
+    min-height: 0;
+    margin-inline: auto;
+  }
+
+  .purpose-card {
+    grid-template-columns: 1fr;
+  }
+
+  .purpose-card img {
+    max-height: 145px;
+  }
+
+  .products-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .about-product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .about-product-grid img {
+    height: 170px;
+  }
+}

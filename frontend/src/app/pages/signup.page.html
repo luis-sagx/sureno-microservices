@@ -1,0 +1,58 @@
+<section class="auth-layout signup-layout">
+  <div class="auth-photo" aria-hidden="true"></div>
+  <div class="auth-panel signup-panel">
+    <div class="auth-card signup-card">
+      <p class="eyebrow">Bienvenido a Sureño</p>
+      <h1 class="section-title">Crear una cuenta.</h1>
+      <p class="auth-description">Todos los clientes deben tener 18 años cumplidos. Las cuentas comerciales requieren revisión manual.</p>
+
+      <div class="account-tabs" role="group" aria-label="Tipo de cuenta">
+        <button type="button" [class.is-selected]="accountType === 'individual'" (click)="accountType = 'individual'; submitted = false">Cliente particular</button>
+        <button type="button" [class.is-selected]="accountType === 'business'" (click)="accountType = 'business'; submitted = false">Negocio B2B</button>
+      </div>
+
+      @if (submitted) {
+        <div class="success-message" role="status">
+          <p>{{ message }}</p>
+          <a class="button-primary" routerLink="/login">Ir a iniciar sesión</a>
+        </div>
+      } @else {
+        <form class="auth-form signup-form" (ngSubmit)="submit()">
+          <div class="form-grid">
+            <div class="field"><label for="cedula">Cédula</label><input id="cedula" name="cedula" inputmode="numeric" maxlength="10" required [(ngModel)]="form.cedula" /></div>
+            <div class="field"><label for="telefono">Teléfono</label><input id="telefono" name="telefono" type="tel" autocomplete="tel" required [(ngModel)]="form.telefono" /></div>
+            <div class="field"><label for="nombres">Nombres</label><input id="nombres" name="nombres" autocomplete="given-name" required [(ngModel)]="form.nombres" /></div>
+            <div class="field"><label for="apellidos">Apellidos</label><input id="apellidos" name="apellidos" autocomplete="family-name" required [(ngModel)]="form.apellidos" /></div>
+            <div class="field"><label for="fecha_nacimiento">Fecha de nacimiento</label><input id="fecha_nacimiento" name="fecha_nacimiento" type="date" [max]="maxBirthDate" required [(ngModel)]="form.fecha_nacimiento" /></div>
+            <div class="field"><label for="email_contacto">Correo (opcional)</label><input id="email_contacto" name="email_contacto" type="email" autocomplete="email" [(ngModel)]="form.email_contacto" /></div>
+          </div>
+
+          @if (accountType === 'business') {
+            <div class="business-fields">
+              <p class="form-section-label">Datos del negocio · revisión manual</p>
+              <div class="form-grid">
+                <div class="field"><label for="ruc">RUC</label><input id="ruc" name="ruc" inputmode="numeric" maxlength="13" [required]="accountType === 'business'" [(ngModel)]="form.ruc" /></div>
+                <div class="field"><label for="razon_social">Razón social</label><input id="razon_social" name="razon_social" [required]="accountType === 'business'" [(ngModel)]="form.razon_social" /></div>
+                <div class="field"><label for="nombre_comercial">Nombre comercial (opcional)</label><input id="nombre_comercial" name="nombre_comercial" [(ngModel)]="form.nombre_comercial" /></div>
+                <div class="field"><label for="direccion_negocio">Dirección del negocio</label><input id="direccion_negocio" name="direccion_negocio" [required]="accountType === 'business'" [(ngModel)]="form.direccion_negocio" /></div>
+              </div>
+            </div>
+          }
+
+          <div class="form-grid">
+            <div class="field"><label for="username">Usuario</label><input id="username" name="username" autocomplete="username" required minlength="3" [(ngModel)]="form.username" /></div>
+            <div class="field"><label for="password">Contraseña (12 caracteres mínimo)</label><input id="password" name="password" type="password" autocomplete="new-password" required minlength="12" [(ngModel)]="form.password" /></div>
+          </div>
+
+          @if (error) { <p class="form-message error-message" role="alert">{{ error }}</p> }
+          <button class="button-primary submit-button" type="submit" [disabled]="loading || form.password.length < 12">
+            {{ loading ? 'Enviando…' : accountType === 'business' ? 'Enviar solicitud comercial' : 'Crear cuenta' }}
+          </button>
+          <p class="form-footnote">La aprobación comercial y la verificación de identidad son procesos separados. Registrar un RUC no habilita precios mayoristas.</p>
+        </form>
+      }
+
+      <p class="auth-switch">¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a></p>
+    </div>
+  </div>
+</section>
