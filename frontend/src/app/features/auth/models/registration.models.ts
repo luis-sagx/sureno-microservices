@@ -15,6 +15,5 @@ export interface RegistrationPayload extends RegistrationFieldsPayload {
 export interface BusinessRegistrationPayload extends RegistrationFieldsPayload {
   ruc: string;
   razon_social: string;
-  nombre_comercial?: string;
   direccion_negocio: string;
 }

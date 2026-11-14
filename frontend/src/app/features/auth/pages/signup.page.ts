@@ -37,7 +37,6 @@ export class SignupPage {
     username: '',
     password: '',
     razon_social: '',
-    nombre_comercial: '',
     direccion_negocio: '',
   };
 
@@ -64,9 +63,6 @@ export class SignupPage {
             ...common,
             ruc: this.form.cedula.trim(),
             razon_social: this.form.razon_social.trim(),
-            ...(this.form.nombre_comercial.trim() && {
-              nombre_comercial: this.form.nombre_comercial.trim(),
-            }),
             direccion_negocio: this.form.direccion_negocio.trim(),
           } satisfies BusinessRegistrationPayload)
         : this.api.registerIndividual({

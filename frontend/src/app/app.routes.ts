@@ -26,6 +26,13 @@ export const routes: Routes = [
     path: 'registro',
     loadComponent: () => import('./features/auth/pages/signup.page').then((module) => module.SignupPage),
   },
+  {
+    path: 'cuenta',
+    loadComponent: () =>
+      import('./features/auth/pages/business-account-settings.page').then(
+        (module) => module.BusinessAccountSettingsPage,
+      ),
+  },
   { path: 'about', redirectTo: 'quienes-somos', pathMatch: 'full' },
   { path: 'catalog', redirectTo: 'catalogo', pathMatch: 'full' },
   { path: 'auth/login', redirectTo: 'login', pathMatch: 'full' },
