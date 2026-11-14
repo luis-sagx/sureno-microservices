@@ -68,11 +68,11 @@ The signup page currently checks only whether required fields are present and wh
 
 ### REG-03 — Single-RUC B2B registration contract
 
-- [ ] Change B2B registration to require a valid business RUC in the single identity field, relabel/validate that field conditionally, remove the duplicate form field and request property, and persist the single value in both corresponding identifiers; add backend and Angular tests first.
+- [x] Change B2B registration to require a valid business RUC in the single identity field, relabel/validate that field conditionally, remove the duplicate form field and request property, and persist the single value in both corresponding identifiers; add backend and Angular tests first.
 - Route: delegated direct; changes domain validation, request model, signup component/template, and tests.
 - TDD: enabled; `pnpm test` in `ms-auth`; `./node_modules/.bin/ng test --watch=false` in `frontend`.
-- Verification evidence: pending.
-- Commit: pending.
+- TDD: RED showed the business validator rejecting RUC-only payloads and the client sending the wrong payload shape. GREEN: `ms-auth pnpm test` passed 46/46 with build/lint; Angular passed 70/70 with build. `git diff --cached --check` passed. Existing message-copy edits were kept unstaged, outside the REG-03 commit.
+- Commit: `a9d1536` — `feat(auth): use one business RUC input`.
 
 ### REG-04 — Stable validation layout and conditional B2B RUC UI
 
@@ -88,5 +88,5 @@ The signup page currently checks only whether required fields are present and wh
 - REG-01 now validates Ecuadorian cédula checksum and natural-person RUC, business RUC structure, requested names/user/email/phone/date/password constraints, and widens persisted person IDs to 13 digits.
 - REG-02 now performs client-side field validation before any request, exposes field messages, supports show/hide password, and reports a friendly timeout after 15 seconds while always releasing the loading state.
 - Verification: frontend suite 69/69 and build passed. MS01 suite 45/45, build, and lint passed when run with `.env.example` settings; an initial verification without environment values failed two integration test suites because database credentials and `AUTH_SESSION_SECRET` were absent. The MS01 migration was applied to the local database.
-- User review follow-up: the validation messages changed signup row heights and B2B asks for the RUC twice. The user authorized REG-03/REG-04 to keep error space stable and collect/validate one business RUC only.
-- Next: complete REG-03/REG-04 by TDD and commit each unit on the existing feature branch.
+- User review follow-up: the validation messages changed signup row heights and B2B asks for the RUC twice. REG-03 now shows a conditional RUC label, accepts one business RUC field/request property, and maps it to both domain records; B2C keeps its cédula/personal-RUC behavior.
+- Next: complete REG-04 by TDD so inline errors use reserved space without shifting the signup grid.
