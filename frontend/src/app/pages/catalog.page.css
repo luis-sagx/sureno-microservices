@@ -1,6 +1,6 @@
 .catalog-intro {
   border-bottom: 1px solid var(--line);
-  background: radial-gradient(90% 90% at 10% 0%, rgb(169 191 212 / 9%), transparent 70%), var(--surface);
+  background: radial-gradient(90% 90% at 10% 0%, color-mix(in srgb, var(--navy), transparent 90%), transparent 70%), var(--surface);
 }
 
 .catalog-intro .page-container {
@@ -139,7 +139,7 @@
   height: clamp(230px, 25vw, 330px);
   place-items: center;
   overflow: hidden;
-  background: #100e0d;
+  background: var(--product-stage);
 }
 
 .product-image-wrap img {
@@ -161,7 +161,7 @@
   border: 1px solid var(--line-strong);
   padding: 0.42rem 0.55rem;
   color: var(--gold);
-  background: rgb(19 17 16 / 82%);
+  background: var(--product-badge);
   font-size: 0.58rem;
   font-weight: 700;
   letter-spacing: 0.12em;

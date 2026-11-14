@@ -13,7 +13,7 @@ main {
   top: 0;
   z-index: 20;
   border-bottom: 1px solid var(--line);
-  background: rgb(19 17 16 / 94%);
+  background: var(--header-background);
   backdrop-filter: blur(14px);
 }
 
@@ -85,6 +85,39 @@ main {
   color: var(--paper);
 }
 
+.theme-toggle {
+  order: 1;
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  border: 1px solid var(--line);
+  padding: 0.5rem 0.7rem;
+  color: var(--muted);
+  background: transparent;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.theme-toggle:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.theme-toggle-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
 .menu-toggle span {
   width: 18px;
   height: 1px;
@@ -151,7 +184,12 @@ main {
   }
 
   .menu-toggle {
+  order: 2;
     display: flex;
+  }
+
+  .theme-toggle {
+    margin-left: auto;
   }
 
   .main-navigation {

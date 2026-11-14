@@ -7,7 +7,7 @@
 
 .auth-photo {
   min-height: 100%;
-  background: linear-gradient(0deg, rgb(19 17 16 / 65%), rgb(19 17 16 / 25%)), url('/bg.webp') center / cover;
+  background: var(--auth-photo-overlay), url('/bg.webp') center / cover;
 }
 
 .auth-panel {
@@ -114,7 +114,7 @@
 .account-tabs button.is-selected {
   border-color: var(--gold);
   color: var(--gold);
-  background: rgb(233 193 118 / 8%);
+  background: color-mix(in srgb, var(--gold), transparent 92%);
 }
 
 .business-fields {

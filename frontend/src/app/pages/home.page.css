@@ -12,7 +12,7 @@
   position: absolute;
   z-index: -2;
   inset: 0;
-  background-image: linear-gradient(90deg, rgb(19 17 16 / 95%) 0%, rgb(19 17 16 / 75%) 48%, rgb(19 17 16 / 35%) 100%), url('/bg.webp');
+  background-image: var(--hero-photo-overlay), url('/bg.webp');
   background-position: center;
   background-size: cover;
 }
@@ -134,7 +134,7 @@
 .featured-shade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgb(19 17 16 / 12%), transparent 35%, rgb(19 17 16 / 92%));
+  background: var(--featured-shade);
 }
 
 .featured-number {
@@ -234,7 +234,7 @@
   }
 
   .hero-backdrop {
-    background-image: linear-gradient(90deg, rgb(19 17 16 / 90%), rgb(19 17 16 / 68%)), url('/bg.webp');
+    background-image: var(--hero-photo-overlay-mobile), url('/bg.webp');
     background-position: 57% center;
   }
 

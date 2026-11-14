@@ -1,6 +1,7 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from './core/auth.service';
+import { ThemeService } from './core/theme.service';
 
 @Component({
   imports: [RouterOutlet, RouterLink, RouterLinkActive],
@@ -10,10 +11,12 @@ import { AuthService } from './core/auth.service';
 })
 export class App implements OnInit {
   protected readonly menuOpen = signal(false);
+  protected readonly theme = inject(ThemeService);
 
   constructor(protected readonly auth: AuthService) {}
 
   ngOnInit() {
+    this.theme.initialize();
     this.auth.restoreSession();
   }
 

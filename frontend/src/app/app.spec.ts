@@ -40,4 +40,21 @@ describe('App', () => {
     expect(paths).toContain('login');
     expect(paths).toContain('registro');
   });
+
+  it('shows an accessible theme control that switches the page theme', () => {
+    localStorage.clear();
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    const themeButton = compiled.querySelector<HTMLButtonElement>(
+      'button[aria-label="Cambiar a modo oscuro"]',
+    );
+
+    expect(themeButton).toBeTruthy();
+    themeButton!.click();
+    fixture.detectChanges();
+
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    expect(localStorage.getItem('sureno-theme')).toBe('dark');
+  });
 });

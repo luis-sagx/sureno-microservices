@@ -1,6 +1,38 @@
 @import 'tailwindcss';
 
 :root {
+  color-scheme: light;
+  --background: #fafaf8;
+  --surface: #ffffff;
+  --surface-raised: #f5f3ef;
+  --paper: #23180d;
+  --muted: #5a4535;
+  --muted-dim: #786b60;
+  --gold: #986616;
+  --navy: #17324d;
+  --line: rgb(23 50 77 / 18%);
+  --line-strong: rgb(23 50 77 / 42%);
+  --error: #ba1a1a;
+  --header-background: rgb(250 250 248 / 94%);
+  --hero-photo-overlay: linear-gradient(90deg, rgb(250 250 248 / 96%) 0%, rgb(250 250 248 / 82%) 48%, rgb(250 250 248 / 18%) 100%);
+  --hero-photo-overlay-mobile: linear-gradient(90deg, rgb(250 250 248 / 94%), rgb(250 250 248 / 60%));
+  --featured-shade: linear-gradient(180deg, rgb(250 250 248 / 6%), transparent 35%, rgb(250 250 248 / 91%));
+  --quote-overlay: linear-gradient(0deg, rgb(250 250 248 / 78%), rgb(250 250 248 / 68%));
+  --auth-photo-overlay: linear-gradient(0deg, rgb(250 250 248 / 36%), rgb(250 250 248 / 12%));
+  --product-stage: #f5f3ef;
+  --product-badge: rgb(250 250 248 / 92%);
+  --font-display: Georgia, 'Times New Roman', serif;
+  --font-body: 'Hanken Grotesk', 'Segoe UI', Arial, sans-serif;
+  font-family: var(--font-body);
+  background: var(--background);
+  color: var(--paper);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root[data-theme='dark'] {
   color-scheme: dark;
   --background: #131110;
   --surface: #1b1815;
@@ -13,15 +45,14 @@
   --line: rgb(169 191 212 / 20%);
   --line-strong: rgb(169 191 212 / 46%);
   --error: #ffb4ab;
-  --font-display: Georgia, 'Times New Roman', serif;
-  --font-body: 'Hanken Grotesk', 'Segoe UI', Arial, sans-serif;
-  font-family: var(--font-body);
-  background: var(--background);
-  color: var(--paper);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --header-background: rgb(19 17 16 / 94%);
+  --hero-photo-overlay: linear-gradient(90deg, rgb(19 17 16 / 95%) 0%, rgb(19 17 16 / 75%) 48%, rgb(19 17 16 / 35%) 100%);
+  --hero-photo-overlay-mobile: linear-gradient(90deg, rgb(19 17 16 / 90%), rgb(19 17 16 / 68%));
+  --featured-shade: linear-gradient(180deg, rgb(19 17 16 / 12%), transparent 35%, rgb(19 17 16 / 92%));
+  --quote-overlay: linear-gradient(0deg, rgb(19 17 16 / 84%), rgb(19 17 16 / 70%));
+  --auth-photo-overlay: linear-gradient(0deg, rgb(19 17 16 / 65%), rgb(19 17 16 / 25%));
+  --product-stage: #100e0d;
+  --product-badge: rgb(19 17 16 / 82%);
 }
 
 * {
@@ -137,8 +168,8 @@ img {
 }
 
 .button-primary:hover:not(:disabled) {
-  border-color: #f2d79b;
-  background: #f2d79b;
+  border-color: color-mix(in srgb, var(--gold), white 24%);
+  background: color-mix(in srgb, var(--gold), white 24%);
 }
 
 .button-secondary {

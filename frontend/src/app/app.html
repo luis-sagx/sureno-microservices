@@ -5,6 +5,17 @@
     </a>
 
     <button
+      class="theme-toggle"
+      type="button"
+      [attr.aria-label]="theme.theme() === 'light' ? 'Cambiar a modo oscuro' : 'Cambiar a modo claro'"
+      [attr.aria-pressed]="theme.theme() === 'dark'"
+      (click)="theme.toggle()"
+    >
+      <span aria-hidden="true">{{ theme.theme() === 'light' ? '☾' : '☀' }}</span>
+      <span class="theme-toggle-label">{{ theme.theme() === 'light' ? 'Oscuro' : 'Claro' }}</span>
+    </button>
+
+    <button
       class="menu-toggle"
       type="button"
       [attr.aria-expanded]="menuOpen()"

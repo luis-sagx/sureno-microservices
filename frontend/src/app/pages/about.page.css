@@ -89,7 +89,7 @@
 .quote-backdrop {
   position: absolute;
   inset: 0;
-  background: linear-gradient(0deg, rgb(19 17 16 / 84%), rgb(19 17 16 / 70%)), url('/bg.webp') center / cover;
+  background: var(--quote-overlay), url('/bg.webp') center / cover;
   opacity: 0.85;
 }
 
