@@ -52,7 +52,7 @@ The current site has a wide, tall catalog introduction and verbose product cards
 - [x] Restyle the shared navbar and footer to the reference composition using existing assets and behavior. Cart icon omitted because no cart flow exists; no response to the focused preference question arrived before this task closed.
 - Check: RED observed (2 new assertions failed, 26 passed); GREEN after implementation/refactor (`npm test -- --watch=false`: 6 files, 28 tests); `npm run build` passed and prerendered 5 routes; `git diff --check` passed. The only build warning is the existing catalog CSS budget warning (5.44 KB vs 4 KB).
 - Route: delegated direct; multiple non-trivial shared template/style edits.
-- Commit: pending parent escalation because `.git` is read-only in the sandbox.
+- Commit: `0a77dae` — `feat(frontend): refresh shared storefront shell`.
 - Receipt-driven review: disabled/unmanaged; no native assessment or approval claimed.
 
 ### SVR-02 — Home hero and wholesale CTA
@@ -80,5 +80,5 @@ The current site has a wide, tall catalog introduction and verbose product cards
 
 - Exploration confirms the relevant Angular files are under `frontend/src/app`; the visual source project is Next.js under `/home/luissagnay/Desktop/ls/projects/sureno`.
 - Business rules permit removing the generic infrastructure notice but require preserving truthful availability and price states.
-- SVR-01 implementation and checks are complete; only its work-unit commit and commit identity record remain.
-- Next: close SVR-01, then implement SVR-02.
+- SVR-01 implementation, checks, and work-unit commit are complete.
+- Next: implement SVR-02.
