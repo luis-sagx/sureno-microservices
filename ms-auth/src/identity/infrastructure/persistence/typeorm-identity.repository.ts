@@ -6,6 +6,7 @@ import type { BusinessRegistrationInput } from '../../domain/registration.js';
 import type {
   IdentityRegistration,
   IdentityRepository,
+  BusinessAccountSettings,
   PendingReviews,
   PersonReviewResult,
   RegistrationResponse,
@@ -102,7 +103,7 @@ export class TypeOrmIdentityRepository implements IdentityRepository {
             user_id: userId,
             ruc: registration.ruc,
             razon_social: registration.razon_social,
-            nombre_comercial: registration.nombre_comercial,
+            nombre_comercial: null,
             direccion_negocio: registration.direccion_negocio,
             estado_solicitud: 'PENDING',
             revisado_por_user_id: null,
@@ -239,6 +240,32 @@ export class TypeOrmIdentityRepository implements IdentityRepository {
         motivo_rechazo: account.motivo_rechazo,
       };
     });
+  }
+
+  async getBusinessAccountSettings(
+    userId: string,
+  ): Promise<BusinessAccountSettings | null> {
+    const [settings] = await this.dataSource.query(
+      `SELECT nombre_comercial
+       FROM business_account
+       WHERE user_id = $1`,
+      [userId],
+    );
+    return settings ?? null;
+  }
+
+  async updateBusinessCommercialName(
+    userId: string,
+    nombreComercial: string | null,
+  ): Promise<BusinessAccountSettings | null> {
+    const [settings] = await this.dataSource.query(
+      `UPDATE business_account
+       SET nombre_comercial = $2
+       WHERE user_id = $1
+       RETURNING nombre_comercial`,
+      [userId, nombreComercial],
+    );
+    return settings ?? null;
   }
 }
 

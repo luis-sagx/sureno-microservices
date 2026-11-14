@@ -1,9 +1,11 @@
 import { IdentityError } from '../domain/identity-error.js';
+import { commercialNameFromSettings } from '../domain/business-account-profile.js';
 import {
   validateBusinessRequest,
   validateRegistration,
 } from '../domain/registration.js';
 import type {
+  BusinessAccountSettings,
   IdentityRepository,
   ReviewDecision,
 } from './identity.repository.js';
@@ -80,6 +82,36 @@ export class IdentityService {
       reason: rejectionReason,
       reviewerUserId,
     });
+  }
+
+  async getBusinessAccountSettings(
+    userId: string,
+  ): Promise<BusinessAccountSettings> {
+    this.validateUuid(userId);
+    const settings = await this.identities.getBusinessAccountSettings(userId);
+    if (!settings) {
+      throw new IdentityError(
+        'not_found',
+        'No hay una cuenta comercial asociada a este usuario.',
+      );
+    }
+    return settings;
+  }
+
+  async updateBusinessCommercialName(userId: string, input: unknown) {
+    this.validateUuid(userId);
+    const nombreComercial = commercialNameFromSettings(input);
+    const settings = await this.identities.updateBusinessCommercialName(
+      userId,
+      nombreComercial,
+    );
+    if (!settings) {
+      throw new IdentityError(
+        'not_found',
+        'No hay una cuenta comercial asociada a este usuario.',
+      );
+    }
+    return settings;
   }
 
   private validateUuid(value: string): void {

@@ -34,6 +34,10 @@ export type PersonReviewResult =
   | { status: 'not_found' }
   | { status: 'already_reviewed' };
 
+export type BusinessAccountSettings = {
+  nombre_comercial: string | null;
+};
+
 export interface IdentityRepository {
   register(input: IdentityRegistration): Promise<RegistrationResponse>;
   listPendingReviews(): Promise<PendingReviews>;
@@ -47,4 +51,9 @@ export interface IdentityRepository {
     reason: string;
     reviewerUserId: string;
   }): Promise<Record<string, unknown>>;
+  getBusinessAccountSettings(userId: string): Promise<BusinessAccountSettings | null>;
+  updateBusinessCommercialName(
+    userId: string,
+    nombreComercial: string | null,
+  ): Promise<BusinessAccountSettings | null>;
 }

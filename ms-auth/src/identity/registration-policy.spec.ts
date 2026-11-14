@@ -20,7 +20,6 @@ const validBusinessRegistration = () => {
     ...common,
     ruc: '1791234567001',
     razon_social: 'Comercial Sureño S.A.',
-    nombre_comercial: null,
     direccion_negocio: 'Quito, Ecuador',
   };
 };
@@ -96,6 +95,15 @@ describe('MS01 registration policy', () => {
       cedula: businessRuc,
       ruc: businessRuc,
     });
+  });
+
+  it('does not include optional commercial-name data in the registration contract', () => {
+    const registration = validateBusinessRequest({
+      ...validBusinessRegistration(),
+      nombre_comercial: 'Should be completed later',
+    });
+
+    expect(registration).not.toHaveProperty('nombre_comercial');
   });
 
   it.each(['0011234567001', '1771234567001', '1791234567000', '1710034065000'])

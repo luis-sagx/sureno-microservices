@@ -12,6 +12,9 @@ export interface RegisterIndividualDto {
 export interface RequestBusinessAccountDto extends Omit<RegisterIndividualDto, 'cedula'> {
   ruc: string;
   razon_social: string;
-  nombre_comercial?: string;
   direccion_negocio: string;
+}
+
+export interface UpdateBusinessAccountSettingsDto {
+  nombre_comercial: string | null;
 }

@@ -14,7 +14,6 @@ export interface RegistrationInput {
 export interface BusinessRegistrationInput extends RegistrationInput {
   ruc: string;
   razon_social: string;
-  nombre_comercial: string | null;
   direccion_negocio: string;
 }
 
@@ -227,11 +226,6 @@ export function validateBusinessRequest(
     ...registration,
     ruc,
     razon_social: text(input.razon_social, 'La razón social', 160),
-    nombre_comercial: optionalText(
-      input.nombre_comercial,
-      'El nombre comercial',
-      160,
-    ),
     direccion_negocio: text(
       input.direccion_negocio,
       'La dirección del negocio',

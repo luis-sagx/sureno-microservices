@@ -3,7 +3,7 @@ import { validateBusinessRequest } from './registration-validation.js';
 describe('business registration validation', () => {
   it('reports invalid business input with a framework-independent domain error', () => {
     const input = {
-      ruc: '1791234567001',
+      ruc: 'invalid-ruc',
       nombres: 'Andrea',
       apellidos: 'Paredes',
       fecha_nacimiento: '1995-04-21',
@@ -11,7 +11,6 @@ describe('business registration validation', () => {
       username: 'andrea-test',
       password: 'Seguro-Registro-2026!',
       razon_social: 'Comercial de Prueba S.A.',
-      nombre_comercial: 42,
       direccion_negocio: 'Quito, Ecuador',
     };
 
@@ -25,7 +24,7 @@ describe('business registration validation', () => {
     expect(caught).toMatchObject({
       name: 'IdentityValidationError',
       code: 'bad_request',
-      message: 'El nombre comercial no es válido.',
+      message: 'El RUC debe tener 13 dígitos válidos.',
     });
   });
 });
