@@ -1,5 +1,29 @@
 @import 'tailwindcss';
 
+@font-face {
+  font-family: 'EB Garamond';
+  src: url('/fonts/eb-garamond-latin.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'EB Garamond';
+  src: url('/fonts/eb-garamond-italic-latin.woff2') format('woff2');
+  font-style: italic;
+  font-weight: 400 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hanken Grotesk';
+  src: url('/fonts/hanken-grotesk-latin.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+}
+
 :root {
   color-scheme: light;
   --background: #fafaf8;
@@ -8,8 +32,9 @@
   --paper: #23180d;
   --muted: #5a4535;
   --muted-dim: #786b60;
-  --gold: #986616;
+  --gold: #b8842f;
   --navy: #17324d;
+  --secondary: #17324d;
   --line: rgb(23 50 77 / 18%);
   --line-strong: rgb(23 50 77 / 42%);
   --error: #ba1a1a;
@@ -22,8 +47,9 @@
   --product-stage: #f5f3ef;
   --product-badge: rgb(250 250 248 / 92%);
   --header-height: 76px;
-  --font-display: Georgia, 'Times New Roman', serif;
+  --font-display: 'EB Garamond', Georgia, 'Times New Roman', serif;
   --font-body: 'Hanken Grotesk', 'Segoe UI', Arial, sans-serif;
+  --font-label: 'Hanken Grotesk', 'Segoe UI', Arial, sans-serif;
   font-family: var(--font-body);
   background: var(--background);
   color: var(--paper);
@@ -43,6 +69,7 @@
   --muted-dim: #a79d8d;
   --gold: #e9c176;
   --navy: #a9bfd4;
+  --secondary: #a9bfd4;
   --line: rgb(169 191 212 / 20%);
   --line-strong: rgb(169 191 212 / 46%);
   --error: #ffb4ab;
@@ -245,6 +272,32 @@ img {
 
 .hairline-top {
   border-top: 1px solid var(--line);
+}
+
+[data-scroll-reveal='pending'] {
+  opacity: 0;
+  transform: translate3d(0, 1rem, 0);
+}
+
+[data-scroll-reveal='pending'],
+[data-scroll-reveal='visible'] {
+  transition:
+    opacity 700ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-scroll-reveal='visible'] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-scroll-reveal='pending'],
+  [data-scroll-reveal='visible'] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
 
 @media (max-width: 520px) {
