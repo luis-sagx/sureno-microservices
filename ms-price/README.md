@@ -13,7 +13,7 @@ pnpm db:seed:reference
 pnpm start:dev
 ```
 
-Las migraciones son repetibles. La carga inicial hace correspondencia por nombre exacto y presentación `UNIDAD`/`CAJA` de 12 unidades en MS02; si una presentación falta, aborta la transacción. Sólo importa las once cantidades explícitas del legado `/home/luissagnay/Desktop/ls/projects/sureno/prisma/add-sureno-products.ts`. Las tarifas B2B se calculan como `wholesaleUnitPrice` ya redondeado a centavos por 12 (por ejemplo, $1.67 × 12 = $20.04), según la decisión aceptada para este trabajo. No importa un precio público de caja porque el origen no lo define. Los valores del legado aún requieren validación comercial.
+Las migraciones son repetibles. La carga inicial hace correspondencia por nombre exacto y presentación `UNIDAD`/`CAJA` de 12 unidades en MS02; si una presentación falta, aborta la transacción. Sólo importa las once cantidades explícitas del legado `/home/luissagnay/Desktop/ls/projects/sureno/prisma/add-sureno-products.ts`. Como el legado no define una tarifa pública por caja, MS04 deriva una como nueve veces el precio B2C unitario, calculado en centavos (por ejemplo, $1.67 × 9 = $15.03). Las tarifas B2B se calculan como `wholesaleUnitPrice` ya redondeado a centavos por 12 (por ejemplo, $1.67 × 12 = $20.04). La carga no reemplaza ninguna tarifa activa ya configurada y registra en `price_changes` cada tarifa que inserta. Los valores del legado y la regla de caja aún requieren validación comercial.
 
 ## API
 
