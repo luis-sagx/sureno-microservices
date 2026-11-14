@@ -95,8 +95,8 @@ The first pass used the screenshots without auditing the reference's active desi
 - Check: focused reveal/card tests passed; full suite 7 files/38 tests; `npm run build` passed and prerendered five routes; `git diff --check` passed. Catalog CSS budget warning remains at 5.64 KB vs 4 KB; product-detail CSS is under budget.
 - Reopened because the reference audit found the active palette/type/motion system was not applied consistently to cards.
 - Route: delegated direct; catalog template/style and behavior coverage span multiple files.
-- Prior implementation commit: `435ffd2`; corrected and verified in `54ad983` (`feat(frontend): refine compact catalog product cards`).
-- Commit: `54ad983` (`feat(frontend): refine compact catalog product cards`).
+- Prior implementation commit: `435ffd2`; corrected and verified in `f0073fe` (`feat(frontend): refine compact catalog product cards`).
+- Commit: `f0073fe` (`feat(frontend): refine compact catalog product cards`).
 
 ## Progress and next step
 
@@ -104,6 +104,6 @@ The first pass used the screenshots without auditing the reference's active desi
 - Reference Home order is Hero, categories, full Heritage, trust, HORECA. The target had an abbreviated Heritage band after HORECA.
 - Existing auth theme persistence now has visible controls on the standalone routes and token-driven light/dark styles.
 - Previous SVR-01 through SVR-04 commits remain in history; user feedback reopens their visual acceptance. No unrelated completed work is invalidated.
-- All five tasks are implemented, verified, and committed: `9c5e256` (fonts/tokens/reveal), `8157ba5` (shared shell), `66cfdab` (home/Heritage), `fd19b19` (auth themes), and `54ad983` (catalog/product cards). The Engram mirror is synchronized with this task document.
+- All five tasks are implemented, verified, and committed: `9c5e256` (fonts/tokens/reveal), `8157ba5` (shared shell), `66cfdab` (home/Heritage), `fd19b19` (auth themes), and `f0073fe` (catalog/product cards). The Engram mirror is synchronized with this task document.
 - Final checks passed: full Angular suite (7 files/38 tests), production build/prerender of five routes, and `git diff --check`. The build reports component CSS budget warnings for Home (6.44 KB vs 4 KB) and catalog (5.64 KB vs 4 KB); these are warnings and the build succeeds.
 - Next: no implementation tasks remain in the authorized visual refresh scope. Unrelated and pre-existing workspace changes remain uncommitted.
