@@ -52,26 +52,6 @@ main {
   gap: clamp(1.25rem, 3vw, 2.6rem);
 }
 
-.main-navigation a,
-.footer-column a {
-  color: var(--muted);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-decoration: none;
-  text-transform: uppercase;
-}
-
-.main-navigation a {
-  padding-block: 0.65rem;
-}
-
-.main-navigation a:hover,
-.main-navigation a.active,
-.footer-column a:hover {
-  color: var(--gold);
-}
-
 .header-actions {
   display: flex;
   flex: 0 0 auto;
@@ -79,42 +59,13 @@ main {
   gap: 0.6rem;
 }
 
-.nav-account,
-.theme-toggle {
-  display: inline-grid;
-  width: 44px;
-  height: 44px;
-  place-items: center;
-  border: 1px solid transparent;
-  border-radius: 50%;
-  color: var(--muted);
-  background: transparent;
-}
-
-.nav-account:hover,
-.nav-account.active,
-.theme-toggle:hover {
-  color: var(--gold);
-}
-
-.nav-account svg,
-.theme-toggle svg {
-  width: 23px;
-  height: 23px;
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 1.8;
-}
-
 .theme-toggle {
   cursor: pointer;
 }
 
-a:focus-visible,
-button:focus-visible {
-  outline: 2px solid var(--gold);
-  outline-offset: 3px;
+.footer-column h2 {
+  font-family: var(--font-label);
+  color: var(--secondary);
 }
 
 .menu-toggle {
@@ -179,22 +130,6 @@ button:focus-visible {
   flex-direction: column;
   align-items: flex-start;
   gap: 0.95rem;
-}
-
-.footer-column h2 {
-  margin: 0 0 0.35rem;
-  color: var(--ink);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-}
-
-.footer-column a {
-  font-size: 0.88rem;
-  font-weight: 400;
-  letter-spacing: 0;
-  text-transform: none;
 }
 
 .footer-legal {
@@ -263,6 +198,10 @@ button:focus-visible {
     padding: 1rem 0.35rem;
   }
 
+  .main-navigation a::after {
+    content: none;
+  }
+
   .footer-inner {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 2rem 1.5rem;
@@ -280,6 +219,7 @@ button:focus-visible {
     grid-column: 2 / 3;
   }
 }
+
 
 @media (max-width: 420px) {
   .brand img {

@@ -17,9 +17,9 @@
     </button>
 
     <nav id="main-navigation" class="main-navigation" [class.is-open]="menuOpen()" aria-label="Navegación principal">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenu()">Inicio</a>
-      <a routerLink="/quienes-somos" routerLinkActive="active" (click)="closeMenu()">Quiénes somos</a>
-      <a routerLink="/catalogo" routerLinkActive="active" (click)="closeMenu()">Catálogo</a>
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page" (click)="closeMenu()">Inicio</a>
+      <a routerLink="/quienes-somos" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeMenu()">Quiénes somos</a>
+      <a routerLink="/catalogo" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeMenu()">Catálogo</a>
     </nav>
 
     <div class="header-actions" role="group" aria-label="Acciones de cuenta y apariencia">
@@ -27,6 +27,7 @@
         class="nav-account"
         routerLink="/login"
         routerLinkActive="active"
+        ariaCurrentWhenActive="page"
         [attr.aria-label]="auth.user() ? 'Mi cuenta' : 'Iniciar sesión'"
         (click)="closeMenu()"
       >

@@ -41,6 +41,25 @@ describe('App', () => {
     expect(accountLink?.querySelector('svg[aria-hidden="true"]')).toBeTruthy();
   });
 
+  it('marks the current page and applies the active navy palette to navigation', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+    await fixture.whenStable();
+    await router.navigateByUrl('/');
+    await fixture.whenStable();
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    const activeLink = compiled.querySelector<HTMLAnchorElement>('.main-navigation a.active');
+
+    expect(activeLink?.classList.contains('active')).toBe(true);
+    expect(activeLink?.getAttribute('aria-current')).toBe('page');
+
+    compiled.querySelector<HTMLButtonElement>('.theme-toggle')!.click();
+    fixture.detectChanges();
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    expect(localStorage.getItem('sureno-theme')).toBe('dark');
+  });
+
   it('groups footer navigation under company, legal, and support headings', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();

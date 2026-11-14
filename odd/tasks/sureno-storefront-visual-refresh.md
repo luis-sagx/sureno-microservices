@@ -64,9 +64,10 @@ The first pass used the screenshots without auditing the reference's active desi
 
 ### SVR-01 — Shared navigation and footer (reopened by user feedback)
 
-- [ ] Revisit navbar/footer after SVR-05 to apply the reference's navy/mist-blue, loaded fonts, and active underline/hover transitions. Prior layout and accessibility behavior remains valid.
+- [x] Applied loaded label typography, light navy/dark mist-blue active states, underline and hover/focus transitions, and reduced-motion handling to the shared navigation/footer. Added `aria-current="page"` to active navigation links and preserved responsive layout.
+- Check: focused app suite 9/9; full suite 7 files/38 tests; `npm run build` passed and prerendered five routes; `git diff --check` passed. Home CSS (6.44 KB vs 4 KB) and catalog CSS (5.64 KB vs 4 KB) budget warnings remain; app CSS is now under budget.
 - Reopened because the user identified that the prior implementation did not use the reference palette, typography, or animation language.
-- Prior verification/commit: `0a77dae`; new checks pending.
+- Prior implementation commit: `0a77dae`; corrected verification complete.
 - Route: delegated direct; multiple non-trivial shared template/style edits.
 - Commit: pending.
 
