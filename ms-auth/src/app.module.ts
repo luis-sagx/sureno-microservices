@@ -10,6 +10,8 @@ import { BusinessAccount } from './identity/entities/business-account.entity.js'
 import { Role } from './identity/entities/role.entity.js';
 import { UserRole } from './identity/entities/user-role.entity.js';
 import { CreateIdentitySchema1700000000000 } from './identity/migrations/1700000000000-CreateIdentitySchema.js';
+import { AuthSession } from './identity/entities/auth-session.entity.js';
+import { CreateSessionsAndRoles1700000001000 } from './identity/migrations/1700000001000-CreateSessionsAndRoles.js';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -22,8 +24,8 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
       username: process.env.AUTH_DB_USER ?? 'auth_app',
       password: process.env.AUTH_DB_PASSWORD,
       database: process.env.AUTH_DB_NAME ?? 'auth_db',
-      entities: [Person, AppUser, BusinessAccount, Role, UserRole],
-      migrations: [CreateIdentitySchema1700000000000],
+      entities: [Person, AppUser, BusinessAccount, Role, UserRole, AuthSession],
+      migrations: [CreateIdentitySchema1700000000000, CreateSessionsAndRoles1700000001000],
       migrationsRun: true,
       synchronize: false,
     }),
