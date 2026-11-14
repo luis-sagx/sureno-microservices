@@ -2,12 +2,12 @@ import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Component, OnInit, PLATFORM_ID, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../core/auth.service';
-import { CatalogApiService } from '../features/catalog/data-access/catalog-api.service';
-import { Category, Product, Presentation } from '../features/catalog/models/catalog.models';
-import { productImagePath } from '../features/catalog/domain/product-media';
-import { getAllowedPresentations, selectPresentation } from '../features/catalog/domain/presentation-rules';
-import { RevealOnScrollDirective } from '../core/reveal-on-scroll.directive';
+import { AuthService } from '../../../core/auth.service';
+import { CatalogFacade } from '../data-access/catalog.facade';
+import { Category, Product, Presentation } from '../models/catalog.models';
+import { productImagePath } from '../domain/product-media';
+import { getAllowedPresentations, selectPresentation } from '../domain/presentation-rules';
+import { RevealOnScrollDirective } from '../../../shared/directives/reveal-on-scroll.directive';
 
 @Component({
   selector: 'app-catalog-page',
@@ -16,16 +16,16 @@ import { RevealOnScrollDirective } from '../core/reveal-on-scroll.directive';
   styleUrl: './catalog.page.css',
 })
 export class CatalogPage implements OnInit {
-  private readonly api = inject(CatalogApiService);
+  private readonly catalog = inject(CatalogFacade);
   private readonly document = inject(DOCUMENT);
   private readonly router = inject(Router);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   protected readonly auth = inject(AuthService);
-  protected readonly categories = signal<Category[]>([]);
-  protected readonly products = signal<Product[]>([]);
-  protected readonly loading = signal(false);
-  protected readonly error = signal('');
-  protected readonly hasLoaded = signal(false);
+  protected readonly categories = this.catalog.categories;
+  protected readonly products = this.catalog.products;
+  protected readonly loading = this.catalog.loading;
+  protected readonly error = this.catalog.error;
+  protected readonly hasLoaded = this.catalog.hasLoaded;
   protected query = '';
   protected categoryId = '';
   protected readonly selectedTypes = signal<Record<string, 'UNIDAD' | 'CAJA'>>({});
@@ -35,31 +35,12 @@ export class CatalogPage implements OnInit {
   }
 
   protected loadCatalog() {
-    this.loading.set(true);
-    this.error.set('');
-    this.api.categories().subscribe({
-      next: (categories) => this.categories.set(categories),
-      error: () => this.categories.set([]),
+    this.catalog.load({
+      ...(this.query.trim() && { q: this.query.trim() }),
+      ...(this.categoryId && { category_id: this.categoryId }),
+      page: 1,
+      page_size: 100,
     });
-    this.api
-      .products({
-        ...(this.query.trim() && { q: this.query.trim() }),
-        ...(this.categoryId && { category_id: this.categoryId }),
-        page: 1,
-        page_size: 100,
-      })
-      .subscribe({
-        next: (page) => {
-          this.products.set(page.items);
-          this.hasLoaded.set(true);
-          this.loading.set(false);
-        },
-        error: () => {
-          this.error.set('No se pudo cargar el catálogo. Intenta nuevamente cuando los servicios estén disponibles.');
-          this.hasLoaded.set(true);
-          this.loading.set(false);
-        },
-      });
   }
 
   protected search() {

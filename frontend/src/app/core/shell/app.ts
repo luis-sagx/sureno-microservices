@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { AuthService } from './core/auth.service';
-import { ThemeService } from './core/theme.service';
+import { AuthService } from '../auth.service';
+import { ThemeService } from '../theme.service';
 
 @Component({
   imports: [RouterOutlet, RouterLink, RouterLinkActive],

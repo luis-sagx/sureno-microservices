@@ -3,12 +3,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, DestroyRef, OnInit, PLATFORM_ID, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { AuthService } from '../core/auth.service';
-import { CatalogApiService } from '../features/catalog/data-access/catalog-api.service';
-import { Presentation, Product } from '../features/catalog/models/catalog.models';
-import { productImagePath } from '../features/catalog/domain/product-media';
-import { getAllowedPresentations, selectPresentation } from '../features/catalog/domain/presentation-rules';
-import { RevealOnScrollDirective } from '../core/reveal-on-scroll.directive';
+import { AuthService } from '../../../core/auth.service';
+import { CatalogApiService } from '../data-access/catalog-api.service';
+import { Presentation, Product } from '../models/catalog.models';
+import { productImagePath } from '../domain/product-media';
+import { getAllowedPresentations, selectPresentation } from '../domain/presentation-rules';
+import { RevealOnScrollDirective } from '../../../shared/directives/reveal-on-scroll.directive';
 
 const UUID_PATTERN = /^[\da-f]{8}-(?:[\da-f]{4}-){3}[\da-f]{12}$/i;
 

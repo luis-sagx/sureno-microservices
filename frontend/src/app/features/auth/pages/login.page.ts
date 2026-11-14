@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../core/auth.service';
-import { ThemeService } from '../core/theme.service';
+import { AuthService } from '../../../core/auth.service';
+import { ThemeService } from '../../../core/theme.service';
 
 @Component({
   selector: 'app-login-page',

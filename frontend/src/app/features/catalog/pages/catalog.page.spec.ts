@@ -2,9 +2,9 @@ import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
-import { AuthService } from '../core/auth.service';
-import { Category, Product } from '../features/catalog/models/catalog.models';
-import { CatalogApiService } from '../features/catalog/data-access/catalog-api.service';
+import { AuthService } from '../../../core/auth.service';
+import { Category, Product } from '../models/catalog.models';
+import { CatalogApiService } from '../data-access/catalog-api.service';
 import { CatalogPage } from './catalog.page';
 
 @Component({ template: '' })

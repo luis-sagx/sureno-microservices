@@ -11,7 +11,7 @@ import {
   signal,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { RevealOnScrollDirective } from '../core/reveal-on-scroll.directive';
+import { RevealOnScrollDirective } from '../../../shared/directives/reveal-on-scroll.directive';
 
 export const HERO_FRAMES = Array.from(
   { length: 76 },

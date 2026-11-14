@@ -44,8 +44,9 @@ The user explicitly requested a feature-oriented architectural refactor of the A
 
 ## Tasks
 
-- [x] FE-01 (delegated): Split auth/catalog contracts and API clients into feature-owned models/data-access, and extract catalog presentation rules into pure domain functions. Route: delegated direct; the writer trigger fired because this task spans multiple non-trivial files. Verification: the new domain spec failed at first because its module did not exist, then passed (3/3); `npm test` passed (8 files, 41 tests); `npm run build` passed with existing component-style budget warnings. Commit: pending.
-- [ ] FE-02 (delegated): Move app shell, shared directive, and home/about/auth/catalog files and specs into `core`, `shared`, and feature-first folders; update routes and imports. Route: delegated direct; the writer trigger fired because this task spans multiple non-trivial files. Checks: `npm test` and `npm run build` in `frontend`.
+- [x] FE-01 (delegated): Split auth/catalog contracts and API clients into feature-owned models/data-access, and extract catalog presentation rules into pure domain functions. Route: delegated direct; the writer trigger fired because this task spans multiple non-trivial files. Verification: the new domain spec failed at first because its module did not exist, then passed (3/3); `npm test` passed (8 files, 41 tests); `npm run build` passed with component-style budget warnings. Commit: `0d991db` (`refactor(frontend): isolate feature contracts and domain rules`).
+- [x] FE-02 (delegated): Move app shell, shared directive, and home/about/auth/catalog files and specs into `core`, `shared`, and feature-first folders; update routes and imports. Move catalog multi-query coordination into a feature facade. Route: delegated direct; the writer trigger fired because this task spans multiple non-trivial files. Verification: facade spec failed at first because its module did not exist, then passed (1/1); `npm test` passed (9 files, 42 tests); `npm run build` passed, prerendering five routes, with component-style budget warnings. Commit: pending.
+- [ ] FE-03 (delegated): Keep session models and login/current-session/logout API in `core`; keep registration-only payloads and API access in `features/auth` so `core` has no dependency on a feature. Route: delegated direct; parent review identified a boundary violation after FE-01. Checks: focused session/registration API specs, `npm test`, and `npm run build` in `frontend`.
 
 ## Progress and evidence
 
@@ -55,7 +56,11 @@ The user explicitly requested a feature-oriented architectural refactor of the A
 - FE-01 TDD evidence: RED was a missing-module build failure for `presentation-rules`; GREEN passed the focused test file (3/3).
 - FE-01 checks: `npm test` passed (8 files, 41 tests). `npm run build` passed and prerendered five routes; it emitted style budget warnings for catalog (5.64 kB vs 4 kB) and home (6.44 kB vs 4 kB).
 - FE-01 authored changes are staged only after confirming the unrelated dirty changes remain unstaged.
+- FE-02 implementation: shell is under `core/shell`; the generic reveal directive is under `shared/directives`; page files, templates, styles, and specs are under `features/{home,about,auth,catalog}/pages`; routes still lazy-load the same pages. `CatalogFacade` now coordinates catalog/category loading and page state in `features/catalog/data-access`.
+- FE-02 TDD evidence: RED was a missing-module build failure for `CatalogFacade`; GREEN passed its focused spec (1/1).
+- FE-02 checks: `npm test` passed (9 files, 42 tests). `npm run build` passed and prerendered five routes; catalog (5.64 kB vs 4 kB) and home (6.44 kB vs 4 kB) style budget warnings remain.
+- A post-FE-01 boundary review found `core/auth.service.ts` importing auth feature models and API. This is tracked as FE-03; session concerns will move back under `core`, leaving registration in `features/auth`.
 
 ## Next step
 
-Complete FE-02 with the enabled RED→GREEN→REFACTOR sequence, then update this document with its checks and commit evidence. Engram mirror/read-back is delegated to the parent agent.
+Commit FE-02, then complete FE-03 using the enabled RED→GREEN→REFACTOR sequence. Engram mirror/read-back is delegated to the parent agent.

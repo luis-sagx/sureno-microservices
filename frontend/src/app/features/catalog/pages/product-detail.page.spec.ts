@@ -4,10 +4,10 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { provideRouter } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { RenderMode } from '@angular/ssr';
-import { routes } from '../app.routes';
-import { serverRoutes } from '../app.routes.server';
-import { AuthService } from '../core/auth.service';
-import { Product } from '../features/catalog/models/catalog.models';
+import { routes } from '../../../app.routes';
+import { serverRoutes } from '../../../app.routes.server';
+import { AuthService } from '../../../core/auth.service';
+import { Product } from '../models/catalog.models';
 
 const productId = '98765432-1234-4234-8234-123456789012';
 const businessProductId = '98765432-1234-4234-8234-123456789013';
