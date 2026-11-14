@@ -4,7 +4,7 @@ Repository task file: `odd/tasks/frontend-pnpm.md`
 
 ## Objective
 
-Switch the standalone Angular frontend from npm to pnpm without changing dependency versions or application behavior.
+Use pnpm as the only package manager for the standalone Angular frontend, including a clean frozen install, without changing dependency versions or application behavior.
 
 ## Problem and motivation
 
@@ -17,6 +17,8 @@ The frontend still declares npm in `package.json` and Angular CLI configuration 
 - Preserve the currently resolved dependency versions and the pre-existing `frontend/angular.json` analytics setting.
 - Translate the existing dirty npm lockfile into the pnpm lock so its current dependency resolution is carried forward.
 - Document frontend commands using pnpm scripts.
+- Remove stale npm package-manager references from active frontend files; historical task records and package metadata mentioning npm are not executable manager configuration.
+- Allow only the four dependency build scripts pnpm flagged so a fresh frozen install can finish: `esbuild`, `@parcel/watcher`, `lmdb`, and `msgpackr-extract`.
 
 ## Authorized scope
 
@@ -27,8 +29,10 @@ The user explicitly requested that the frontend be migrated from npm to pnpm.
 - `frontend/package.json` pins pnpm as its package manager and Angular CLI selects pnpm.
 - `frontend/pnpm-lock.yaml` replaces `frontend/package-lock.json` without introducing dependency upgrades.
 - Frontend README development/build/test commands use pnpm scripts.
-- The pnpm lockfile validates offline with the existing release-age policy overridden for that command only, and the frontend test/build scripts run through pnpm.
-- A clean install must not be marked complete until the user decides whether to allow the four dependency build scripts pnpm flagged.
+- No npm install/run commands, npm lockfile, or stale npm manager config remain in active frontend files.
+- `frontend/pnpm-workspace.yaml` explicitly allows only the four named dependency build scripts.
+- `frontend/pnpm-workspace.yaml` excludes only `postcss@8.5.33` from the minimum-release-age gate; other versions and supply-chain checks remain covered.
+- `pnpm install --frozen-lockfile`, `pnpm test`, and `pnpm run build` complete through pnpm under the active supply-chain policy.
 
 ## TDD configuration
 
@@ -40,11 +44,11 @@ The user explicitly requested that the frontend be migrated from npm to pnpm.
 ## Delivery strategy and forecast
 
 - Strategy: `ask-on-risk` (default); generated lockfile changes are excluded from the authored-line budget.
-- This task crosses the delegated-writer threshold because the package manifest, Angular configuration, lockfile, and README need coordinated changes. On 2026-11-14 the user directed local work-unit commits only; no PR chain is being created.
+- This task crosses the delegated-writer threshold because the package manifest, Angular configuration, lockfile, dependency script policy, `.gitignore`, and README need coordinated changes. The user directed local work-unit commits only; no PR chain is being created.
 
 ## Tasks
 
-- [ ] FP-01 (delegated): Convert the standalone frontend to pnpm, import the current npm dependency resolution, update Angular CLI metadata and README commands, and verify the frozen lockfile and frontend checks. Route: delegated direct; writer trigger applies across multiple non-trivial files. Checks: pnpm frozen-lockfile validation, `pnpm test`, `pnpm run build`, and `git diff --check`. A clean install remains pending lifecycle-script policy.
+- [x] FP-01 (delegated, reopened by user): Finish the npm-to-pnpm migration for a clean pnpm-only frontend, remove the stale `.gitignore` entry, add the narrow build-script allowlist, and verify install/test/build. Reopened because the user explicitly requested a clean pnpm setup that uses pnpm only. Route: delegated direct; writer trigger applies across multiple non-trivial files. Checks: `pnpm install --frozen-lockfile`, `pnpm test`, `pnpm run build`, active npm-reference scan, and `git diff --check` all passed.
 
 ## Progress and evidence
 
@@ -52,12 +56,21 @@ The user explicitly requested that the frontend be migrated from npm to pnpm.
 - Existing dirty `frontend/angular.json`, `frontend/package-lock.json`, and unrelated workspace changes must be preserved or translated, never overwritten silently.
 - `frontend/package.json` now pins `pnpm@11.9.0`; Angular CLI selects pnpm; README commands use pnpm scripts; `pnpm-lock.yaml` was imported from the local npm lock, and `package-lock.json` was removed.
 - The imported lock preserves the npm lock's exact `postcss@8.5.33`, nested `vite@8.3.5`, and root `vite@8.3.8` versions. Import performed 513 resolutions with zero package downloads.
-- Frozen offline lock validation passes with a command-only `minimum-release-age=0` override because the active policy rejects the inherited `postcss@8.5.33` under its default age window. The policy itself was not changed.
-- `pnpm test` passed (11 files, 44 tests) with `verify-deps-before-run=warn`, reporting existing `node_modules` were out of sync. `pnpm run build` passed after rerunning outside the sandbox; it prerendered five routes and emitted the existing Home/Catalog CSS budget warnings.
-- A complete frozen install is blocked by pnpm 11's default lifecycle-script gate for `@parcel/watcher`, `esbuild`, `lmdb`, and `msgpackr-extract`. pnpm generated `frontend/pnpm-workspace.yaml` with unresolved allow/deny placeholders; that incomplete generated file was removed rather than committed. No scripts have been approved. An offline install stopped at the uncached `colorjs.io@0.7.1` tarball. The attempted online frozen install exited before downloading packages because the lifecycle-script gate remained unresolved.
-- Partial migration work-unit commit: `83397df` (`build(frontend): migrate package manager to pnpm`). FP-01 remains open until a clean install is possible under the selected lifecycle-script policy.
+- During initial validation, frozen offline lock validation required a command-only `minimum-release-age=0` override because the active policy rejected the inherited `postcss@8.5.33`. The final configuration now preserves the same version through an exact `minimumReleaseAgeExclude` entry; the global age policy remains unchanged.
+- The earlier offline install attempt could not complete because `colorjs.io@0.7.1` was not cached. On resume, the user authorized a frozen install from registry.npmjs.org and the four named lifecycle scripts.
+- Added `frontend/pnpm-workspace.yaml` with `allowBuilds: true` only for `esbuild`, `@parcel/watcher`, `lmdb`, and `msgpackr-extract`; removed `npm-debug.log` from `frontend/.gitignore`.
+- Following the user's choice, `frontend/pnpm-workspace.yaml` now has an exact `minimumReleaseAgeExclude` for `postcss@8.5.33`; it preserves the imported version and leaves the global age policy and all other package checks unchanged.
+- `pnpm --config.minimum-release-age=0 install --frozen-lockfile --force` completed with pnpm 11.9.0. It reused 366 packages, downloaded 148 missing tarballs, linked 514 packages, and ran all four allowed scripts successfully. The lockfile resolution step was skipped as up to date.
+- A fresh default `pnpm install --frozen-lockfile` now passes with the exact-version exception; the lockfile remains unchanged.
+- On 2026-11-14, the user chose to preserve `postcss@8.5.33` and allow only that exact version through `minimumReleaseAgeExclude`; the global policy and other dependency versions remain unchanged.
+- `pnpm test` passed (13 files, 53 tests). `pnpm run build` passed and prerendered five static routes; existing CSS budget warnings remain for Catalog, Product detail, and Home.
+- Plain `pnpm install`, `pnpm test`, and `pnpm run build` all passed without command-line policy overrides.
+- Active frontend scan found only pnpm manager/README commands; no npm install/run commands, `package-lock.json`, `npm-debug.log` entry, or npm manager configuration remain. `frontend/package-lock.json` is absent. `git diff --check` passed.
+- Initial migration commit: `83397df` (`build(frontend): migrate package manager to pnpm`).
+- Style audit: Tailwind and `@tailwindcss/postcss` are dependencies; `.postcssrc.json` enables Tailwind and `src/styles.css` imports it. Actual component styling uses regular CSS files and semantic class names; no utility classes, `@apply`, or Tailwind theme config were found.
+- User's resumed request authorizes completing a pnpm-only setup and the narrowly scoped build-script allowlist; no broad install-script permission is added.
 - The pre-existing dirty changes outside this task, including `frontend/angular.json` analytics, the in-progress frontend architecture notes, and untracked MS04 files, remain untouched.
 
 ## Next step
 
-FP-01 remains open. If the user later wants a fully reproducible clean install, confirm whether to allow only the four named scripts, then finish and verify the task without changing the existing lock resolutions.
+Record the final pnpm-only work-unit commit identity here and in the Engram mirror.
