@@ -1,0 +1,2 @@
+export const CATALOG_REPOSITORY = Symbol('CATALOG_REPOSITORY');
+export const CATALOG_AUTH_PORT = Symbol('CATALOG_AUTH_PORT');

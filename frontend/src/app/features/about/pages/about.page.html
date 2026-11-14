@@ -1,0 +1,127 @@
+<section
+  class="about-intro border-b border-[var(--line)] bg-[var(--surface)]"
+>
+  <div
+    class="page-container about-intro-grid grid grid-cols-[minmax(0,1fr)_260px] items-center gap-[clamp(2rem,7vw,6rem)] py-[clamp(3.5rem,8vw,7rem)] max-[850px]:grid-cols-[minmax(0,1fr)_210px] max-[620px]:grid-cols-1"
+  >
+    <div>
+      <p class="eyebrow mb-4">Quiénes somos</p>
+      <h1 class="display-title">Una historia nacida<br />en el <em class="text-[var(--gold)] font-normal">sur de Quito.</em></h1>
+      <p class="story-copy mt-5 mb-0 max-w-[68ch] text-[var(--muted)] text-[0.96rem] leading-[1.8]">
+        El 22 de mayo de 1998 nace la idea de formar una pequeña industria licorera en el sur de la
+        ciudad de Quito llamada <strong class="text-[var(--paper)]">Sureño</strong>, desarrollándose
+        al principio artesanalmente. Con el transcurso del tiempo evolucionó como microempresa,
+        cumpliendo siempre con normas INEN y procesos controlados por ARCSA.
+      </p>
+      <p class="story-copy mt-5 mb-0 max-w-[68ch] text-[var(--muted)] text-[0.96rem] leading-[1.8]">
+        Maximizamos la satisfacción de nuestros clientes y de todos los que conformamos la familia
+        Sureño, superándonos cada día para estar a la altura de sus exigencias.
+      </p>
+    </div>
+    <div
+      class="about-seal relative grid w-full min-h-[250px] aspect-square place-items-center content-center rounded-full border border-[var(--line-strong)] text-[var(--gold)] text-center max-[850px]:min-h-[210px] max-[620px]:mx-auto max-[620px]:w-[min(220px,70vw)] max-[620px]:min-h-0"
+      aria-label="Sureño, tradición desde 1998"
+    >
+      <span></span>
+      <img class="z-[1] h-auto w-[32%] object-contain" src="/logo-isotipo.png" alt="Isotipo de Sureño" width="180" height="180" />
+      <p class="z-[1] mt-[0.65rem] mb-0 text-[0.62rem] font-bold tracking-[0.14em] leading-[1.7] uppercase">
+        Desde 1998<br />Quito, Ecuador
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="about-quote relative grid min-h-[270px] items-center overflow-hidden border-b border-[var(--line)] text-center">
+  <div class="quote-backdrop" aria-hidden="true"></div>
+  <div class="page-container quote-content relative max-w-[850px] py-14">
+    <p class="eyebrow justify-center">El sabor auténtico del sur</p>
+    <blockquote class="mt-4 mb-0 text-[var(--paper)] font-(family-name:--font-display) text-[clamp(1.9rem,4.7vw,3.35rem)] italic leading-[1.2]">
+      “En cada botella destilamos tradición, pasión y el sabor de lo auténtico.”
+    </blockquote>
+  </div>
+</section>
+
+<section class="purpose-section py-[clamp(3.5rem,7vw,6rem)]">
+  <div class="page-container">
+    <p class="eyebrow">Propósito</p>
+    <h2 class="section-title mt-[0.65rem]">Lo que nos mueve.</h2>
+    <div class="purpose-grid mt-8 grid grid-cols-2 gap-5 max-[620px]:grid-cols-1">
+      @for (item of purpose; track item.title) {
+        <article class="purpose-card overflow-hidden border border-[var(--line)] bg-[var(--surface)]">
+          <img
+            class="block h-[clamp(180px,26vw,300px)] w-full object-cover max-[620px]:h-[210px]"
+            [src]="item.image"
+            [alt]="item.alt"
+            loading="lazy"
+          />
+          <div class="px-[clamp(1.2rem,3vw,2rem)] pt-[1.4rem] pb-[1.7rem]">
+            <h3 class="mt-0 mb-[0.55rem] text-[var(--gold)] font-(family-name:--font-display) text-[1.8rem] font-normal">
+              {{ item.title }}
+            </h3>
+            <p class="m-0 text-[var(--muted)] text-[0.88rem] leading-[1.75]">{{ item.text }}</p>
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="about-products border-y border-[var(--line)] bg-[var(--surface)] py-[clamp(3.5rem,7vw,6rem)]">
+  <div class="page-container">
+    <div class="products-heading flex items-end justify-between gap-6 max-[620px]:flex-col max-[620px]:items-start max-[620px]:gap-4">
+      <div>
+        <p class="eyebrow mb-4">Nuestro portafolio</p>
+        <h2 class="section-title">Tradición en cada botella.</h2>
+      </div>
+      <a class="shrink-0 text-[var(--gold)] text-[0.68rem] font-bold tracking-[0.12em] no-underline uppercase" routerLink="/catalogo">
+        Conocer el catálogo <span aria-hidden="true">→</span>
+      </a>
+    </div>
+    <div class="product-carousel-controls" role="group" aria-label="Controles del carrusel de productos">
+      <button type="button" aria-label="Ver productos anteriores" [disabled]="atStart()" (click)="showPrevious()">←</button>
+      <button type="button" aria-label="Ver más productos" [disabled]="atEnd()" (click)="showNext()">→</button>
+    </div>
+    <div
+      class="product-carousel-region"
+      role="region"
+      aria-roledescription="carrusel"
+      aria-label="Productos de Sureño"
+      tabindex="0"
+      (keydown)="handleCarouselKeydown($event)"
+    >
+      <ul class="product-carousel-track" #productTrack data-product-carousel-track>
+        @for (product of products; track product.name) {
+          <li class="product-carousel-slide">
+            <figure>
+              <img [src]="product.image" [alt]="product.name" loading="lazy" />
+              <figcaption>{{ product.name }}</figcaption>
+            </figure>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="logistics-section bg-[var(--background)] py-[clamp(3.5rem,7vw,6rem)]">
+  <div class="page-container">
+    <p class="eyebrow">Logística</p>
+    <h2 class="section-title mt-[0.65rem]">Información de envío</h2>
+    <p class="logistics-intro mt-[0.8rem] mb-0 text-[var(--muted)] text-[0.88rem] leading-[1.75]">
+      Cómo llega tu pedido, dentro y fuera de Quito.
+    </p>
+    <div class="logistics-grid mt-8 grid grid-cols-3 gap-4 max-[620px]:grid-cols-1 max-[620px]:gap-6">
+      @for (item of shipping; track item.title; let index = $index) {
+        <article class="logistics-card min-w-0 border-t-2 border-[var(--gold)] px-4 pt-5">
+          <span class="text-[var(--gold)] text-[0.68rem] font-bold tracking-[0.12em]">
+            {{ (index + 1).toString().padStart(2, '0') }}
+          </span>
+          <h3 class="mt-[0.65rem] mb-[0.45rem] text-[var(--paper)] font-(family-name:--font-display) text-xl font-normal">
+            {{ item.title }}
+          </h3>
+          <p class="m-0 text-[var(--muted)] text-[0.88rem] leading-[1.75]">{{ item.text }}</p>
+        </article>
+      }
+    </div>
+  </div>
+</section>

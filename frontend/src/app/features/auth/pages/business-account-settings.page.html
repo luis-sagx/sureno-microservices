@@ -1,0 +1,46 @@
+<section class="auth-layout min-h-[65vh] px-4 py-16 sm:py-24">
+  <div class="mx-auto w-full max-w-[720px]">
+    <p class="form-section-label mb-3">Mi cuenta</p>
+    <h1 class="font-(family-name:--font-display) text-4xl text-[var(--paper)]">Datos del negocio</h1>
+
+    @if (loading()) {
+      <p class="mt-8 text-[var(--muted)]" role="status">Cargando configuración…</p>
+    } @else if (!auth.user()) {
+      <div class="auth-card mt-8 rounded-sm p-6">
+        <p>Inicia sesión para ver la configuración de tu cuenta.</p>
+        <a class="button-primary mt-5 inline-flex" routerLink="/login">Iniciar sesión</a>
+      </div>
+    } @else if (businessAccountUnavailable) {
+      <div class="auth-card mt-8 rounded-sm p-6">
+        <p>Esta opción está disponible solo para cuentas de negocio.</p>
+      </div>
+    } @else if (error() && !hasBusinessAccount()) {
+      <div class="auth-card mt-8 rounded-sm p-6">
+        <p class="text-[var(--error)]" role="alert">{{ error() }}</p>
+      </div>
+    } @else {
+      <form class="auth-card mt-8 grid gap-6 rounded-sm p-6 sm:p-8" (ngSubmit)="save()">
+        <p class="text-[var(--muted)]">Puedes actualizar el nombre comercial asociado a tu cuenta.</p>
+        <div class="field">
+          <label for="nombre_comercial">Nombre comercial (opcional)</label>
+          <input
+            id="nombre_comercial"
+            name="nombre_comercial"
+            maxlength="160"
+            autocomplete="organization"
+            [(ngModel)]="nombreComercial"
+          />
+        </div>
+        @if (error()) {
+          <p class="text-[var(--error)]" role="alert">{{ error() }}</p>
+        }
+        @if (success()) {
+          <p class="text-[var(--gold)]" role="status">{{ success() }}</p>
+        }
+        <button class="button-primary" type="submit" [disabled]="saving()">
+          {{ saving() ? 'Guardando…' : 'Guardar cambios' }}
+        </button>
+      </form>
+    }
+  </div>
+</section>

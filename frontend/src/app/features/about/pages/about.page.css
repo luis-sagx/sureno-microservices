@@ -1,0 +1,24 @@
+.about-seal::before,
+.about-seal::after {
+  position: absolute;
+  inset: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  content: '';
+}
+
+.about-seal::after {
+  inset: 2rem;
+}
+
+.quote-backdrop {
+  position: absolute;
+  inset: 0;
+  background: var(--quote-overlay), url('/bg.webp') center 45% / cover;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-product-track {
+    scroll-behavior: auto;
+  }
+}

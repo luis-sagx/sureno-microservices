@@ -1,0 +1,7 @@
+allowBuilds:
+  esbuild: true
+  '@parcel/watcher': true
+  lmdb: true
+  msgpackr-extract: true
+minimumReleaseAgeExclude:
+  - 'postcss@8.5.33'

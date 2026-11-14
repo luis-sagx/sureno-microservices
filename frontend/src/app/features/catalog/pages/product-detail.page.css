@@ -1,0 +1,118 @@
+.detail-back-link:hover {
+  color: var(--secondary);
+}
+
+.loading-line {
+  width: min(220px, 60vw);
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  animation: detail-loading 1.3s ease-in-out infinite;
+}
+
+.product-detail-image img {
+  transition: transform 320ms var(--ease-entrance, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+.product-detail-image:hover img {
+  transform: scale(1.025);
+}
+
+.detail-availability > span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+.detail-availability.is-unavailable {
+  color: var(--error);
+}
+
+.detail-availability.is-unavailable > span {
+  background: var(--error);
+}
+
+.detail-presentation {
+  gap: 0.5rem;
+}
+
+.detail-presentation label {
+  color: var(--secondary);
+}
+
+.detail-presentation select {
+  width: 100%;
+}
+
+.detail-presentation small,
+.detail-presentation-unavailable {
+  color: var(--muted-dim);
+  font-size: 0.76rem;
+  line-height: 1.6;
+}
+
+.detail-price span {
+  color: var(--secondary);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.detail-price strong {
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 400;
+  text-align: right;
+}
+
+.detail-price-value {
+  display: grid;
+  justify-items: end;
+  gap: 0.3rem;
+}
+
+.detail-price-value del {
+  color: var(--muted-dim);
+  font-size: 0.9rem;
+}
+
+.detail-price-value small,
+.detail-price-state-error strong {
+  color: var(--secondary);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.detail-price-state-error {
+  display: grid;
+  justify-items: end;
+  gap: 0.5rem;
+}
+
+.price-retry {
+  border: 1px solid var(--line);
+  padding: 0.45rem 0.7rem;
+  color: var(--paper);
+  background: transparent;
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+
+@media (max-width: 520px) {
+  .detail-price strong {
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-detail-image img {
+    transition: none;
+  }
+
+  .product-detail-image:hover img {
+    transform: none;
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "/api/auth": {
+    "target": "http://localhost:3001",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api/auth": ""
+    }
+  },
+  "/api/catalog": {
+    "target": "http://localhost:3002",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api/catalog": "/catalog"
+    }
+  },
+  "/api/prices": {
+    "target": "http://localhost:3004",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api/prices": "/prices"
+    }
+  }
+}
