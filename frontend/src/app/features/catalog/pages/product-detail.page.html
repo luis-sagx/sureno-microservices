@@ -1,49 +1,110 @@
-<section class="product-detail-page">
+<section
+  class="product-detail-page min-h-[60vh] pt-6 pb-[clamp(4rem,8vw,7rem)] bg-[var(--background)] max-[520px]:pt-4"
+>
   <div class="page-container">
-    <a class="detail-back-link" routerLink="/catalogo"><span aria-hidden="true">←</span> Volver al catálogo</a>
+    <a
+      class="detail-back-link mb-6 inline-flex items-center gap-[0.55rem] text-[var(--muted)] text-[0.68rem] font-bold tracking-[0.1em] no-underline uppercase transition-colors duration-[160ms] ease-[ease]"
+      routerLink="/catalogo"
+      ><span aria-hidden="true">←</span> Volver al catálogo</a
+    >
 
     @if (loading()) {
-      <div class="detail-state" role="status" data-product-detail-loading>
+      <div
+        class="detail-state grid min-h-[320px] place-items-center content-center gap-[0.8rem] border border-[var(--line)] px-4 py-8 text-center"
+        role="status"
+        data-product-detail-loading
+      >
         <span class="loading-line" aria-hidden="true"></span>
-        <p>Cargando detalle del producto…</p>
+        <p class="m-0 max-w-[48ch] text-[var(--muted)] leading-[1.7]">
+          Cargando detalle del producto…
+        </p>
       </div>
     } @else if (error()) {
-      <div class="detail-state" role="alert">
-        <p class="eyebrow">Catálogo Sureño</p>
-        <h1>No encontramos este producto</h1>
-        <p>{{ error() }}</p>
-        <a class="button-secondary" routerLink="/catalogo">Volver al catálogo</a>
+      <div
+        class="detail-state grid min-h-[320px] place-items-center content-center gap-[0.8rem] border border-[var(--line)] px-4 py-8 text-center"
+        role="alert"
+      >
+        <p class="eyebrow m-0">Catálogo Sureño</p>
+        <h1 class="m-0 font-[var(--font-display)] text-[clamp(2rem,4vw,3rem)] font-normal">
+          No encontramos este producto
+        </h1>
+        <p class="m-0 max-w-[48ch] text-[var(--muted)] leading-[1.7]">{{ error() }}</p>
+        <a class="button-secondary mt-2" routerLink="/catalogo">Volver al catálogo</a>
       </div>
     } @else if (product(); as item) {
-      <article class="product-detail" aria-labelledby="product-detail-title">
-        <div class="product-detail-image" appScrollReveal>
-          <img [src]="productImage()" [alt]="item.nombre" width="600" height="900" fetchpriority="high" />
-          <span class="detail-category">{{ item.categoria?.nombre || 'Sureño' }}</span>
+      <article
+        class="product-detail grid grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] items-start gap-[clamp(2rem,6vw,5.5rem)] pt-4 max-[800px]:grid-cols-1 max-[800px]:gap-6"
+        aria-labelledby="product-detail-title"
+      >
+        <div
+          class="product-detail-image relative flex min-h-[400px] h-[clamp(400px,55vw,700px)] items-center justify-center overflow-hidden border border-[var(--line)] bg-[var(--product-stage)] max-[800px]:min-h-[360px] max-[800px]:h-[min(112vw,440px)]"
+          appScrollReveal
+        >
+          <img
+            class="w-auto h-[calc(100%-3rem)] max-w-[calc(100%-3rem)] object-contain"
+            [src]="productImage()"
+            [alt]="item.nombre"
+            width="600"
+            height="900"
+            fetchpriority="high"
+          />
+          <span
+            class="detail-category absolute top-4 left-4 border border-[var(--line-strong)] px-[0.65rem] py-[0.45rem] text-[var(--secondary)] bg-[var(--product-badge)] text-[0.62rem] font-bold tracking-[0.12em] uppercase"
+            >{{ item.categoria?.nombre || 'Sureño' }}</span
+          >
         </div>
 
-        <div class="product-detail-copy" appScrollReveal>
-          <p class="eyebrow">{{ item.categoria?.nombre || 'Nuestro catálogo' }}</p>
-          <h1 id="product-detail-title">{{ item.nombre }}</h1>
-          <p class="detail-volume">{{ item.volumen_ml ? item.volumen_ml + ' ml' : 'Volumen no especificado' }}</p>
+        <div class="product-detail-copy pt-[0.8rem]" appScrollReveal>
+          <p class="eyebrow m-0 mb-4">{{ item.categoria?.nombre || 'Nuestro catálogo' }}</p>
+          <h1
+            class="m-0 font-[var(--font-display)] text-[clamp(2.8rem,5vw,5.3rem)] font-normal tracking-[-0.04em] leading-[0.98] max-[520px]:text-[clamp(2.5rem,11vw,3.5rem)]"
+            id="product-detail-title"
+          >
+            {{ item.nombre }}
+          </h1>
+          <p
+            class="detail-volume mt-4 mb-0 text-[var(--gold)] text-[0.72rem] font-bold tracking-[0.13em] uppercase"
+          >
+            {{ item.volumen_ml ? item.volumen_ml + ' ml' : 'Volumen no especificado' }}
+          </p>
           @if (item.descripcion) {
-            <p class="detail-description">{{ item.descripcion }}</p>
+            <p
+              class="detail-description mt-[1.6rem] mb-0 text-[var(--muted)] text-[0.98rem] leading-[1.8]"
+            >
+              {{ item.descripcion }}
+            </p>
           }
 
-          <p class="detail-availability" [class.is-unavailable]="!item.disponible" [attr.aria-label]="item.disponible ? 'Disponibilidad por confirmar' : 'Producto no disponible'">
+          <p
+            class="detail-availability mt-[1.6rem] mb-0 flex items-center gap-[0.55rem] text-[var(--muted)] text-[0.78rem]"
+            [class.is-unavailable]="!item.disponible"
+            [attr.aria-label]="
+              item.disponible ? 'Disponibilidad por confirmar' : 'Producto no disponible'
+            "
+          >
             <span aria-hidden="true"></span>
             {{ item.disponible ? 'Disponibilidad por confirmar' : 'No disponible' }}
           </p>
 
           @if (allowedPresentations().length > 0) {
-            <div class="detail-presentation field">
+            <div
+              class="detail-presentation field mt-[1.6rem] border-y border-[var(--line)] py-[0.85rem]"
+            >
               <label for="detail-presentation">Presentación</label>
               <select
                 id="detail-presentation"
                 (change)="selectPresentation($any($event.target).value)"
               >
                 @for (presentation of allowedPresentations(); track presentation.id) {
-                  <option [value]="presentation.tipo" [selected]="presentation.tipo === selectedPresentation()?.tipo">
-                    {{ presentation.tipo === 'UNIDAD' ? 'Unidad' : 'Caja completa (' + presentation.unidades_por_presentacion + ' unidades)' }}
+                  <option
+                    [value]="presentation.tipo"
+                    [selected]="presentation.tipo === selectedPresentation()?.tipo"
+                  >
+                    {{
+                      presentation.tipo === 'UNIDAD'
+                        ? 'Unidad'
+                        : 'Caja completa (' + presentation.unidades_por_presentacion + ' unidades)'
+                    }}
                   </option>
                 }
               </select>
@@ -54,12 +115,17 @@
               }
             </div>
           } @else {
-            <p class="detail-presentation-unavailable">No hay presentaciones activas para este perfil.</p>
+            <p class="detail-presentation-unavailable mt-6">
+              No hay presentaciones activas para este perfil.
+            </p>
           }
 
           @let selectedQuote = quoteForSelectedPresentation();
           @let quoteState = quoteStatus();
-          <div class="detail-price" aria-live="polite">
+          <div
+            class="detail-price mt-[1.8rem] flex items-baseline justify-between gap-4 border-t border-[var(--line)] pt-[1.1rem] max-[520px]:items-start max-[520px]:flex-col max-[520px]:gap-[0.35rem]"
+            aria-live="polite"
+          >
             <span>Precio</span>
             @if (quoteState.loading) {
               <strong role="status">Consultando precio…</strong>
@@ -77,7 +143,10 @@
                 }
                 <strong>{{ formatPrice(selectedQuote.final_amount) }}</strong>
                 @if (hasDiscount(selectedQuote.discount_amount)) {
-                  <small>{{ selectedQuote.promotion_name || 'Promoción' }} · ahorras {{ formatPrice(selectedQuote.discount_amount) }}</small>
+                  <small
+                    >{{ selectedQuote.promotion_name || 'Promoción' }} · ahorras
+                    {{ formatPrice(selectedQuote.discount_amount) }}</small
+                  >
                 }
               </div>
             } @else {

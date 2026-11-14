@@ -54,7 +54,7 @@ The user explicitly approved migrating the frontend gradually to Tailwind, begin
 
 - [x] TW-01: Convert suitable Home page styles to Tailwind utilities. Starting file: `frontend/src/app/features/home/pages/home.page.css` (441 lines). Route: delegated direct; the multi-file writer trigger applies to the template and stylesheet. Checks: `pnpm run build` passed; `git diff --check` passed. Complex backdrops, overlays, watermark, ornament/seal, and Horeca background remain in CSS.
 - [x] TW-02: Convert suitable Catalog page styles. Starting file: `frontend/src/app/features/catalog/pages/catalog.page.css` (416 lines). Route: delegated direct; the multi-file writer trigger applies to the template and stylesheet. Checks: `pnpm run build` and `git diff --check` passed. Catalog CSS budget warning is resolved.
-- [ ] TW-03: Convert suitable Product detail page styles. Starting file: `frontend/src/app/features/catalog/pages/product-detail.page.css` (298 lines). Route: delegated direct; the multi-file writer trigger applies to the template and stylesheet. Checks: build and confirm remaining selectors serve complex/specialized styles.
+- [x] TW-03: Convert suitable Product detail page styles. Starting file: `frontend/src/app/features/catalog/pages/product-detail.page.css` (298 lines). Route: delegated direct; the multi-file writer trigger applies to the template and stylesheet. Checks: `pnpm run build` and `git diff --check` passed; motion, loading, interaction, and theme styles remain in CSS.
 - [ ] TW-04: Convert suitable Auth page styles. Starting file: `frontend/src/app/features/auth/pages/auth.page.css` (293 lines). Route: delegated direct; the multi-file writer trigger applies to the login/signup templates and stylesheet. Checks: build and confirm remaining selectors serve complex/specialized styles.
 - [ ] TW-05: Convert suitable About page styles. Starting file: `frontend/src/app/features/about/pages/about.page.css` (275 lines). Route: delegated direct; the multi-file writer trigger applies to the template and stylesheet. Checks: build and confirm remaining selectors serve complex/specialized styles.
 - [ ] TW-06: Convert suitable shared shell styles while preserving global CSS tokens and base styles. Starting file: `frontend/src/app/core/shell/app.css` (252 lines). Route: delegated direct; the multi-file writer trigger applies to the shell template and stylesheet. Checks: build and confirm global theme styles remain intact.
@@ -67,8 +67,10 @@ The user explicitly approved migrating the frontend gradually to Tailwind, begin
 - TW-01 work-unit commit: `92abaed` (`style(home): migrate layout utilities to Tailwind`).
 - Catalog CSS dropped from 416 to 200 lines; static layout, grid, form, card, and responsive rules moved to Tailwind classes. Animations, hover effects, special states, and theme styles remain in CSS. Build passed; Catalog no longer exceeds its CSS budget.
 - TW-02 work-unit commit: `8d65088` (`style(catalog): migrate layout utilities to Tailwind`).
+- Product detail CSS dropped from 298 to 118 lines; static layout, spacing, typography, and responsive rules moved to Tailwind. Hover, reduced-motion, loading, interaction-state, and theme styles remain in CSS. Build passed.
+- TW-03 work-unit commit pending.
 - The local Engram v2 CLI accepted the full task copy as observation #121, but export shows `topic: null`; the requested topic-scoped mirror remains pending.
 
 ## Next step
 
-Start TW-03 (Product detail) using the same preservation rules.
+Start TW-04 (Auth) using the same preservation rules.
