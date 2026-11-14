@@ -15,4 +15,3 @@ export interface BusinessRegistrationPayload extends RegistrationPayload {
   nombre_comercial?: string;
   direccion_negocio: string;
 }
-

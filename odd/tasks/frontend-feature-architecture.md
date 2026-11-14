@@ -40,13 +40,13 @@ The user explicitly requested a feature-oriented architectural refactor of the A
 ## Delivery strategy and forecast
 
 - Strategy: `ask-on-risk` (default); estimated authored diff is under 400 lines, excluding moves/generated output.
-- One delegated implementation route across FE-01 and FE-02; each task closes with its own scoped commit. RDD status command is unavailable in this environment (`gentle-ai` is not installed), so no native review will be started and this limitation will be reported.
+- One delegated implementation route across FE-01, FE-02, and FE-03; each task closes with its own scoped commit. RDD status command is unavailable in this environment (`gentle-ai` is not installed), so no native review was started and this limitation will be reported.
 
 ## Tasks
 
 - [x] FE-01 (delegated): Split auth/catalog contracts and API clients into feature-owned models/data-access, and extract catalog presentation rules into pure domain functions. Route: delegated direct; the writer trigger fired because this task spans multiple non-trivial files. Verification: the new domain spec failed at first because its module did not exist, then passed (3/3); `npm test` passed (8 files, 41 tests); `npm run build` passed with component-style budget warnings. Commit: `0d991db` (`refactor(frontend): isolate feature contracts and domain rules`).
 - [x] FE-02 (delegated): Move app shell, shared directive, and home/about/auth/catalog files and specs into `core`, `shared`, and feature-first folders; update routes and imports. Move catalog multi-query coordination into a feature facade. Route: delegated direct; the writer trigger fired because this task spans multiple non-trivial files. Verification: facade spec failed at first because its module did not exist, then passed (1/1); `npm test` passed (9 files, 42 tests); `npm run build` passed, prerendering five routes, with component-style budget warnings. Commit: `66cfc2c` (`refactor(frontend): organize pages by feature`).
-- [x] FE-03 (delegated): Keep session models and login/current-session/logout API in `core`; keep registration-only payloads and API access in `features/auth` so `core` has no dependency on a feature. Route: delegated direct; parent review identified a boundary violation after FE-01. Verification: both new API specs first failed on missing modules, then passed (2/2); `npm test` passed (11 files, 44 tests); `npm run build` passed and prerendered five routes, with component-style budget warnings. Commit: `b8a9a0f` (`refactor(frontend): keep session services in core`).
+- [x] FE-03 (delegated): Keep session models and login/current-session/logout API in `core`; keep registration-only payloads and API access in `features/auth` so `core` has no dependency on a feature. Route: delegated direct; parent review identified a boundary violation after FE-01. Verification: both new API specs first failed on missing modules, then passed (2/2); `npm test` passed (11 files, 44 tests); `npm run build` passed and prerendered five routes, with component-style budget warnings. Commit: `44cbd50` (`refactor(frontend): keep session services in core`).
 
 ## Progress and evidence
 
@@ -63,7 +63,8 @@ The user explicitly requested a feature-oriented architectural refactor of the A
 - FE-03 implementation: `core/session.models.ts` and `core/session-api.service.ts` own login/session/logout contracts and HTTP; `features/auth/models/registration.models.ts` and `auth-registration-api.service.ts` own registration. CodeGraph confirms `core/auth.service.ts` now imports only `core/session.models.ts` and `core/session-api.service.ts`.
 - FE-03 TDD evidence: RED was missing-module build errors for the session and registration API test imports; GREEN passed both focused specs (2/2).
 - FE-03 checks: `npm test` passed (11 files, 44 tests). `npm run build` passed and prerendered five routes; catalog (5.64 kB vs 4 kB) and home (6.44 kB vs 4 kB) style budget warnings remain.
+- Final parent verification after all three commits: `npm test` passed (11 files, 44 tests); `npm run build` exited 0 and prerendered five routes; `git diff --check` passed after removing a trailing blank line in a new model. The catalog and home CSS budget warnings remain. Existing dirty `frontend/angular.json`, `frontend/package-lock.json`, and untracked `.codegraph/` were left untouched.
 
 ## Next step
 
-Commit FE-03 and hand the current task document to the parent for Engram mirror/read-back.
+No implementation tasks remain. Engram mirror synchronized and read back; report the three work-unit commits, verification, and remaining CSS budget warnings.
