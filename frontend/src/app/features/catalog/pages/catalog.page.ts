@@ -1,9 +1,10 @@
 import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { Component, OnInit, PLATFORM_ID, inject, signal } from '@angular/core';
+import { Component, OnInit, PLATFORM_ID, effect, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/auth.service';
 import { CatalogFacade } from '../data-access/catalog.facade';
+import { CatalogPricingFacade } from '../data-access/catalog-pricing.facade';
 import { Category, Product, Presentation } from '../models/catalog.models';
 import { productImagePath } from '../domain/product-media';
 import { getAllowedPresentations, selectPresentation } from '../domain/presentation-rules';
@@ -17,6 +18,7 @@ import { RevealOnScrollDirective } from '../../../shared/directives/reveal-on-sc
 })
 export class CatalogPage implements OnInit {
   private readonly catalog = inject(CatalogFacade);
+  private readonly pricing = inject(CatalogPricingFacade);
   private readonly document = inject(DOCUMENT);
   private readonly router = inject(Router);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
@@ -29,6 +31,14 @@ export class CatalogPage implements OnInit {
   protected query = '';
   protected categoryId = '';
   protected readonly selectedTypes = signal<Record<string, 'UNIDAD' | 'CAJA'>>({});
+  private readonly quoteSync = effect(() => {
+    const products = this.products();
+    this.auth.user();
+    const presentationIds = products
+      .map((product) => this.selectedPresentation(product)?.id)
+      .filter((id): id is string => !!id);
+    if (presentationIds.length > 0) this.pricing.load(presentationIds);
+  });
 
   ngOnInit() {
     if (this.isBrowser) this.loadCatalog();
@@ -70,6 +80,33 @@ export class CatalogPage implements OnInit {
 
   protected productImage(product: Product) {
     return productImagePath(product, this.selectedPresentation(product));
+  }
+
+  protected quoteFor(product: Product) {
+    const presentation = this.selectedPresentation(product);
+    const quote = this.pricing.quoteFor(presentation?.id);
+    if (!quote) return undefined;
+    const expectedSegment = this.auth.isApprovedBusiness() ? 'B2B' : 'B2C';
+    return quote.segmento === expectedSegment ? quote : undefined;
+  }
+
+  protected quoteProfileMismatch(product: Product): boolean {
+    const presentation = this.selectedPresentation(product);
+    const quote = this.pricing.quoteFor(presentation?.id);
+    if (!quote) return false;
+    return quote.segmento !== (this.auth.isApprovedBusiness() ? 'B2B' : 'B2C');
+  }
+
+  protected quoteStatus(product: Product) {
+    return this.pricing.statusFor(this.selectedPresentation(product)?.id);
+  }
+
+  protected formatPrice(amount: string): string {
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(Number(amount));
+  }
+
+  protected hasDiscount(amount: string): boolean {
+    return Number(amount) > 0;
   }
 
   protected openProduct(id: string, event: MouseEvent): void {

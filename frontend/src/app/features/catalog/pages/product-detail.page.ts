@@ -1,10 +1,11 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, DestroyRef, OnInit, PLATFORM_ID, computed, inject, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, PLATFORM_ID, computed, effect, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/auth.service';
 import { CatalogApiService } from '../data-access/catalog-api.service';
+import { CatalogPricingFacade } from '../data-access/catalog-pricing.facade';
 import { Presentation, Product } from '../models/catalog.models';
 import { productImagePath } from '../domain/product-media';
 import { getAllowedPresentations, selectPresentation } from '../domain/presentation-rules';
@@ -21,6 +22,7 @@ const UUID_PATTERN = /^[\da-f]{8}-(?:[\da-f]{4}-){3}[\da-f]{12}$/i;
 export class ProductDetailPage implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly api = inject(CatalogApiService);
+  private readonly pricing = inject(CatalogPricingFacade);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly auth = inject(AuthService);
   private readonly destroyRef = inject(DestroyRef);
@@ -40,6 +42,10 @@ export class ProductDetailPage implements OnInit {
     return product ? productImagePath(product, this.selectedPresentation()) : '';
   });
   protected readonly isApprovedBusiness = () => this.auth.isApprovedBusiness();
+  private readonly quoteSync = effect(() => {
+    const presentation = this.selectedPresentation();
+    if (presentation) this.pricing.load([presentation.id]);
+  });
 
   ngOnInit(): void {
     if (!this.isBrowser) return;
@@ -55,6 +61,35 @@ export class ProductDetailPage implements OnInit {
     ) {
       this.selectedType.set(value);
     }
+  }
+
+  protected quoteForSelectedPresentation() {
+    const quote = this.pricing.quoteFor(this.selectedPresentation()?.id);
+    if (!quote) return undefined;
+    const expectedSegment = this.auth.isApprovedBusiness() ? 'B2B' : 'B2C';
+    return quote.segmento === expectedSegment ? quote : undefined;
+  }
+
+  protected quoteProfileMismatch(): boolean {
+    const quote = this.pricing.quoteFor(this.selectedPresentation()?.id);
+    return !!quote && quote.segmento !== (this.auth.isApprovedBusiness() ? 'B2B' : 'B2C');
+  }
+
+  protected quoteStatus() {
+    return this.pricing.statusFor(this.selectedPresentation()?.id);
+  }
+
+  protected formatPrice(amount: string): string {
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(Number(amount));
+  }
+
+  protected hasDiscount(amount: string): boolean {
+    return Number(amount) > 0;
+  }
+
+  protected retryQuote(): void {
+    const presentation = this.selectedPresentation();
+    if (presentation) this.pricing.load([presentation.id]);
   }
 
   private loadProduct(id: string): void {

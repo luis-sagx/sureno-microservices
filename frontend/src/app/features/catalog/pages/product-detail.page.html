@@ -39,11 +39,10 @@
               <label for="detail-presentation">Presentación</label>
               <select
                 id="detail-presentation"
-                [value]="selectedPresentation()?.tipo"
                 (change)="selectPresentation($any($event.target).value)"
               >
                 @for (presentation of allowedPresentations(); track presentation.id) {
-                  <option [value]="presentation.tipo">
+                  <option [value]="presentation.tipo" [selected]="presentation.tipo === selectedPresentation()?.tipo">
                     {{ presentation.tipo === 'UNIDAD' ? 'Unidad' : 'Caja completa (' + presentation.unidades_por_presentacion + ' unidades)' }}
                   </option>
                 }
@@ -58,9 +57,32 @@
             <p class="detail-presentation-unavailable">No hay presentaciones activas para este perfil.</p>
           }
 
-          <div class="detail-price">
+          @let selectedQuote = quoteForSelectedPresentation();
+          @let quoteState = quoteStatus();
+          <div class="detail-price" aria-live="polite">
             <span>Precio</span>
-            <strong>Precio no configurado</strong>
+            @if (quoteState.loading) {
+              <strong role="status">Consultando precio…</strong>
+            } @else if (quoteState.error) {
+              <div class="detail-price-state-error" role="alert">
+                <strong>{{ quoteState.error }}</strong>
+                <button type="button" class="price-retry" (click)="retryQuote()">Reintentar</button>
+              </div>
+            } @else if (quoteProfileMismatch()) {
+              <strong role="alert">No se pudo confirmar el perfil del precio.</strong>
+            } @else if (selectedQuote?.configured && selectedQuote.final_amount !== null) {
+              <div class="detail-price-value">
+                @if (hasDiscount(selectedQuote.discount_amount)) {
+                  <del>{{ formatPrice(selectedQuote.base_amount!) }}</del>
+                }
+                <strong>{{ formatPrice(selectedQuote.final_amount) }}</strong>
+                @if (hasDiscount(selectedQuote.discount_amount)) {
+                  <small>{{ selectedQuote.promotion_name || 'Promoción' }} · ahorras {{ formatPrice(selectedQuote.discount_amount) }}</small>
+                }
+              </div>
+            } @else {
+              <strong>Precio no configurado</strong>
+            }
           </div>
         </div>
       </article>

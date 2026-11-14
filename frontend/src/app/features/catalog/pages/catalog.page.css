@@ -284,6 +284,33 @@
   font-weight: 400;
 }
 
+.price-value,
+.detail-price-value {
+  display: grid;
+  justify-items: end;
+  gap: 0.2rem;
+  text-align: right;
+}
+
+.price-value del,
+.detail-price-value del {
+  color: var(--muted-dim);
+  font-size: 0.76rem;
+}
+
+.price-value small,
+.detail-price-value small {
+  color: var(--secondary);
+  font-size: 0.65rem;
+  line-height: 1.35;
+}
+
+.price-placeholder .price-state-error {
+  color: var(--secondary);
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+}
+
 .catalog-rule-note {
   display: grid;
   gap: 0.4rem;

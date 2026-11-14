@@ -14,5 +14,13 @@
     "pathRewrite": {
       "^/api/catalog": "/catalog"
     }
+  },
+  "/api/prices": {
+    "target": "http://localhost:3004",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api/prices": "/prices"
+    }
   }
 }

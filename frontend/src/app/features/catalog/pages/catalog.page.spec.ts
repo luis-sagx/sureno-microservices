@@ -1,10 +1,12 @@
-import { Component, signal } from '@angular/core';
+import { Component, WritableSignal, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { AuthService } from '../../../core/auth.service';
 import { Category, Product } from '../models/catalog.models';
 import { CatalogApiService } from '../data-access/catalog-api.service';
+import { CatalogPricingFacade } from '../data-access/catalog-pricing.facade';
+import { PriceQuote } from '../models/pricing.models';
 import { CatalogPage } from './catalog.page';
 
 @Component({ template: '' })
@@ -51,10 +53,20 @@ function makeProduct(name: string, index: number): Product {
 describe('CatalogPage', () => {
   let products: Product[];
   let approvedBusiness: ReturnType<typeof vi.fn>;
+  let quotes: WritableSignal<Record<string, PriceQuote>>;
+  let statuses: WritableSignal<Record<string, { loading: boolean; error: string }>>;
+  let pricing: { load: ReturnType<typeof vi.fn>; quoteFor: ReturnType<typeof vi.fn>; statusFor: ReturnType<typeof vi.fn> };
 
   beforeEach(async () => {
     products = Object.keys(imageByName).map(makeProduct);
     approvedBusiness = vi.fn(() => false);
+    quotes = signal({});
+    statuses = signal({});
+    pricing = {
+      load: vi.fn(),
+      quoteFor: vi.fn((id: string) => quotes()[id]),
+      statusFor: vi.fn((id: string) => statuses()[id] ?? { loading: false, error: '' }),
+    };
     await TestBed.configureTestingModule({
       imports: [CatalogPage],
       providers: [
@@ -70,6 +82,7 @@ describe('CatalogPage', () => {
           provide: AuthService,
           useValue: { isApprovedBusiness: approvedBusiness, user: signal(null) },
         },
+        { provide: CatalogPricingFacade, useValue: pricing },
       ],
     }).compileComponents();
   });
@@ -148,6 +161,59 @@ describe('CatalogPage', () => {
     expect(card.textContent).toContain('No disponible');
     expect(card.textContent).toContain('No configurado');
     expect(card.querySelector('button, input[type="submit"]')).toBeNull();
+  });
+
+  it('shows the quote for the selected presentation and refreshes it when selection changes', () => {
+    quotes.update((current) => ({ ...current, 'unit-0': {
+      presentation_id: 'unit-0', presentation_type: 'UNIDAD', segmento: 'B2C', base_amount: '5.00',
+      promotion_id: null, promotion_name: null, discount_amount: '0.00', final_amount: '5.00', configured: true, currency: 'USD',
+    } }));
+    quotes.update((current) => ({ ...current, 'case-0': {
+      presentation_id: 'case-0', presentation_type: 'CAJA', segmento: 'B2C', base_amount: '50.00',
+      promotion_id: 'promo-1', promotion_name: 'Oferta caja', discount_amount: '5.00', final_amount: '45.00', configured: true, currency: 'USD',
+    } }));
+    const fixture = TestBed.createComponent(CatalogPage);
+    fixture.detectChanges();
+    const card = (fixture.nativeElement as HTMLElement).querySelector<HTMLElement>('.product-card')!;
+    expect(card.textContent).toContain('$5.00');
+
+    const select = card.querySelector<HTMLSelectElement>('.presentation-row select')!;
+    select.value = 'CAJA';
+    select.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+
+    expect(card.textContent).toContain('$45.00');
+    expect(card.textContent).toContain('Oferta caja');
+  });
+
+  it('shows loading and retryable error states for price quotes without hiding products', () => {
+    statuses.update((current) => ({ ...current, 'unit-0': { loading: true, error: '' } }));
+    const fixture = TestBed.createComponent(CatalogPage);
+    fixture.detectChanges();
+    const card = (fixture.nativeElement as HTMLElement).querySelector<HTMLElement>('.product-card')!;
+    expect(card.textContent).toContain('Consultando precio');
+
+    statuses.update((current) => ({ ...current, 'unit-0': { loading: false, error: 'No pudimos consultar el precio. Intenta nuevamente.' } }));
+    fixture.detectChanges();
+    expect(card.textContent).toContain('No pudimos consultar el precio');
+    expect(card.querySelector('.detail-link')).toBeTruthy();
+  });
+
+  it('keeps a B2C case explicitly unconfigured when MS04 has no public case tariff', () => {
+    quotes.update((current) => ({ ...current, 'case-0': {
+      presentation_id: 'case-0', presentation_type: 'CAJA', segmento: 'B2C', base_amount: null,
+      promotion_id: null, promotion_name: null, discount_amount: '0.00', final_amount: null, configured: false, currency: 'USD',
+    } }));
+    const fixture = TestBed.createComponent(CatalogPage);
+    fixture.detectChanges();
+    const card = (fixture.nativeElement as HTMLElement).querySelector<HTMLElement>('.product-card')!;
+    const select = card.querySelector<HTMLSelectElement>('.presentation-row select')!;
+    select.value = 'CAJA';
+    select.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+
+    expect(card.textContent).toContain('No configurado');
+    expect(card.textContent).not.toContain('$0.00');
   });
 
   it('keeps cards concise and omits internal service readiness copy', () => {

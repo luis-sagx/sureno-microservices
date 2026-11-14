@@ -121,9 +121,29 @@
               </p>
             }
 
-            <div class="price-placeholder">
+            @let selectedQuote = quoteFor(product);
+            @let quoteState = quoteStatus(product);
+            <div class="price-placeholder" aria-live="polite">
               <span>Precio</span>
-              <strong>No configurado</strong>
+              @if (quoteState.loading) {
+                <strong role="status">Consultando precio…</strong>
+              } @else if (quoteState.error) {
+                <strong class="price-state-error" role="alert">{{ quoteState.error }}</strong>
+              } @else if (quoteProfileMismatch(product)) {
+                <strong class="price-state-error" role="alert">No se pudo confirmar el perfil del precio.</strong>
+              } @else if (selectedQuote?.configured && selectedQuote.final_amount !== null) {
+                <div class="price-value">
+                  @if (hasDiscount(selectedQuote.discount_amount)) {
+                    <del>{{ formatPrice(selectedQuote.base_amount!) }}</del>
+                  }
+                  <strong>{{ formatPrice(selectedQuote.final_amount) }}</strong>
+                  @if (hasDiscount(selectedQuote.discount_amount)) {
+                    <small>{{ selectedQuote.promotion_name || 'Promoción' }} · ahorras {{ formatPrice(selectedQuote.discount_amount) }}</small>
+                  }
+                </div>
+              } @else {
+                <strong>No configurado</strong>
+              }
             </div>
             <a
               class="detail-link"
