@@ -91,10 +91,11 @@ The first pass used the screenshots without auditing the reference's active desi
 
 ### SVR-04 — Compact catalog and product cards (reopened by user feedback)
 
-- [ ] After SVR-05, align catalog typography/colors and card hover motion with the reference while retaining compact imagery, honest price/availability, and removal of service-readiness copy.
+- [x] Kept the compact image-forward cards, applied shared typography and navy/mist-blue accents, added restrained image/reveal motion with reduced-motion handling, and removed the generic MS03/MS04 readiness message. Honest price, availability, presentation, and account restrictions remain.
+- Check: focused reveal/card tests passed; full suite 7 files/38 tests; `npm run build` passed and prerendered five routes; `git diff --check` passed. Catalog CSS budget warning remains at 5.64 KB vs 4 KB; product-detail CSS is under budget.
 - Reopened because the reference audit found the active palette/type/motion system was not applied consistently to cards.
 - Route: delegated direct; catalog template/style and behavior coverage span multiple files.
-- Prior verification/commit: `435ffd2`; new checks pending.
+- Prior implementation commit: `435ffd2`; corrected verification complete.
 - Commit: pending.
 
 ## Progress and next step

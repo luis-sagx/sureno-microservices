@@ -160,4 +160,13 @@ describe('CatalogPage', () => {
     expect(card.textContent).toContain('Disponibilidad por confirmar');
     expect(card.textContent).toContain('No configurado');
   });
+
+  it('applies the shared scroll-reveal behavior to each product card', () => {
+    const fixture = TestBed.createComponent(CatalogPage);
+    fixture.detectChanges();
+    const cards = [...(fixture.nativeElement as HTMLElement).querySelectorAll<HTMLElement>('.product-card')];
+
+    expect(cards).toHaveLength(11);
+    expect(cards.every((card) => card.hasAttribute('appscrollreveal'))).toBe(true);
+  });
 });

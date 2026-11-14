@@ -2,33 +2,47 @@
   <div class="page-container">
     <p class="eyebrow">La colección</p>
     <h1 class="display-title">Catálogo de <em>productos.</em></h1>
-    <p class="catalog-description">Licores de la casa para cada ocasión. Consulta presentaciones y disponibilidad informativa.</p>
-    <dl class="catalog-stats">
-      <div><dt>Categorías</dt><dd>{{ categories().length }}</dd></div>
-      <div><dt>Productos</dt><dd>{{ products().length }}</dd></div>
-      <div><dt>Presentaciones</dt><dd>Unidad · Caja</dd></div>
-    </dl>
   </div>
 </section>
 
 <section class="catalog-content page-container">
   @if (isApprovedBusiness) {
-    <div class="notice profile-notice">Cuenta B2B aprobada: puedes consultar presentaciones por caja completa. La tarifa mayorista aún no está configurada.</div>
+    <div class="notice profile-notice">
+      Cuenta B2B aprobada: puedes consultar presentaciones por caja completa. La tarifa mayorista
+      aún no está configurada.
+    </div>
   } @else if (auth.user()?.estado_solicitud === 'PENDING') {
-    <div class="notice profile-notice">Tu solicitud comercial está pendiente de revisión. Mientras se revisa, no tienes acceso a beneficios B2B. Los pedidos aún no están habilitados.</div>
+    <div class="notice profile-notice">
+      Tu solicitud comercial está pendiente de revisión. Mientras se revisa, no tienes acceso a
+      beneficios B2B. Los pedidos aún no están habilitados.
+    </div>
   } @else if (auth.user()?.estado_verificacion === 'PENDING') {
-    <div class="notice profile-notice">Tu identidad está pendiente de verificación. Puedes consultar el catálogo; los pedidos requieren verificación aprobada.</div>
+    <div class="notice profile-notice">
+      Tu identidad está pendiente de verificación. Puedes consultar el catálogo; los pedidos
+      requieren verificación aprobada.
+    </div>
   }
 
   <div class="catalog-tools">
     <form class="search-form" (ngSubmit)="search()">
       <label class="visually-hidden" for="catalog-search">Buscar productos</label>
-      <input id="catalog-search" name="q" type="search" placeholder="Buscar producto…" [(ngModel)]="query" />
+      <input
+        id="catalog-search"
+        name="q"
+        type="search"
+        placeholder="Buscar producto…"
+        [(ngModel)]="query"
+      />
       <button type="submit" aria-label="Buscar">Buscar <span aria-hidden="true">→</span></button>
     </form>
     <div class="field category-filter">
       <label for="category-filter">Categoría</label>
-      <select id="category-filter" name="category_id" [ngModel]="categoryId" (ngModelChange)="chooseCategory($event)">
+      <select
+        id="category-filter"
+        name="category_id"
+        [ngModel]="categoryId"
+        (ngModelChange)="chooseCategory($event)"
+      >
         <option value="">Todas las categorías</option>
         @for (category of categories(); track category.id) {
           <option [value]="category.id">{{ category.nombre }}</option>
@@ -38,7 +52,10 @@
   </div>
 
   @if (loading()) {
-    <div class="catalog-state" role="status"><span class="loading-line"></span><p>Cargando catálogo…</p></div>
+    <div class="catalog-state" role="status">
+      <span class="loading-line"></span>
+      <p>Cargando catálogo…</p>
+    </div>
   } @else if (error()) {
     <div class="catalog-state error-state" role="alert">
       <h2>No pudimos cargar los productos</h2>
@@ -51,41 +68,68 @@
       <p>Prueba con otro nombre o selecciona una categoría diferente.</p>
     </div>
   } @else if (products().length > 0) {
-    <p class="result-count" aria-live="polite">{{ products().length }} {{ products().length === 1 ? 'producto' : 'productos' }}</p>
+    <p class="result-count" aria-live="polite">
+      {{ products().length }} {{ products().length === 1 ? 'producto' : 'productos' }}
+    </p>
     <div class="product-grid">
       @for (product of products(); track product.id; let index = $index) {
-        <article class="product-card">
+        <article class="product-card" appScrollReveal>
           <div class="product-image-wrap">
-            <img [src]="productImage(product)" [alt]="product.nombre" width="300" height="450" [attr.loading]="index < 12 ? 'eager' : 'lazy'" decoding="async" />
+            <img
+              [src]="productImage(product)"
+              [alt]="product.nombre"
+              width="300"
+              height="450"
+              [attr.loading]="index < 12 ? 'eager' : 'lazy'"
+              decoding="async"
+            />
             <span class="product-category">{{ product.categoria?.nombre || 'Sureño' }}</span>
           </div>
           <div class="product-info">
             <h2>{{ product.nombre }}</h2>
-            <p class="product-volume">{{ product.volumen_ml ? product.volumen_ml + ' ml' : 'Presentación consultable' }}</p>
+            <p class="product-volume">
+              {{ product.volumen_ml ? product.volumen_ml + ' ml' : 'Presentación consultable' }}
+            </p>
             <div class="product-availability" [class.is-unavailable]="!product.disponible">
-              <span aria-hidden="true"></span>{{ product.disponible ? 'Disponibilidad por confirmar' : 'No disponible' }}
+              <span aria-hidden="true"></span
+              >{{ product.disponible ? 'Disponibilidad por confirmar' : 'No disponible' }}
             </div>
 
             @if (allowedPresentations(product).length > 0) {
               <div class="presentation-row">
                 <label [for]="'presentation-' + product.id">Presentación</label>
-                <select [id]="'presentation-' + product.id" [ngModel]="selectedPresentation(product)?.tipo" [name]="'presentation-' + product.id" (ngModelChange)="selectPresentation(product, $event)">
+                <select
+                  [id]="'presentation-' + product.id"
+                  [ngModel]="selectedPresentation(product)?.tipo"
+                  [name]="'presentation-' + product.id"
+                  (ngModelChange)="selectPresentation(product, $event)"
+                >
                   @for (presentation of allowedPresentations(product); track presentation.id) {
                     <option [value]="presentation.tipo">
-                      {{ presentation.tipo === 'UNIDAD' ? 'Unidad' : 'Caja completa (' + presentation.unidades_por_presentacion + ')' }}
+                      {{
+                        presentation.tipo === 'UNIDAD'
+                          ? 'Unidad'
+                          : 'Caja completa (' + presentation.unidades_por_presentacion + ')'
+                      }}
                     </option>
                   }
                 </select>
               </div>
             } @else {
-              <p class="presentation-unavailable">No hay presentaciones activas para este perfil.</p>
+              <p class="presentation-unavailable">
+                No hay presentaciones activas para este perfil.
+              </p>
             }
 
             <div class="price-placeholder">
               <span>Precio</span>
               <strong>No configurado</strong>
             </div>
-            <a class="detail-link" [href]="'/catalogo/producto/' + product.id" (click)="openProduct(product.id, $event)">
+            <a
+              class="detail-link"
+              [href]="'/catalogo/producto/' + product.id"
+              (click)="openProduct(product.id, $event)"
+            >
               Ver detalles <span aria-hidden="true">→</span>
             </a>
           </div>
@@ -98,8 +142,14 @@
     @if (isApprovedBusiness) {
       <p>Las cuentas B2B aprobadas solo pueden solicitar cajas completas.</p>
     } @else {
-      <p>Clientes particulares pueden consultar unidades o cajas. El mínimo B2C de $10 no se calcula porque las tarifas aún no están configuradas.</p>
+      <p>
+        Clientes particulares pueden consultar unidades o cajas. El mínimo B2C de $10 no se calcula
+        porque las tarifas aún no están configuradas.
+      </p>
     }
-    <p>Un RUC registrado para facturación no activa beneficios mayoristas. Los productos no disponibles no pueden agregarse a solicitudes nuevas.</p>
+    <p>
+      Un RUC registrado para facturación no activa beneficios mayoristas. Los productos no
+      disponibles no pueden agregarse a solicitudes nuevas.
+    </p>
   </aside>
 </section>

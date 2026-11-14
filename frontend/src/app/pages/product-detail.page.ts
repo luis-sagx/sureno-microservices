@@ -7,12 +7,13 @@ import { AuthService } from '../core/auth.service';
 import { CatalogApiService } from '../core/catalog-api.service';
 import { Presentation, Product } from '../core/api';
 import { productImagePath } from '../core/product-media';
+import { RevealOnScrollDirective } from '../core/reveal-on-scroll.directive';
 
 const UUID_PATTERN = /^[\da-f]{8}-(?:[\da-f]{4}-){3}[\da-f]{12}$/i;
 
 @Component({
   selector: 'app-product-detail-page',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, RevealOnScrollDirective],
   templateUrl: './product-detail.page.html',
   styleUrl: './product-detail.page.css',
 })

@@ -6,10 +6,11 @@ import { AuthService } from '../core/auth.service';
 import { CatalogApiService } from '../core/catalog-api.service';
 import { Category, Product, Presentation } from '../core/api';
 import { productImagePath } from '../core/product-media';
+import { RevealOnScrollDirective } from '../core/reveal-on-scroll.directive';
 
 @Component({
   selector: 'app-catalog-page',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RevealOnScrollDirective],
   templateUrl: './catalog.page.html',
   styleUrl: './catalog.page.css',
 })

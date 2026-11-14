@@ -16,12 +16,12 @@
       </div>
     } @else if (product(); as item) {
       <article class="product-detail" aria-labelledby="product-detail-title">
-        <div class="product-detail-image">
+        <div class="product-detail-image" appScrollReveal>
           <img [src]="productImage()" [alt]="item.nombre" width="600" height="900" fetchpriority="high" />
           <span class="detail-category">{{ item.categoria?.nombre || 'Sureño' }}</span>
         </div>
 
-        <div class="product-detail-copy">
+        <div class="product-detail-copy" appScrollReveal>
           <p class="eyebrow">{{ item.categoria?.nombre || 'Nuestro catálogo' }}</p>
           <h1 id="product-detail-title">{{ item.nombre }}</h1>
           <p class="detail-volume">{{ item.volumen_ml ? item.volumen_ml + ' ml' : 'Volumen no especificado' }}</p>

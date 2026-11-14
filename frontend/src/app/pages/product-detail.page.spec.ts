@@ -68,6 +68,7 @@ describe('ProductDetailPage', () => {
     expect(page.textContent).toContain('750 ml');
     expect(page.querySelector<HTMLImageElement>('.product-detail-image img')?.getAttribute('src'))
       .toBe('/img-minorista/cana-surena.webp');
+    expect(page.querySelector('[appscrollreveal]')).toBeTruthy();
     expect(page.textContent).toContain('Precio no configurado');
     expect(page.querySelector('button, input[type="submit"]')).toBeNull();
   });
