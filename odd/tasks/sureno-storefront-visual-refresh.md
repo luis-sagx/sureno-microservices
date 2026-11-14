@@ -95,8 +95,8 @@ The first pass used the screenshots without auditing the reference's active desi
 - Check: focused reveal/card tests passed; full suite 7 files/38 tests; `npm run build` passed and prerendered five routes; `git diff --check` passed. Catalog CSS budget warning remains at 5.64 KB vs 4 KB; product-detail CSS is under budget.
 - Reopened because the reference audit found the active palette/type/motion system was not applied consistently to cards.
 - Route: delegated direct; catalog template/style and behavior coverage span multiple files.
-- Prior implementation commit: `435ffd2`; corrected verification complete.
-- Commit: pending.
+- Prior implementation commit: `435ffd2`; corrected and verified in `54ad983` (`feat(frontend): refine compact catalog product cards`).
+- Commit: `54ad983` (`feat(frontend): refine compact catalog product cards`).
 
 ## Progress and next step
 
