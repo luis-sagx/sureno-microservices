@@ -35,7 +35,7 @@
   <div class="quote-backdrop" aria-hidden="true"></div>
   <div class="page-container quote-content relative max-w-[850px] py-14">
     <p class="eyebrow justify-center">El sabor auténtico del sur</p>
-    <blockquote class="mt-4 mb-0 text-[var(--paper)] font-[var(--font-display)] text-[clamp(1.9rem,4.7vw,3.35rem)] italic leading-[1.2]">
+    <blockquote class="mt-4 mb-0 text-[var(--paper)] font-(family-name:--font-display) text-[clamp(1.9rem,4.7vw,3.35rem)] italic leading-[1.2]">
       “En cada botella destilamos tradición, pasión y el sabor de lo auténtico.”
     </blockquote>
   </div>
@@ -55,7 +55,7 @@
             loading="lazy"
           />
           <div class="px-[clamp(1.2rem,3vw,2rem)] pt-[1.4rem] pb-[1.7rem]">
-            <h3 class="mt-0 mb-[0.55rem] text-[var(--gold)] font-[var(--font-display)] text-[1.8rem] font-normal">
+            <h3 class="mt-0 mb-[0.55rem] text-[var(--gold)] font-(family-name:--font-display) text-[1.8rem] font-normal">
               {{ item.title }}
             </h3>
             <p class="m-0 text-[var(--muted)] text-[0.88rem] leading-[1.75]">{{ item.text }}</p>
@@ -116,7 +116,7 @@
           <span class="text-[var(--gold)] text-[0.68rem] font-bold tracking-[0.12em]">
             {{ (index + 1).toString().padStart(2, '0') }}
           </span>
-          <h3 class="mt-[0.65rem] mb-[0.45rem] text-[var(--paper)] font-[var(--font-display)] text-xl font-normal">
+          <h3 class="mt-[0.65rem] mb-[0.45rem] text-[var(--paper)] font-(family-name:--font-display) text-xl font-normal">
             {{ item.title }}
           </h3>
           <p class="m-0 text-[var(--muted)] text-[0.88rem] leading-[1.75]">{{ item.text }}</p>

@@ -25,7 +25,7 @@
         role="alert"
       >
         <p class="eyebrow m-0">Catálogo Sureño</p>
-        <h1 class="m-0 font-[var(--font-display)] text-[clamp(2rem,4vw,3rem)] font-normal">
+        <h1 class="m-0 font-(family-name:--font-display) text-[clamp(2rem,4vw,3rem)] font-normal">
           No encontramos este producto
         </h1>
         <p class="m-0 max-w-[48ch] text-[var(--muted)] leading-[1.7]">{{ error() }}</p>
@@ -57,7 +57,7 @@
         <div class="product-detail-copy pt-[0.8rem]" appScrollReveal>
           <p class="eyebrow m-0 mb-4">{{ item.categoria?.nombre || 'Nuestro catálogo' }}</p>
           <h1
-            class="m-0 font-[var(--font-display)] text-[clamp(2.8rem,5vw,5.3rem)] font-normal tracking-[-0.04em] leading-[0.98] max-[520px]:text-[clamp(2.5rem,11vw,3.5rem)]"
+            class="m-0 font-(family-name:--font-display) text-[clamp(2.8rem,5vw,5.3rem)] font-normal tracking-[-0.04em] leading-[0.98] max-[520px]:text-[clamp(2.5rem,11vw,3.5rem)]"
             id="product-detail-title"
           >
             {{ item.nombre }}

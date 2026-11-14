@@ -52,12 +52,13 @@ The user explicitly approved migrating the frontend gradually to Tailwind, begin
 
 ## Tasks
 
-- [x] TW-01: Convert suitable Home page styles to Tailwind utilities. Starting file: `frontend/src/app/features/home/pages/home.page.css` (441 lines). Route: delegated direct; the multi-file writer trigger applies to the template and stylesheet. Checks: `pnpm run build` passed; `git diff --check` passed. Complex backdrops, overlays, watermark, ornament/seal, and Horeca background remain in CSS.
-- [x] TW-02: Convert suitable Catalog page styles. Starting file: `frontend/src/app/features/catalog/pages/catalog.page.css` (416 lines). Route: delegated direct; the multi-file writer trigger applies to the template and stylesheet. Checks: `pnpm run build` and `git diff --check` passed. Catalog CSS budget warning is resolved.
-- [x] TW-03: Convert suitable Product detail page styles. Starting file: `frontend/src/app/features/catalog/pages/product-detail.page.css` (298 lines). Route: delegated direct; the multi-file writer trigger applies to the template and stylesheet. Checks: `pnpm run build` and `git diff --check` passed; motion, loading, interaction, and theme styles remain in CSS.
+- [x] TW-01: Convert suitable Home page styles to Tailwind utilities. Starting file: `frontend/src/app/features/home/pages/home.page.css` (441 lines). Route: delegated direct; the multi-file writer trigger applies to the template and stylesheet. Layout and typography are now correct after TW-07; build passed.
+- [x] TW-02: Convert suitable Catalog page styles. Starting file: `frontend/src/app/features/catalog/pages/catalog.page.css` (416 lines). Route: delegated direct; the multi-file writer trigger applies to the template and stylesheet. Layout and typography are now correct after TW-07; build passed.
+- [x] TW-03: Convert suitable Product detail page styles. Starting file: `frontend/src/app/features/catalog/pages/product-detail.page.css` (298 lines). Route: delegated direct; the multi-file writer trigger applies to the template and stylesheet. Layout and typography are now correct after TW-07; build passed.
 - [x] TW-04: Convert suitable Auth page styles. Starting file: `frontend/src/app/features/auth/pages/auth.page.css` (293 lines). Route: delegated direct; the multi-file writer trigger applies to the login/signup templates and stylesheet. `git diff --check` passed; a subsequent `pnpm run build` passed after an earlier attempt encountered concurrent TypeScript edits. No tests run.
-- [x] TW-05: Convert suitable About page styles. Starting file: `frontend/src/app/features/about/pages/about.page.css` (275 lines). Route: delegated direct; the multi-file writer trigger applies to the template and stylesheet. `git diff --check` and `pnpm run build` passed; theme decoration and reduced-motion styling remain in CSS.
-- [x] TW-06: Convert suitable shared shell styles while preserving global CSS tokens and base styles. Starting file: `frontend/src/app/core/shell/app.css` (252 lines). Route: delegated direct; the multi-file writer trigger applies to the shell template and stylesheet. `pnpm run build` and `git diff --check` passed; global `styles.css` remains untouched.
+- [x] TW-05: Convert suitable About page styles. Starting file: `frontend/src/app/features/about/pages/about.page.css` (275 lines). Route: delegated direct; the multi-file writer trigger applies to the template and stylesheet. Build and typography passed after TW-07.
+- [x] TW-06: Convert suitable shared shell styles while preserving global CSS tokens and base styles. Starting file: `frontend/src/app/core/shell/app.css` (252 lines). Route: delegated direct; the multi-file writer trigger applies to the template and stylesheet. Build and typography passed after TW-07; global `styles.css` remains untouched.
+- [x] TW-07: Correct Tailwind v4 font-family utility syntax in Home, Catalog, Product detail, About, and shell templates. Route: delegated direct; one writer handled the five affected templates. Replaced 11 display-font and 3 label-font usages with `font-(family-name:--font-display)` / `font-(family-name:--font-label)`; the shell fallback uses `font-[family-name:var(--font-display,Georgia,serif)]`. `pnpm run build` and `git diff --check` passed; generated CSS maps these utilities to `font-family`, with no invalid font-weight rules. Dev server returned HTTP 200 for `/`, `/registro`, and `/styles.css`.
 
 ## Progress and evidence
 
@@ -76,8 +77,13 @@ The user explicitly approved migrating the frontend gradually to Tailwind, begin
 - Shared shell CSS dropped from 252 to 121 lines; responsive header/footer layout, desktop navigation, columns, and spacing moved to Tailwind. Theme/background, mobile overlay, interactive states, and footer decoration remain in CSS; global `styles.css` is unchanged. Build passed.
 - Across the global, shell, and feature stylesheets, CSS fell from 2,642 to 1,388 lines (1,254 fewer, about 47%). The global stylesheet remains 667 lines for shared base/theme responsibilities.
 - TW-06 work-unit commit: `4ea6caf` (`style(shell): migrate shared layout to Tailwind`).
+- User screenshots revealed that Tailwind v4 compiled `font-[var(--font-display)]` and `font-[var(--font-label)]` into `font-weight` declarations instead of `font-family`; generated dev CSS and official Tailwind documentation confirm the ambiguity. The affected migration tasks (TW-01, TW-02, TW-03, TW-05, TW-06) are reopened for TW-07. Auth has no affected arbitrary font-family utility.
+- The reported SSR `AbortError` occurs when Angular's request signal is canceled. The local SSR source rejects that canceled request; direct requests to `/` and `/registro` returned HTTP 200. No route failure was reproduced.
+- Corrected all arbitrary font-family utilities using Tailwind v4's documented family-name hint. Official syntax reference: https://tailwindcss.com/docs/font-family.
+- Verified that the production build emits `.font-\(family-name\:--font-display\){font-family:var(--font-display)}` and the corresponding label utility; no generated `font-weight: var(--font-display)` or `font-weight: var(--font-label)` remains. The running dev server serves updated markup/CSS and returns HTTP 200 for Home and `/registro`.
+- TW-07 work-unit commit pending.
 - The local Engram v2 CLI accepted the full task copy as observation #121, but export shows `topic: null`; the requested topic-scoped mirror remains pending.
 
 ## Next step
 
-Migration complete. No PR or push was requested; retain unrelated working-tree changes untouched.
+Commit TW-07 and record its identity. No PR or push was requested; retain unrelated working-tree changes untouched.
