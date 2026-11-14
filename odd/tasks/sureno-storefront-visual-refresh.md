@@ -83,7 +83,7 @@ The first pass used the screenshots without auditing the reference's active desi
 ### SVR-03 — Login and registration themes (reopened by user feedback)
 
 - [x] Kept standalone account cards and added visible, accessible theme controls on both login and registration. Controls use the persistent ThemeService; auth styles now use shared light/dark tokens and forms/API behavior is unchanged.
-- Check: the new auth route/theme persistence test passed for both routes; `npm run build` passed and prerendered five routes; `git diff --check` passed. The full suite still had a concurrent nav assertion failure (37 passed, 1 failed) at handoff; that failure is outside the auth files and is tracked under SVR-01.
+- Check: the auth route/theme persistence test passed for both routes; final full suite passed (7 files/38 tests); `npm run build` passed and prerendered five routes; `git diff --check` passed.
 - Reopened because the user requires light and dark auth pages; the previous dark-only styles hid the only theme control.
 - Prior implementation commit: `035507b`; corrected and verified in `fd19b19` (`feat(frontend): support auth theme switching`).
 - Route: delegated direct; route shell, auth styles, both page templates, and tests span multiple files.
@@ -104,4 +104,6 @@ The first pass used the screenshots without auditing the reference's active desi
 - Reference Home order is Hero, categories, full Heritage, trust, HORECA. The target had an abbreviated Heritage band after HORECA.
 - Existing auth theme persistence now has visible controls on the standalone routes and token-driven light/dark styles.
 - Previous SVR-01 through SVR-04 commits remain in history; user feedback reopens their visual acceptance. No unrelated completed work is invalidated.
-- SVR-05 is implemented, verified, and committed as `9c5e256`. The reopened page corrections are in progress through delegated writers and will be committed task by task after this foundation slice.
+- All five tasks are implemented, verified, and committed: `9c5e256` (fonts/tokens/reveal), `8157ba5` (shared shell), `66cfdab` (home/Heritage), `fd19b19` (auth themes), and `54ad983` (catalog/product cards). The Engram mirror is synchronized with this task document.
+- Final checks passed: full Angular suite (7 files/38 tests), production build/prerender of five routes, and `git diff --check`. The build reports component CSS budget warnings for Home (6.44 KB vs 4 KB) and catalog (5.64 KB vs 4 KB); these are warnings and the build succeeds.
+- Next: no implementation tasks remain in the authorized visual refresh scope. Unrelated and pre-existing workspace changes remain uncommitted.
