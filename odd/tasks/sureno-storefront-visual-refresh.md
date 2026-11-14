@@ -83,9 +83,9 @@ The first pass used the screenshots without auditing the reference's active desi
 - [x] Kept standalone account cards and added visible, accessible theme controls on both login and registration. Controls use the persistent ThemeService; auth styles now use shared light/dark tokens and forms/API behavior is unchanged.
 - Check: the new auth route/theme persistence test passed for both routes; `npm run build` passed and prerendered five routes; `git diff --check` passed. The full suite still had a concurrent nav assertion failure (37 passed, 1 failed) at handoff; that failure is outside the auth files and is tracked under SVR-01.
 - Reopened because the user requires light and dark auth pages; the previous dark-only styles hid the only theme control.
-- Prior verification/commit: `035507b`; new checks pending.
+- Prior implementation commit: `035507b`; corrected and verified in `fd19b19` (`feat(frontend): support auth theme switching`).
 - Route: delegated direct; route shell, auth styles, both page templates, and tests span multiple files.
-- Commit: pending.
+- Commit: `fd19b19` (`feat(frontend): support auth theme switching`).
 
 ### SVR-04 — Compact catalog and product cards (reopened by user feedback)
 
