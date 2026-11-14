@@ -67,10 +67,11 @@ The user explicitly requested that the frontend be migrated from npm to pnpm.
 - Plain `pnpm install`, `pnpm test`, and `pnpm run build` all passed without command-line policy overrides.
 - Active frontend scan found only pnpm manager/README commands; no npm install/run commands, `package-lock.json`, `npm-debug.log` entry, or npm manager configuration remain. `frontend/package-lock.json` is absent. `git diff --check` passed.
 - Initial migration commit: `83397df` (`build(frontend): migrate package manager to pnpm`).
+- Final pnpm-only work-unit commit: `63c7b3c` (`build(frontend): finish pnpm-only migration`), containing `.gitignore`, the exact-version policy exception and script allowlist, and this task record.
 - Style audit: Tailwind and `@tailwindcss/postcss` are dependencies; `.postcssrc.json` enables Tailwind and `src/styles.css` imports it. Actual component styling uses regular CSS files and semantic class names; no utility classes, `@apply`, or Tailwind theme config were found.
 - User's resumed request authorizes completing a pnpm-only setup and the narrowly scoped build-script allowlist; no broad install-script permission is added.
 - The pre-existing dirty changes outside this task, including `frontend/angular.json` analytics, the in-progress frontend architecture notes, and untracked MS04 files, remain untouched.
 
 ## Next step
 
-Record the final pnpm-only work-unit commit identity here and in the Engram mirror.
+The local Engram v2 CLI saved the full task content to the project observation, but did not preserve the requested topic key `odd/frontend-pnpm/tasks`; topic-scoped mirroring remains pending until a compatible Engram interface is available.
