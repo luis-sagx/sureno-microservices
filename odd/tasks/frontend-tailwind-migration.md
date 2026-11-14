@@ -66,7 +66,7 @@ The user explicitly approved migrating the frontend gradually to Tailwind, begin
 - Home component CSS dropped from 441 to 112 lines; static layout, spacing, typography, and responsive rules moved to Tailwind classes in its template. Angular bindings and content were preserved.
 - TW-01 work-unit commit: `92abaed` (`style(home): migrate layout utilities to Tailwind`).
 - Catalog CSS dropped from 416 to 200 lines; static layout, grid, form, card, and responsive rules moved to Tailwind classes. Animations, hover effects, special states, and theme styles remain in CSS. Build passed; Catalog no longer exceeds its CSS budget.
-- TW-02 work-unit commit pending.
+- TW-02 work-unit commit: `8d65088` (`style(catalog): migrate layout utilities to Tailwind`).
 - The local Engram v2 CLI accepted the full task copy as observation #121, but export shows `topic: null`; the requested topic-scoped mirror remains pending.
 
 ## Next step
