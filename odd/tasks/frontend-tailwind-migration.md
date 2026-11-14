@@ -75,9 +75,9 @@ The user explicitly approved migrating the frontend gradually to Tailwind, begin
 - TW-05 work-unit commit: `a8b9f30` (`style(about): migrate layout utilities to Tailwind`).
 - Shared shell CSS dropped from 252 to 121 lines; responsive header/footer layout, desktop navigation, columns, and spacing moved to Tailwind. Theme/background, mobile overlay, interactive states, and footer decoration remain in CSS; global `styles.css` is unchanged. Build passed.
 - Across the global, shell, and feature stylesheets, CSS fell from 2,642 to 1,388 lines (1,254 fewer, about 47%). The global stylesheet remains 667 lines for shared base/theme responsibilities.
-- TW-06 work-unit commit pending.
+- TW-06 work-unit commit: `4ea6caf` (`style(shell): migrate shared layout to Tailwind`).
 - The local Engram v2 CLI accepted the full task copy as observation #121, but export shows `topic: null`; the requested topic-scoped mirror remains pending.
 
 ## Next step
 
-Complete the final work-unit commit, record its identity, and retain the unrelated working-tree changes untouched.
+Migration complete. No PR or push was requested; retain unrelated working-tree changes untouched.
