@@ -1,4 +1,4 @@
-<section class="catalog-intro">
+<section class="catalog-intro" data-catalog-intro>
   <div class="page-container">
     <p class="eyebrow">La colección</p>
     <h1 class="display-title">Catálogo de <em>productos.</em></h1>
@@ -62,7 +62,6 @@
           <div class="product-info">
             <h2>{{ product.nombre }}</h2>
             <p class="product-volume">{{ product.volumen_ml ? product.volumen_ml + ' ml' : 'Presentación consultable' }}</p>
-            <p class="product-description">{{ product.descripcion }}</p>
             <div class="product-availability" [class.is-unavailable]="!product.disponible">
               <span aria-hidden="true"></span>{{ product.disponible ? 'Disponibilidad por confirmar' : 'No disponible' }}
             </div>
@@ -86,7 +85,6 @@
               <span>Precio</span>
               <strong>No configurado</strong>
             </div>
-            <p class="order-pending">Los precios y pedidos estarán disponibles cuando MS04 y MS03 estén habilitados.</p>
             <a class="detail-link" [href]="'/catalogo/producto/' + product.id" (click)="openProduct(product.id, $event)">
               Ver detalles <span aria-hidden="true">→</span>
             </a>

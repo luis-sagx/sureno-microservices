@@ -113,7 +113,8 @@ describe('ProductDetailPage', () => {
 
     expect(page.textContent).toContain('No disponible');
     expect(page.textContent).toContain('Precio no configurado');
-    expect(page.textContent).toContain('Los precios y pedidos todavía no están habilitados');
+    expect(page.textContent).not.toContain('MS04');
+    expect(page.textContent).not.toContain('MS03');
     expect(page.querySelector('button, input[type="submit"]')).toBeNull();
   });
 

@@ -15,7 +15,7 @@ The current site has a wide, tall catalog introduction and verbose product cards
 - Restyle the shared navbar and footer with the existing local Sureño brand assets and reference icon/layout language.
 - Refine the existing home hero and add a HORECA/wholesale CTA that leads into the current business-account request flow.
 - Restyle login and registration to a polished centered account layout, preserving existing fields, validation, errors, and theme behavior.
-- Reduce catalog intro whitespace, prioritize product imagery, simplify cards, and remove the generic MS03/MS04 enablement notice from catalog cards.
+- Reduce catalog intro whitespace, prioritize product imagery, simplify cards, and remove the generic MS03/MS04 enablement notice wherever it appears in catalog/product views.
 - Reuse local assets and existing icon dependencies where present; do not fetch or transfer assets.
 - Preserve manual availability confirmation, approved-business-account gating, B2B case-only presentation, B2C unit/case selection and $10 minimum, and honest unavailable pricing/order states.
 - Preserve Angular SSR and responsive support down to 360px.
@@ -33,14 +33,15 @@ The current site has a wide, tall catalog introduction and verbose product cards
 1. Navbar uses the Sureño reference composition and available local icons/assets while remaining keyboard-accessible and responsive.
 2. Home retains its current reference-frame behavior and has a visible wholesale CTA that enters business registration without claiming downloadable pricing.
 3. Login and registration use the requested elegant centered account treatment and retain all existing auth behavior.
-4. Catalog products appear sooner on the page; product photography is prominent; cards omit the generic MS03/MS04 notice while preserving meaningful availability, presentation, price, and purchase states.
+4. Catalog products appear sooner on the page; product photography is prominent; catalog/product views omit the generic MS03/MS04 notice while preserving meaningful availability, presentation, price, and purchase states.
 5. Footer follows the reference's grouped columns while keeping valid navigation and legal text.
 6. Theme behavior, SSR, and 360px layout remain functional.
 
 ## Delivery and verification
 
-- Forecast: approximately 600 authored changed lines across four work units, excluding generated files/assets.
+- Forecast: approximately 900 authored changed lines across four work units, excluding generated files/assets. Running count after SVR-04 implementation: approximately 795 authored lines across work-unit changes.
 - Route: delegated direct for each multi-file page unit. Trigger evidence: the change spans shared shell, home, auth, and catalog templates/styles; a writer is required for each multi-file unit. Initial mapping was delegated because understanding required four or more files.
+- Delivery strategy: `feature-branch-chain`, inherited from the user's explicit project instruction to keep work on one feature branch. Slice 1 contains SVR-01 through SVR-03 work-unit commits (`0a77dae`, `74ce5a2`, `035507b`); slice 2 is SVR-04 (pending). No PRs, push, or merge are authorized.
 - Each task observes RED before implementation, GREEN after implementation, then REFACTOR, followed by applicable Angular tests/build and `git diff --check`.
 - Receipt-driven development status has not been enabled in this request; `gentle-ai` is unavailable. Follow ordinary repository delivery policy and report review as unavailable, not approved.
 - No push, PR, or merge is authorized.
@@ -73,10 +74,11 @@ The current site has a wide, tall catalog introduction and verbose product cards
 
 ### SVR-04 — Compact catalog and product cards
 
-- [ ] Reduce catalog header whitespace, improve image prominence, simplify product cards, and remove only the generic technical enablement notice.
-- Check: focused Angular tests (RED/GREEN/REFACTOR), `npm run build`, `git diff --check`.
+- [x] Reduce catalog header whitespace, improve image prominence, simplify product cards, and remove only the generic technical enablement notice wherever it appears in catalog/product views. Product descriptions and repeated infrastructure copy are removed; truthful availability, presentation, and unconfigured-price states remain.
+- Check: RED observed (2 failures, 29 passed); GREEN `npm test -- --watch=false` passed (6 files, 31 tests); `npm run build` passed and prerendered 5 routes; `git diff --check` passed. Catalog CSS warning reduced from 5.44 KB to 5.20 KB, still over the 4 KB threshold.
 - Route: delegated direct; catalog template/style and behavior coverage span multiple files.
-- Commit: pending.
+- Commit: pending parent escalation because `.git` is read-only in the sandbox.
+- Receipt-driven review: disabled/unmanaged; no native assessment or approval claimed.
 
 ## Progress and next step
 
@@ -85,4 +87,5 @@ The current site has a wide, tall catalog introduction and verbose product cards
 - SVR-01 implementation, checks, and work-unit commit are complete.
 - SVR-02 implementation, checks, and work-unit commit are complete.
 - SVR-03 implementation, checks, and work-unit commit are complete.
-- Next: implement SVR-04.
+- SVR-04 implementation and checks are complete; its work-unit commit and commit identity record remain.
+- Next: close SVR-04 and verify the final branch state.

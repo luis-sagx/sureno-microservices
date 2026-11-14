@@ -149,4 +149,15 @@ describe('CatalogPage', () => {
     expect(card.textContent).toContain('No configurado');
     expect(card.querySelector('button, input[type="submit"]')).toBeNull();
   });
+
+  it('keeps cards concise and omits internal service readiness copy', () => {
+    const fixture = TestBed.createComponent(CatalogPage);
+    fixture.detectChanges();
+    const card = (fixture.nativeElement as HTMLElement).querySelector<HTMLElement>('.product-card')!;
+
+    expect(card.querySelector('.product-description')).toBeNull();
+    expect(card.textContent).not.toContain('Los precios y pedidos estarán disponibles cuando MS04 y MS03 estén habilitados.');
+    expect(card.textContent).toContain('Disponibilidad por confirmar');
+    expect(card.textContent).toContain('No configurado');
+  });
 });
