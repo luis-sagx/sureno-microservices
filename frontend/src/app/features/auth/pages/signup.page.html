@@ -41,35 +41,76 @@
           <a class="button-primary" routerLink="/login">Ir a iniciar sesión</a>
         </div>
       } @else {
-        <form class="auth-form signup-form" (ngSubmit)="submit()">
+        <form class="auth-form signup-form" novalidate (ngSubmit)="submit()">
           <div class="form-grid">
-            <div class="field"><label for="cedula">Cédula</label><input id="cedula" name="cedula" inputmode="numeric" maxlength="10" required [(ngModel)]="form.cedula" /></div>
-            <div class="field"><label for="telefono">Teléfono</label><input id="telefono" name="telefono" type="tel" autocomplete="tel" required [(ngModel)]="form.telefono" /></div>
-            <div class="field"><label for="nombres">Nombres</label><input id="nombres" name="nombres" autocomplete="given-name" required [(ngModel)]="form.nombres" /></div>
-            <div class="field"><label for="apellidos">Apellidos</label><input id="apellidos" name="apellidos" autocomplete="family-name" required [(ngModel)]="form.apellidos" /></div>
-            <div class="field"><label for="fecha_nacimiento">Fecha de nacimiento</label><input id="fecha_nacimiento" name="fecha_nacimiento" type="date" [max]="maxBirthDate" required [(ngModel)]="form.fecha_nacimiento" /></div>
-            <div class="field"><label for="email_contacto">Correo (opcional)</label><input id="email_contacto" name="email_contacto" type="email" autocomplete="email" [(ngModel)]="form.email_contacto" /></div>
+            <div class="field">
+              <label for="cedula">Cédula o RUC personal</label>
+              <input id="cedula" name="cedula" inputmode="numeric" maxlength="13" autocomplete="off" required [attr.aria-invalid]="fieldError('cedula') ? 'true' : null" (blur)="markTouched('cedula')" [(ngModel)]="form.cedula" />
+              @if (fieldError('cedula')) { <small class="field-error" role="alert">{{ fieldError('cedula') }}</small> }
+            </div>
+            <div class="field">
+              <label for="telefono">Teléfono</label>
+              <input id="telefono" name="telefono" type="tel" inputmode="tel" autocomplete="tel" maxlength="16" required [attr.aria-invalid]="fieldError('telefono') ? 'true' : null" (blur)="markTouched('telefono')" [(ngModel)]="form.telefono" />
+              @if (fieldError('telefono')) { <small class="field-error" role="alert">{{ fieldError('telefono') }}</small> }
+            </div>
+            <div class="field">
+              <label for="nombres">Nombres</label>
+              <input id="nombres" name="nombres" autocomplete="given-name" maxlength="50" required [attr.aria-invalid]="fieldError('nombres') ? 'true' : null" (blur)="markTouched('nombres')" [(ngModel)]="form.nombres" />
+              @if (fieldError('nombres')) { <small class="field-error" role="alert">{{ fieldError('nombres') }}</small> }
+            </div>
+            <div class="field">
+              <label for="apellidos">Apellidos</label>
+              <input id="apellidos" name="apellidos" autocomplete="family-name" maxlength="50" required [attr.aria-invalid]="fieldError('apellidos') ? 'true' : null" (blur)="markTouched('apellidos')" [(ngModel)]="form.apellidos" />
+              @if (fieldError('apellidos')) { <small class="field-error" role="alert">{{ fieldError('apellidos') }}</small> }
+            </div>
+            <div class="field">
+              <label for="fecha_nacimiento">Fecha de nacimiento</label>
+              <input id="fecha_nacimiento" name="fecha_nacimiento" type="date" [min]="minBirthDate" [max]="maxBirthDate" required [attr.aria-invalid]="fieldError('fecha_nacimiento') ? 'true' : null" (blur)="markTouched('fecha_nacimiento')" [(ngModel)]="form.fecha_nacimiento" />
+              @if (fieldError('fecha_nacimiento')) { <small class="field-error" role="alert">{{ fieldError('fecha_nacimiento') }}</small> }
+            </div>
+            <div class="field">
+              <label for="email_contacto">Correo (opcional)</label>
+              <input id="email_contacto" name="email_contacto" type="email" autocomplete="email" maxlength="255" [attr.aria-invalid]="fieldError('email_contacto') ? 'true' : null" (blur)="markTouched('email_contacto')" [(ngModel)]="form.email_contacto" />
+              @if (fieldError('email_contacto')) { <small class="field-error" role="alert">{{ fieldError('email_contacto') }}</small> }
+            </div>
           </div>
 
           @if (accountType === 'business') {
             <div class="business-fields">
               <p class="form-section-label">Datos del negocio · revisión manual</p>
               <div class="form-grid">
-                <div class="field"><label for="ruc">RUC</label><input id="ruc" name="ruc" inputmode="numeric" maxlength="13" [required]="accountType === 'business'" [(ngModel)]="form.ruc" /></div>
-                <div class="field"><label for="razon_social">Razón social</label><input id="razon_social" name="razon_social" [required]="accountType === 'business'" [(ngModel)]="form.razon_social" /></div>
+                <div class="field">
+                  <label for="ruc">RUC del negocio</label>
+                  <input id="ruc" name="ruc" inputmode="numeric" maxlength="13" [required]="accountType === 'business'" [attr.aria-invalid]="fieldError('ruc') ? 'true' : null" (blur)="markTouched('ruc')" [(ngModel)]="form.ruc" />
+                  @if (fieldError('ruc')) { <small class="field-error" role="alert">{{ fieldError('ruc') }}</small> }
+                </div>
+                <div class="field"><label for="razon_social">Razón social</label><input id="razon_social" name="razon_social" maxlength="160" [required]="accountType === 'business'" [attr.aria-invalid]="fieldError('razon_social') ? 'true' : null" (blur)="markTouched('razon_social')" [(ngModel)]="form.razon_social" />@if (fieldError('razon_social')) { <small class="field-error" role="alert">{{ fieldError('razon_social') }}</small> }</div>
                 <div class="field"><label for="nombre_comercial">Nombre comercial (opcional)</label><input id="nombre_comercial" name="nombre_comercial" [(ngModel)]="form.nombre_comercial" /></div>
-                <div class="field"><label for="direccion_negocio">Dirección del negocio</label><input id="direccion_negocio" name="direccion_negocio" [required]="accountType === 'business'" [(ngModel)]="form.direccion_negocio" /></div>
+                <div class="field"><label for="direccion_negocio">Dirección del negocio</label><input id="direccion_negocio" name="direccion_negocio" maxlength="2000" [required]="accountType === 'business'" [attr.aria-invalid]="fieldError('direccion_negocio') ? 'true' : null" (blur)="markTouched('direccion_negocio')" [(ngModel)]="form.direccion_negocio" />@if (fieldError('direccion_negocio')) { <small class="field-error" role="alert">{{ fieldError('direccion_negocio') }}</small> }</div>
               </div>
             </div>
           }
 
           <div class="form-grid">
-            <div class="field"><label for="username">Usuario</label><input id="username" name="username" autocomplete="username" required minlength="3" [(ngModel)]="form.username" /></div>
-            <div class="field"><label for="password">Contraseña (12 caracteres mínimo)</label><input id="password" name="password" type="password" autocomplete="new-password" required minlength="12" [(ngModel)]="form.password" /></div>
+            <div class="field">
+              <label for="username">Usuario</label>
+              <input id="username" name="username" autocomplete="username" minlength="2" maxlength="32" required [attr.aria-invalid]="fieldError('username') ? 'true' : null" (blur)="markTouched('username')" [(ngModel)]="form.username" />
+              @if (fieldError('username')) { <small class="field-error" role="alert">{{ fieldError('username') }}</small> }
+            </div>
+            <div class="field">
+              <label for="password">Contraseña (12 caracteres mínimo)</label>
+              <div class="password-input-wrap">
+                <input id="password" name="password" [type]="showPassword ? 'text' : 'password'" autocomplete="new-password" required minlength="12" [attr.aria-invalid]="fieldError('password') ? 'true' : null" (blur)="markTouched('password')" [(ngModel)]="form.password" />
+                <button class="password-visibility" type="button" data-password-visibility [attr.aria-label]="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'" [attr.aria-pressed]="showPassword" (click)="togglePasswordVisibility()">
+                  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.5"/></svg>
+                </button>
+              </div>
+              @if (fieldError('password')) { <small class="field-error" role="alert">{{ fieldError('password') }}</small> }
+            </div>
           </div>
 
           @if (error) { <p class="form-message error-message" role="alert">{{ error }}</p> }
-          <button class="button-primary submit-button" type="submit" [disabled]="loading || form.password.length < 12">
+          <button class="button-primary submit-button" type="submit" [disabled]="loading">
             {{ loading ? 'Enviando…' : accountType === 'business' ? 'Enviar solicitud comercial' : 'Crear cuenta' }}
           </button>
           <p class="form-footnote">La aprobación comercial y la verificación de identidad son procesos separados. Registrar un RUC no habilita precios mayoristas.</p>
