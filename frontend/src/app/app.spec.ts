@@ -29,7 +29,29 @@ describe('App', () => {
     );
     expect(links).toContain('/catalogo');
     expect(links).toContain('/quienes-somos');
-    expect(links).toContain('/login');
+  });
+
+  it('presents the account action with a decorative account icon', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const compiled = fixture.nativeElement as HTMLElement;
+    const accountLink = compiled.querySelector<HTMLAnchorElement>('.nav-account');
+
+    expect(accountLink?.getAttribute('href')).toBe('/login');
+    expect(accountLink?.querySelector('svg[aria-hidden="true"]')).toBeTruthy();
+  });
+
+  it('groups footer navigation under company, legal, and support headings', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const compiled = fixture.nativeElement as HTMLElement;
+    const headings = [...compiled.querySelectorAll('.footer-column h2')].map((heading) =>
+      heading.textContent?.trim(),
+    );
+
+    expect(headings).toEqual(['Empresa', 'Legal', 'Soporte']);
+    expect(compiled.querySelector('.footer-brand img[alt="Licorería Sureño"]')).toBeTruthy();
+    expect(compiled.querySelector('.footer-legal')?.textContent).toContain('mayores de 18 años');
   });
 
   it('declares the requested public pages and account routes', () => {
