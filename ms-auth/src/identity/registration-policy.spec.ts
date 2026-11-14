@@ -14,13 +14,16 @@ const validRegistration = () => ({
   password: 'ClaveSegura1!x',
 });
 
-const validBusinessRegistration = () => ({
-  ...validRegistration(),
-  ruc: '1791234567001',
-  razon_social: 'Comercial Sureño S.A.',
-  nombre_comercial: null,
-  direccion_negocio: 'Quito, Ecuador',
-});
+const validBusinessRegistration = () => {
+  const { cedula: _cedula, ...common } = validRegistration();
+  return {
+    ...common,
+    ruc: '1791234567001',
+    razon_social: 'Comercial Sureño S.A.',
+    nombre_comercial: null,
+    direccion_negocio: 'Quito, Ecuador',
+  };
+};
 
 describe('MS01 registration policy', () => {
   it('validates Ecuadorian cédula check digit and accepts a natural-person RUC', () => {
@@ -83,6 +86,16 @@ describe('MS01 registration policy', () => {
       .toBe('1791234567001');
     expect(validateBusinessRequest({ ...validBusinessRegistration(), ruc: '1760001550001' }).ruc)
       .toBe('1760001550001');
+  });
+
+  it('uses one business RUC as the person identifier and account RUC', () => {
+    const businessRuc = '1791234567001';
+    const input = { ...validBusinessRegistration(), ruc: businessRuc };
+
+    expect(validateBusinessRequest(input)).toMatchObject({
+      cedula: businessRuc,
+      ruc: businessRuc,
+    });
   });
 
   it.each(['0011234567001', '1771234567001', '1791234567000', '1710034065000'])

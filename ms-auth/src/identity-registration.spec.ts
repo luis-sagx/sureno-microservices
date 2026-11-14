@@ -94,10 +94,10 @@ describe('Identity registration API', () => {
   });
 
   it('creates a business-account request with manual review pending', async () => {
+    const ruc = makeRuc();
     const response = await request(app.getHttpServer())
       .post('/identity/business-requests')
       .send({
-        cedula: makeCedula(),
         nombres: 'Jorge',
         apellidos: 'Quishpe',
         fecha_nacimiento: '1990-09-17',
@@ -105,7 +105,7 @@ describe('Identity registration API', () => {
         email_contacto: 'jorge@example.test',
         username: `jorge-${Date.now()}`,
         password: 'Seguro-Registro-2026!',
-        ruc: makeRuc(),
+        ruc,
         razon_social: 'Comercial de Prueba S.A.',
         nombre_comercial: 'Comercial Prueba',
         direccion_negocio: 'Quito, Ecuador',

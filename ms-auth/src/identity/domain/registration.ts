@@ -150,7 +150,10 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
 }
 
-export function validateRegistration(input: unknown): RegistrationInput {
+function validateRegistrationWithIdentity(
+  input: unknown,
+  validateIdentity: (value: unknown) => string,
+): RegistrationInput {
   if (!isRecord(input)) {
     throw new IdentityValidationError(
       'Los datos de registro son obligatorios.',
@@ -192,7 +195,7 @@ export function validateRegistration(input: unknown): RegistrationInput {
   }
 
   return {
-    cedula: validateCedula(input.cedula),
+    cedula: validateIdentity(input.cedula),
     nombres: personName(input.nombres, 'Los nombres'),
     apellidos: personName(input.apellidos, 'Los apellidos'),
     fecha_nacimiento: validateAdultBirthDate(input.fecha_nacimiento),
@@ -203,6 +206,10 @@ export function validateRegistration(input: unknown): RegistrationInput {
   };
 }
 
+export function validateRegistration(input: unknown): RegistrationInput {
+  return validateRegistrationWithIdentity(input, validateCedula);
+}
+
 export function validateBusinessRequest(
   input: unknown,
 ): BusinessRegistrationInput {
@@ -211,8 +218,11 @@ export function validateBusinessRequest(
       'Los datos de registro son obligatorios.',
     );
   }
-  const registration = validateRegistration(input);
-  const ruc = validateBusinessRuc(input.ruc);
+  const registration = validateRegistrationWithIdentity(
+    { ...input, cedula: input.ruc },
+    validateBusinessRuc,
+  );
+  const ruc = registration.cedula;
   return {
     ...registration,
     ruc,

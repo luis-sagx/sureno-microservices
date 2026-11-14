@@ -1,5 +1,4 @@
-export interface RegistrationPayload {
-  cedula: string;
+export interface RegistrationFieldsPayload {
   nombres: string;
   apellidos: string;
   fecha_nacimiento: string;
@@ -9,7 +8,11 @@ export interface RegistrationPayload {
   password: string;
 }
 
-export interface BusinessRegistrationPayload extends RegistrationPayload {
+export interface RegistrationPayload extends RegistrationFieldsPayload {
+  cedula: string;
+}
+
+export interface BusinessRegistrationPayload extends RegistrationFieldsPayload {
   ruc: string;
   razon_social: string;
   nombre_comercial?: string;

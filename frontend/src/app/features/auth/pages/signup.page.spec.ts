@@ -115,7 +115,7 @@ describe('SignupPage registration validation', () => {
     expect(api.registerIndividual).toHaveBeenCalledOnce();
   });
 
-  it('validates the business RUC locally and prevents a malformed request', () => {
+  it('rejects a cédula when B2B requires the business RUC', () => {
     const fixture = TestBed.createComponent(SignupPage);
     fixture.detectChanges();
     const root = fixture.nativeElement as HTMLElement;
@@ -126,7 +126,7 @@ describe('SignupPage registration validation', () => {
       accountType: 'individual' | 'business';
     };
     Object.assign(component.form, validValues, {
-      ruc: '0102030400000', razon_social: 'Distribuidora Sureña',
+      razon_social: 'Distribuidora Sureña',
       direccion_negocio: 'Quito',
     });
     component.accountType = 'business';
@@ -135,7 +135,38 @@ describe('SignupPage registration validation', () => {
     fixture.detectChanges();
 
     expect(api.requestBusinessAccount).not.toHaveBeenCalled();
-    expect(root.textContent).toContain('RUC ecuatoriano válido');
+    expect(root.textContent).toContain('RUC válido de 13 dígitos');
+  });
+
+  it('uses one business RUC in the identity field and registration request', () => {
+    const fixture = TestBed.createComponent(SignupPage);
+    fixture.detectChanges();
+    const root = fixture.nativeElement as HTMLElement;
+    root.querySelectorAll<HTMLButtonElement>('.account-tabs button')[1].click();
+    fixture.detectChanges();
+
+    const component = fixture.componentInstance as unknown as {
+      form: Record<string, string>;
+      accountType: 'individual' | 'business';
+    };
+    const businessRuc = '1791234567001';
+    Object.assign(component.form, validValues, {
+      cedula: businessRuc,
+      razon_social: 'Distribuidora Sureña',
+      direccion_negocio: 'Quito',
+    });
+    component.accountType = 'business';
+    fixture.detectChanges();
+
+    root.querySelector('form')!.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+    fixture.detectChanges();
+
+    expect(api.requestBusinessAccount).toHaveBeenCalledOnce();
+    const payload = api.requestBusinessAccount.mock.calls[0][0] as Record<string, unknown>;
+    expect(payload['ruc']).toBe(businessRuc);
+    expect(payload).not.toHaveProperty('cedula');
+    expect(root.querySelector('label[for="cedula"]')?.textContent).toContain('RUC del negocio');
+    expect(root.querySelector('[name="ruc"]')).toBeNull();
   });
 
   it('ends loading and displays a timeout message when registration never responds', async () => {

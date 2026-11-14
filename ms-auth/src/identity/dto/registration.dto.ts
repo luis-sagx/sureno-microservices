@@ -9,7 +9,7 @@ export interface RegisterIndividualDto {
   password: string;
 }
 
-export interface RequestBusinessAccountDto extends RegisterIndividualDto {
+export interface RequestBusinessAccountDto extends Omit<RegisterIndividualDto, 'cedula'> {
   ruc: string;
   razon_social: string;
   nombre_comercial?: string;

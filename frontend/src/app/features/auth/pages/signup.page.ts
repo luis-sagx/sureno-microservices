@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { finalize, TimeoutError, timeout } from 'rxjs';
 import { AuthRegistrationApiService } from '../data-access/auth-registration-api.service';
-import { BusinessRegistrationPayload, RegistrationPayload } from '../models/registration.models';
+import { BusinessRegistrationPayload, RegistrationFieldsPayload, RegistrationPayload } from '../models/registration.models';
 import { ThemeService } from '../../../core/theme.service';
 
 @Component({
@@ -36,7 +36,6 @@ export class SignupPage {
     email_contacto: '',
     username: '',
     password: '',
-    ruc: '',
     razon_social: '',
     nombre_comercial: '',
     direccion_negocio: '',
@@ -49,8 +48,7 @@ export class SignupPage {
     this.loading = true;
     this.error = '';
     this.submitted = false;
-    const common: RegistrationPayload = {
-      cedula: this.form.cedula.trim(),
+    const common: RegistrationFieldsPayload = {
       nombres: this.form.nombres.trim(),
       apellidos: this.form.apellidos.trim(),
       fecha_nacimiento: this.form.fecha_nacimiento,
@@ -64,14 +62,17 @@ export class SignupPage {
       this.accountType === 'business'
         ? this.api.requestBusinessAccount({
             ...common,
-            ruc: this.form.ruc.trim(),
+            ruc: this.form.cedula.trim(),
             razon_social: this.form.razon_social.trim(),
             ...(this.form.nombre_comercial.trim() && {
               nombre_comercial: this.form.nombre_comercial.trim(),
             }),
             direccion_negocio: this.form.direccion_negocio.trim(),
           } satisfies BusinessRegistrationPayload)
-        : this.api.registerIndividual(common);
+        : this.api.registerIndividual({
+            ...common,
+            cedula: this.form.cedula.trim(),
+          });
 
     operation.pipe(
       timeout({ first: this.requestTimeoutMs }),
@@ -106,6 +107,9 @@ export class SignupPage {
     const value = this.form[field].trim();
     switch (field) {
       case 'cedula':
+        if (this.accountType === 'business') {
+          return this.isValidBusinessRuc(value) ? '' : 'Ingresa un RUC válido de 13 dígitos.';
+        }
         return this.isValidIdentity(value) ? '' : 'Ingresa una cédula ecuatoriana válida o un RUC de persona natural.';
       case 'telefono':
         return /^\+?\d{7,15}$/.test(value) ? '' : 'Ingresa entre 7 y 15 dígitos; puedes iniciar con +.';
@@ -120,8 +124,6 @@ export class SignupPage {
         return this.isValidUsername(value) ? '' : 'Usa de 2 a 32 letras o números; también se permiten punto, guion y guion bajo.';
       case 'password':
         return this.isValidPassword(this.form.password) ? '' : 'Usa al menos 12 caracteres, una mayúscula, un número y un carácter especial.';
-      case 'ruc':
-        return this.isValidBusinessRuc(value) ? '' : 'Ingresa un RUC ecuatoriano válido de 13 dígitos.';
       case 'razon_social':
         return value.length > 0 && value.length <= 160 ? '' : 'La razón social es obligatoria.';
       case 'direccion_negocio':
@@ -139,7 +141,7 @@ export class SignupPage {
       'email_contacto', 'username', 'password',
     ];
     const fields = this.accountType === 'business'
-      ? [...common, 'ruc', 'razon_social', 'direccion_negocio'] as SignupField[]
+      ? [...common, 'razon_social', 'direccion_negocio'] as SignupField[]
       : common;
     return fields.every((field) => !this.fieldError(field));
   }
@@ -201,5 +203,5 @@ export class SignupPage {
 
 type SignupField =
   | 'cedula' | 'nombres' | 'apellidos' | 'fecha_nacimiento' | 'telefono'
-  | 'email_contacto' | 'username' | 'password' | 'ruc' | 'razon_social'
+  | 'email_contacto' | 'username' | 'password' | 'razon_social'
   | 'direccion_negocio';
