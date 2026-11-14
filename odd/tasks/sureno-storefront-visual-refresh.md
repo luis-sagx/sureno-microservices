@@ -39,9 +39,9 @@ The current site has a wide, tall catalog introduction and verbose product cards
 
 ## Delivery and verification
 
-- Forecast: approximately 900 authored changed lines across four work units, excluding generated files/assets. Running count after SVR-04 implementation: approximately 795 authored lines across work-unit changes.
+- Forecast: approximately 900 authored changed lines across four work units, excluding generated files/assets. Final running count: approximately 812 authored lines across work-unit commits.
 - Route: delegated direct for each multi-file page unit. Trigger evidence: the change spans shared shell, home, auth, and catalog templates/styles; a writer is required for each multi-file unit. Initial mapping was delegated because understanding required four or more files.
-- Delivery strategy: `feature-branch-chain`, inherited from the user's explicit project instruction to keep work on one feature branch. Slice 1 contains SVR-01 through SVR-03 work-unit commits (`0a77dae`, `74ce5a2`, `035507b`); slice 2 is SVR-04 (pending). No PRs, push, or merge are authorized.
+- Delivery strategy: `feature-branch-chain`, inherited from the user's explicit project instruction to keep work on one feature branch. Slice 1 contains SVR-01 through SVR-03 work-unit commits (`0a77dae`, `74ce5a2`, `035507b`); slice 2 contains SVR-04 (`435ffd2`). No PRs, push, or merge are authorized.
 - Each task observes RED before implementation, GREEN after implementation, then REFACTOR, followed by applicable Angular tests/build and `git diff --check`.
 - Receipt-driven development status has not been enabled in this request; `gentle-ai` is unavailable. Follow ordinary repository delivery policy and report review as unavailable, not approved.
 - No push, PR, or merge is authorized.
@@ -77,7 +77,7 @@ The current site has a wide, tall catalog introduction and verbose product cards
 - [x] Reduce catalog header whitespace, improve image prominence, simplify product cards, and remove only the generic technical enablement notice wherever it appears in catalog/product views. Product descriptions and repeated infrastructure copy are removed; truthful availability, presentation, and unconfigured-price states remain.
 - Check: RED observed (2 failures, 29 passed); GREEN `npm test -- --watch=false` passed (6 files, 31 tests); `npm run build` passed and prerendered 5 routes; `git diff --check` passed. Catalog CSS warning reduced from 5.44 KB to 5.20 KB, still over the 4 KB threshold.
 - Route: delegated direct; catalog template/style and behavior coverage span multiple files.
-- Commit: pending parent escalation because `.git` is read-only in the sandbox.
+- Commit: `435ffd2` — `feat(frontend): compact product catalog cards`.
 - Receipt-driven review: disabled/unmanaged; no native assessment or approval claimed.
 
 ## Progress and next step
@@ -87,5 +87,5 @@ The current site has a wide, tall catalog introduction and verbose product cards
 - SVR-01 implementation, checks, and work-unit commit are complete.
 - SVR-02 implementation, checks, and work-unit commit are complete.
 - SVR-03 implementation, checks, and work-unit commit are complete.
-- SVR-04 implementation and checks are complete; its work-unit commit and commit identity record remain.
-- Next: close SVR-04 and verify the final branch state.
+- SVR-04 implementation, checks, and work-unit commit are complete.
+- Next: verify the final branch state and report any remaining checks/warnings.
