@@ -55,8 +55,9 @@ The user explicitly requested that the frontend be migrated from npm to pnpm.
 - Frozen offline lock validation passes with a command-only `minimum-release-age=0` override because the active policy rejects the inherited `postcss@8.5.33` under its default age window. The policy itself was not changed.
 - `pnpm test` passed (11 files, 44 tests) with `verify-deps-before-run=warn`, reporting existing `node_modules` were out of sync. `pnpm run build` passed after rerunning outside the sandbox; it prerendered five routes and emitted the existing Home/Catalog CSS budget warnings.
 - A complete frozen install is blocked by pnpm 11's default lifecycle-script gate for `@parcel/watcher`, `esbuild`, `lmdb`, and `msgpackr-extract`. pnpm generated `frontend/pnpm-workspace.yaml` with unresolved allow/deny placeholders; that incomplete generated file was removed rather than committed. No scripts have been approved. An offline install stopped at the uncached `colorjs.io@0.7.1` tarball. The attempted online frozen install exited before downloading packages because the lifecycle-script gate remained unresolved.
+- Partial migration work-unit commit: `83397df` (`build(frontend): migrate package manager to pnpm`). FP-01 remains open until a clean install is possible under the selected lifecycle-script policy.
 - The pre-existing dirty changes outside this task, including `frontend/angular.json` analytics, the in-progress frontend architecture notes, and untracked MS04 files, remain untouched.
 
 ## Next step
 
-The user requested commits only; commit the current pnpm migration work unit and leave the clean-install/script-approval decision recorded as pending. If the user later wants a fully reproducible clean install, ask whether to allow only the four named scripts, then update and verify this task.
+FP-01 remains open. If the user later wants a fully reproducible clean install, confirm whether to allow only the four named scripts, then finish and verify the task without changing the existing lock resolutions.
