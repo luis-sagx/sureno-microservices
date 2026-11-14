@@ -48,12 +48,44 @@
       </div>
       <a routerLink="/catalogo">Conocer el catálogo <span aria-hidden="true">→</span></a>
     </div>
-    <div class="about-product-grid">
-      @for (product of products; track product.name) {
-        <figure>
-          <img [src]="product.image" [alt]="product.name" loading="lazy" />
-          <figcaption>{{ product.name }}</figcaption>
-        </figure>
+    <div class="product-carousel-controls" role="group" aria-label="Controles del carrusel de productos">
+      <button type="button" aria-label="Ver productos anteriores" [disabled]="atStart()" (click)="showPrevious()">←</button>
+      <button type="button" aria-label="Ver más productos" [disabled]="atEnd()" (click)="showNext()">→</button>
+    </div>
+    <div
+      class="product-carousel-region"
+      role="region"
+      aria-roledescription="carrusel"
+      aria-label="Productos de Sureño"
+      tabindex="0"
+      (keydown)="handleCarouselKeydown($event)"
+    >
+      <ul class="product-carousel-track" #productTrack data-product-carousel-track>
+        @for (product of products; track product.name) {
+          <li class="product-carousel-slide">
+            <figure>
+              <img [src]="product.image" [alt]="product.name" loading="lazy" />
+              <figcaption>{{ product.name }}</figcaption>
+            </figure>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="logistics-section">
+  <div class="page-container">
+    <p class="eyebrow">Logística</p>
+    <h2 class="section-title">Información de envío</h2>
+    <p class="logistics-intro">Cómo llega tu pedido, dentro y fuera de Quito.</p>
+    <div class="logistics-grid">
+      @for (item of shipping; track item.title; let index = $index) {
+        <article class="logistics-card">
+          <span>{{ (index + 1).toString().padStart(2, '0') }}</span>
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.text }}</p>
+        </article>
       }
     </div>
   </div>

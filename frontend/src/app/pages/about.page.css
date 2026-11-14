@@ -5,14 +5,15 @@
 
 .about-intro-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 280px;
+  grid-template-columns: minmax(0, 1fr) 260px;
   align-items: center;
-  gap: 5rem;
-  padding-block: clamp(4rem, 9vw, 8rem);
+  gap: clamp(2rem, 7vw, 6rem);
+  padding-block: clamp(3.5rem, 8vw, 7rem);
 }
 
-.about-intro .eyebrow {
-  margin-bottom: 1.5rem;
+.about-intro .eyebrow,
+.products-heading .eyebrow {
+  margin-bottom: 1rem;
 }
 
 .about-intro h1 em {
@@ -21,10 +22,10 @@
 }
 
 .story-copy {
-  max-width: 66ch;
-  margin: 1.6rem 0 0;
+  max-width: 68ch;
+  margin: 1.25rem 0 0;
   color: var(--muted);
-  font-size: 1rem;
+  font-size: 0.96rem;
   line-height: 1.8;
 }
 
@@ -35,10 +36,11 @@
 .about-seal {
   position: relative;
   display: grid;
-  min-height: 280px;
+  width: 100%;
+  min-height: 250px;
   place-items: center;
   align-content: center;
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-strong);
   border-radius: 50%;
   aspect-ratio: 1;
   color: var(--gold);
@@ -48,38 +50,37 @@
 .about-seal::before,
 .about-seal::after {
   position: absolute;
-  inset: 1.1rem;
+  inset: 1rem;
   border: 1px solid var(--line);
   border-radius: 50%;
   content: '';
 }
 
 .about-seal::after {
-  inset: 2.2rem;
-  opacity: 0.6;
+  inset: 2rem;
 }
 
 .about-seal img {
   z-index: 1;
-  width: 34%;
+  width: 32%;
   height: auto;
   object-fit: contain;
 }
 
 .about-seal p {
   z-index: 1;
-  margin: 0.75rem 0 0;
-  font-size: 0.65rem;
+  margin: 0.65rem 0 0;
+  font-size: 0.62rem;
   font-weight: 700;
-  letter-spacing: 0.16em;
-  line-height: 1.8;
+  letter-spacing: 0.14em;
+  line-height: 1.7;
   text-transform: uppercase;
 }
 
 .about-quote {
   position: relative;
-  min-height: 300px;
   display: grid;
+  min-height: 270px;
   align-items: center;
   overflow: hidden;
   border-bottom: 1px solid var(--line);
@@ -89,14 +90,13 @@
 .quote-backdrop {
   position: absolute;
   inset: 0;
-  background: var(--quote-overlay), url('/bg.webp') center / cover;
-  opacity: 0.85;
+  background: var(--quote-overlay), url('/bg.webp') center 45% / cover;
 }
 
 .quote-content {
   position: relative;
   max-width: 850px;
-  padding-block: 4rem;
+  padding-block: 3.5rem;
 }
 
 .quote-content .eyebrow {
@@ -104,63 +104,68 @@
 }
 
 .quote-content blockquote {
-  margin: 1.2rem 0 0;
+  margin: 1rem 0 0;
   color: var(--paper);
   font-family: var(--font-display);
-  font-size: clamp(2rem, 5vw, 3.6rem);
+  font-size: clamp(1.9rem, 4.7vw, 3.35rem);
   font-style: italic;
   line-height: 1.2;
 }
 
 .purpose-section,
-.about-products {
-  padding-block: clamp(4rem, 8vw, 7rem);
+.about-products,
+.logistics-section {
+  padding-block: clamp(3.5rem, 7vw, 6rem);
 }
 
-.purpose-section .section-title {
-  margin-top: 0.8rem;
+.purpose-section .section-title,
+.logistics-section .section-title {
+  margin-top: 0.65rem;
 }
 
 .purpose-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.2rem;
-  margin-top: 2.5rem;
+  gap: 1.25rem;
+  margin-top: 2rem;
 }
 
 .purpose-card {
-  display: grid;
-  grid-template-columns: minmax(100px, 0.6fr) 1fr;
-  align-items: center;
-  gap: 1.5rem;
+  overflow: hidden;
   border: 1px solid var(--line);
-  padding: clamp(1rem, 3vw, 2rem);
   background: var(--surface);
 }
 
 .purpose-card img {
+  display: block;
   width: 100%;
-  max-height: 210px;
-  object-fit: contain;
+  height: clamp(180px, 26vw, 300px);
+  object-fit: cover;
+}
+
+.purpose-card > div {
+  padding: 1.4rem clamp(1.2rem, 3vw, 2rem) 1.7rem;
 }
 
 .purpose-card h3 {
-  margin: 0 0 0.6rem;
+  margin: 0 0 0.55rem;
   color: var(--gold);
   font-family: var(--font-display);
   font-size: 1.8rem;
   font-weight: 400;
 }
 
-.purpose-card p {
+.purpose-card p,
+.logistics-intro,
+.logistics-card p {
   margin: 0;
   color: var(--muted);
   font-size: 0.88rem;
-  line-height: 1.7;
+  line-height: 1.75;
 }
 
 .about-products {
-  border-top: 1px solid var(--line);
+  border-block: 1px solid var(--line);
   background: var(--surface);
 }
 
@@ -171,61 +176,61 @@
   gap: 1.5rem;
 }
 
-.products-heading .eyebrow {
-  margin-bottom: 1rem;
-}
-
 .products-heading a {
   flex: 0 0 auto;
   color: var(--gold);
   font-size: 0.68rem;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-decoration: none;
   text-transform: uppercase;
 }
 
-.about-product-grid {
+.logistics-section {
+  background: var(--background);
+}
+
+.logistics-intro {
+  margin-top: 0.8rem;
+}
+
+.logistics-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
   margin-top: 2rem;
 }
 
-.about-product-grid figure {
-  margin: 0;
-  border: 1px solid var(--line);
-  padding: 0.75rem;
+.logistics-card {
+  min-width: 0;
+  border-top: 2px solid var(--gold);
+  padding: 1.2rem 1rem 0;
 }
 
-.about-product-grid img {
-  display: block;
-  width: 100%;
-  height: 220px;
-  object-fit: contain;
-  background: var(--background);
+.logistics-card > span {
+  color: var(--gold);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
 }
 
-.about-product-grid figcaption {
-  padding: 0.8rem 0.3rem 0.2rem;
+.logistics-card h3 {
+  margin: 0.65rem 0 0.45rem;
   color: var(--paper);
   font-family: var(--font-display);
-  font-size: 1.2rem;
+  font-size: 1.25rem;
+  font-weight: 400;
 }
 
 @media (max-width: 850px) {
   .about-intro-grid {
     grid-template-columns: minmax(0, 1fr) 210px;
-    gap: 2rem;
   }
 
   .about-seal {
     min-height: 210px;
   }
 
-  .purpose-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 620px) {
@@ -233,30 +238,38 @@
     grid-template-columns: 1fr;
   }
 
+  .about-intro h1 {
+    font-size: clamp(2.3rem, 11vw, 3.4rem);
+  }
+
   .about-seal {
-    width: min(230px, 80%);
+    width: min(220px, 70vw);
     min-height: 0;
     margin-inline: auto;
   }
 
-  .purpose-card {
+  .purpose-grid,
+  .logistics-grid {
     grid-template-columns: 1fr;
   }
 
   .purpose-card img {
-    max-height: 145px;
+    height: 210px;
   }
 
   .products-heading {
     align-items: flex-start;
     flex-direction: column;
+    gap: 1rem;
   }
 
-  .about-product-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .logistics-grid {
+    gap: 1.5rem;
   }
+}
 
-  .about-product-grid img {
-    height: 170px;
+@media (prefers-reduced-motion: reduce) {
+  .about-product-track {
+    scroll-behavior: auto;
   }
 }

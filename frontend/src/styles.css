@@ -278,6 +278,104 @@ img {
   min-height: min(720px, calc(100svh - var(--header-height)));
 }
 
+/* Shared horizontal product carousel for editorial and catalog surfaces. */
+.product-carousel-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.55rem;
+  margin-top: 1.5rem;
+}
+
+.product-carousel-controls button {
+  width: 2.6rem;
+  height: 2.6rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--paper);
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+.product-carousel-controls button:disabled {
+  cursor: default;
+  opacity: 0.4;
+}
+
+.product-carousel-controls button:focus-visible,
+.product-carousel-region:focus-visible,
+.products-heading a:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.product-carousel-region {
+  overflow: hidden;
+  margin-top: 0.75rem;
+}
+
+.product-carousel-track {
+  display: grid;
+  grid-auto-columns: calc((100% - 3rem) / 4);
+  grid-auto-flow: column;
+  gap: 1rem;
+  overflow-x: auto;
+  padding: 0 0 0.5rem;
+  margin: 0;
+  list-style: none;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
+
+.product-carousel-slide {
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+.product-carousel-slide figure {
+  height: 100%;
+  margin: 0;
+  border: 1px solid var(--line);
+  background: var(--background);
+}
+
+.product-carousel-slide img {
+  display: block;
+  width: 100%;
+  height: 220px;
+  object-fit: contain;
+}
+
+.product-carousel-slide figcaption {
+  padding: 0.9rem 1rem 1rem;
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+}
+
+@media (max-width: 850px) {
+  .product-carousel-track {
+    grid-auto-columns: calc((100% - 2rem) / 3);
+  }
+}
+
+@media (max-width: 620px) {
+  .product-carousel-controls {
+    margin-top: 1rem;
+  }
+
+  .product-carousel-track {
+    grid-auto-columns: 78%;
+    gap: 0.75rem;
+  }
+
+  .product-carousel-slide img {
+    height: 230px;
+  }
+}
+
 .hero-bottle-stage {
   position: absolute;
   z-index: 0;
