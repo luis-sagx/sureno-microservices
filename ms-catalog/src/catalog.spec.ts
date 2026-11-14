@@ -3,10 +3,13 @@ import { spawn, spawnSync } from 'node:child_process';
 import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
 import { App } from 'supertest/types.js';
+import { DataSource } from 'typeorm';
 import { AppModule } from './app.module.js';
 
 describe('MS02 catalog API', () => {
   let app: INestApplication<App>;
+  let dataSource: DataSource;
+  const createdProductIds: string[] = [];
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -14,9 +17,13 @@ describe('MS02 catalog API', () => {
     }).compile();
     app = moduleFixture.createNestApplication();
     await app.init();
+    dataSource = app.get(DataSource);
   });
 
   afterAll(async () => {
+    if (createdProductIds.length > 0) {
+      await dataSource.query('DELETE FROM product WHERE id = ANY($1::uuid[])', [createdProductIds]);
+    }
     await app?.close();
     vi.unstubAllGlobals();
   });
@@ -74,6 +81,7 @@ describe('MS02 catalog API', () => {
         ],
       })
       .expect(201);
+    createdProductIds.push(created.body.id);
 
     await request(app.getHttpServer())
       .patch(`/catalog/products/${created.body.id}`)
