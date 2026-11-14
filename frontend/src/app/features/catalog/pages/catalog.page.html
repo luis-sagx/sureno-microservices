@@ -128,7 +128,9 @@
             >
           </div>
           <div class="product-info p-[0.9rem]">
-            <h2 class="m-0 font-(family-name:--font-display) text-[1.55rem] font-normal leading-[1.1]">
+            <h2
+              class="m-0 font-(family-name:--font-display) text-[1.55rem] font-normal leading-[1.1]"
+            >
               {{ product.nombre }}
             </h2>
             <p
@@ -216,21 +218,4 @@
       }
     </div>
   }
-
-  <aside class="catalog-rule-note mt-8 grid gap-[0.4rem] border-t border-[var(--line)] pt-4">
-    @if (isApprovedBusiness) {
-      <p class="m-0 text-[var(--muted-dim)] text-[0.75rem] leading-[1.65]">
-        Las cuentas B2B aprobadas solo pueden solicitar cajas completas.
-      </p>
-    } @else {
-      <p class="m-0 text-[var(--muted-dim)] text-[0.75rem] leading-[1.65]">
-        Clientes particulares pueden consultar unidades o cajas. El mínimo B2C de $10 no se calcula
-        porque las tarifas aún no están configuradas.
-      </p>
-    }
-    <p class="m-0 text-[var(--muted-dim)] text-[0.75rem] leading-[1.65]">
-      Un RUC registrado para facturación no activa beneficios mayoristas. Los productos no
-      disponibles no pueden agregarse a solicitudes nuevas.
-    </p>
-  </aside>
 </section>

@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { finalize, TimeoutError, timeout } from 'rxjs';
 import { AuthRegistrationApiService } from '../data-access/auth-registration-api.service';
-import { BusinessRegistrationPayload, RegistrationFieldsPayload, RegistrationPayload } from '../models/registration.models';
+import { BusinessRegistrationPayload, RegistrationPayload } from '../models/registration.models';
 import { ThemeService } from '../../../core/theme.service';
 
 @Component({
@@ -47,7 +47,7 @@ export class SignupPage {
     this.loading = true;
     this.error = '';
     this.submitted = false;
-    const common: RegistrationFieldsPayload = {
+    const common: Omit<RegistrationPayload, 'cedula'> = {
       nombres: this.form.nombres.trim(),
       apellidos: this.form.apellidos.trim(),
       fecha_nacimiento: this.form.fecha_nacimiento,
@@ -70,28 +70,33 @@ export class SignupPage {
             cedula: this.form.cedula.trim(),
           });
 
-    operation.pipe(
-      timeout({ first: this.requestTimeoutMs }),
-      finalize(() => { this.loading = false; }),
-    ).subscribe({
-      next: () => {
-        this.submitted = true;
-        this.message =
-          this.accountType === 'business'
-            ? 'Tu solicitud comercial quedó pendiente de revisión manual. Te avisaremos cuando sea aprobada.'
-            : 'Tu cuenta quedó pendiente de verificación de identidad. Inicia sesión para consultar el catálogo.';
-      },
-      error: (error: unknown) => {
-        if (error instanceof TimeoutError) {
-          this.error = 'El servicio está tardando demasiado. Intenta nuevamente en unos momentos.';
-          return;
-        }
-        const message = (error as { error?: { message?: string | string[] } }).error?.message;
-        this.error = Array.isArray(message)
-          ? message.join(' ')
-          : message || 'No se pudo completar el registro. Revisa los datos e inténtalo otra vez.';
-      },
-    });
+    operation
+      .pipe(
+        timeout({ first: this.requestTimeoutMs }),
+        finalize(() => {
+          this.loading = false;
+        }),
+      )
+      .subscribe({
+        next: () => {
+          this.submitted = true;
+          this.message =
+            this.accountType === 'business'
+              ? 'Tu solicitud comercial quedó pendiente de revisión manual. Te avisaremos cuando sea aprobada.'
+              : 'Tu cuenta quedó pendiente de verificación de identidad. Inicia sesión para consultar el catálogo.';
+        },
+        error: (error: unknown) => {
+          if (error instanceof TimeoutError) {
+            this.error =
+              'El servicio está tardando demasiado. Intenta nuevamente en unos momentos.';
+            return;
+          }
+          const message = (error as { error?: { message?: string | string[] } }).error?.message;
+          this.error = Array.isArray(message)
+            ? message.join(' ')
+            : message || 'No se pudo completar el registro. Revisa los datos e inténtalo otra vez.';
+        },
+      });
   }
 
   protected markTouched(field: SignupField) {
@@ -106,24 +111,32 @@ export class SignupPage {
         if (this.accountType === 'business') {
           return this.isValidBusinessRuc(value) ? '' : 'Ingresa un RUC válido de 13 dígitos.';
         }
-        return this.isValidIdentity(value) ? '' : 'Ingresa una cédula ecuatoriana válida o un RUC de persona natural.';
+        return this.isValidIdentity(value) ? '' : 'Ingresa una cédula o RUC válido.';
       case 'telefono':
-        return /^\+?\d{7,15}$/.test(value) ? '' : 'Ingresa entre 7 y 15 dígitos; puedes iniciar con +.';
+        return /^\+?\d{7,15}$/.test(value) ? '' : 'Ingresa un número de teléfono válido.';
       case 'nombres':
       case 'apellidos':
-        return this.isValidPersonName(value) ? '' : 'Usa de 2 a 50 letras; puedes incluir ñ, tildes, espacios y guiones.';
+        return this.isValidPersonName(value) ? '' : 'Debe ingresar entre 2 y 50 letras.';
       case 'fecha_nacimiento':
-        return this.isValidBirthDate(value) ? '' : 'La fecha debe ser posterior al 01/01/1900 y debes tener al menos 18 años.';
+        return this.isValidBirthDate(value)
+          ? ''
+          : 'Ingresa una fecha de nacimiento válida. Debes ser mayor de 18 años.';
       case 'email_contacto':
-        return !value || /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value) ? '' : 'El correo electrónico no es válido.';
+        return !value || /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value)
+          ? ''
+          : 'El correo electrónico no es válido.';
       case 'username':
-        return this.isValidUsername(value) ? '' : 'Usa de 2 a 32 letras o números; también se permiten punto, guion y guion bajo.';
+        return this.isValidUsername(value) ? '' : 'Usa de 2 a 32 letras o números.';
       case 'password':
-        return this.isValidPassword(this.form.password) ? '' : 'Usa al menos 12 caracteres, una mayúscula, un número y un carácter especial.';
+        return this.isValidPassword(this.form.password)
+          ? ''
+          : 'Usa al menos 12 caracteres, una mayúscula, un número y un carácter especial.';
       case 'razon_social':
         return value.length > 0 && value.length <= 160 ? '' : 'La razón social es obligatoria.';
       case 'direccion_negocio':
-        return value.length > 0 && value.length <= 2000 ? '' : 'La dirección del negocio es obligatoria.';
+        return value.length > 0 && value.length <= 2000
+          ? ''
+          : 'La dirección del negocio es obligatoria.';
     }
   }
 
@@ -133,28 +146,40 @@ export class SignupPage {
 
   private formIsValid(): boolean {
     const common: SignupField[] = [
-      'cedula', 'nombres', 'apellidos', 'fecha_nacimiento', 'telefono',
-      'email_contacto', 'username', 'password',
+      'cedula',
+      'nombres',
+      'apellidos',
+      'fecha_nacimiento',
+      'telefono',
+      'email_contacto',
+      'username',
+      'password',
     ];
-    const fields = this.accountType === 'business'
-      ? [...common, 'razon_social', 'direccion_negocio'] as SignupField[]
-      : common;
+    const fields =
+      this.accountType === 'business'
+        ? ([...common, 'razon_social', 'direccion_negocio'] as SignupField[])
+        : common;
     return fields.every((field) => !this.fieldError(field));
   }
 
   private isValidIdentity(value: string): boolean {
     if (this.isValidCedula(value)) return true;
-    return /^\d{13}$/.test(value) && value.slice(10) !== '000' && this.isValidCedula(value.slice(0, 10));
+    return (
+      /^\d{13}$/.test(value) && value.slice(10) !== '000' && this.isValidCedula(value.slice(0, 10))
+    );
   }
 
   private isValidCedula(value: string): boolean {
     if (!/^\d{10}$/.test(value)) return false;
     const province = Number(value.slice(0, 2));
     if (province < 1 || province > 24 || Number(value[2]) > 5) return false;
-    const sum = value.slice(0, 9).split('').reduce((total, digit, index) => {
-      const doubled = Number(digit) * (index % 2 === 0 ? 2 : 1);
-      return total + (doubled > 9 ? doubled - 9 : doubled);
-    }, 0);
+    const sum = value
+      .slice(0, 9)
+      .split('')
+      .reduce((total, digit, index) => {
+        const doubled = Number(digit) * (index % 2 === 0 ? 2 : 1);
+        return total + (doubled > 9 ? doubled - 9 : doubled);
+      }, 0);
     return (10 - (sum % 10)) % 10 === Number(value[9]);
   }
 
@@ -169,23 +194,38 @@ export class SignupPage {
 
   private isValidPersonName(value: string): boolean {
     const length = Array.from(value).length;
-    return length >= 2 && length <= 50 &&
-      /^\p{L}[\p{L}\p{M}]*(?:[ '\u2019-]\p{L}[\p{L}\p{M}]*)*$/u.test(value);
+    return (
+      length >= 2 &&
+      length <= 50 &&
+      /^\p{L}[\p{L}\p{M}]*(?:[ '\u2019-]\p{L}[\p{L}\p{M}]*)*$/u.test(value)
+    );
   }
 
   private isValidUsername(value: string): boolean {
-    return value.length >= 2 && value.length <= 32 &&
+    return (
+      value.length >= 2 &&
+      value.length <= 32 &&
       /^[\p{L}\p{N}][\p{L}\p{M}\p{N}._-]*$/u.test(value) &&
-      !/[._-]$/.test(value);
+      !/[._-]$/.test(value)
+    );
   }
 
   private isValidPassword(value: string): boolean {
-    return value.length >= 12 && /\p{Lu}/u.test(value) && /\p{N}/u.test(value) &&
-      /[^\p{L}\p{M}\p{N}\s]/u.test(value);
+    return (
+      value.length >= 12 &&
+      /\p{Lu}/u.test(value) &&
+      /\p{N}/u.test(value) &&
+      /[^\p{L}\p{M}\p{N}\s]/u.test(value)
+    );
   }
 
   private isValidBirthDate(value: string): boolean {
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(value) || value < this.minBirthDate || value > this.maxBirthDate) return false;
+    if (
+      !/^\d{4}-\d{2}-\d{2}$/.test(value) ||
+      value < this.minBirthDate ||
+      value > this.maxBirthDate
+    )
+      return false;
     const date = new Date(`${value}T00:00:00.000Z`);
     return !Number.isNaN(date.valueOf()) && date.toISOString().slice(0, 10) === value;
   }
@@ -198,6 +238,13 @@ export class SignupPage {
 }
 
 type SignupField =
-  | 'cedula' | 'nombres' | 'apellidos' | 'fecha_nacimiento' | 'telefono'
-  | 'email_contacto' | 'username' | 'password' | 'razon_social'
+  | 'cedula'
+  | 'nombres'
+  | 'apellidos'
+  | 'fecha_nacimiento'
+  | 'telefono'
+  | 'email_contacto'
+  | 'username'
+  | 'password'
+  | 'razon_social'
   | 'direccion_negocio';

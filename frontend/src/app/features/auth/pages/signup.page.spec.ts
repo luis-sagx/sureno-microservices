@@ -101,15 +101,15 @@ describe('SignupPage registration validation', () => {
 
   it.each([
     ['invalid cédula verifier', { cedula: '0102030403' }, 'cédula'],
-    ['short name', { nombres: 'A' }, 'Usa de 2 a 50 letras'],
-    ['symbol in surname', { apellidos: 'López#' }, 'Usa de 2 a 50 letras'],
-    ['invalid phone', { telefono: '593 991234567' }, 'Ingresa entre 7 y 15 dígitos'],
+    ['short name', { nombres: 'A' }, 'Debe ingresar entre 2 y 50 letras.'],
+    ['symbol in surname', { apellidos: 'López#' }, 'Debe ingresar entre 2 y 50 letras.'],
+    ['invalid phone', { telefono: '593 991234567' }, 'Ingresa un número de teléfono válido.'],
     ['invalid username', { username: 'u' }, 'Usa de 2 a 32 letras'],
     ['unexpected username symbol', { username: 'luis!' }, 'Usa de 2 a 32 letras'],
     ['password without a special character', { password: 'Contrasena1234' }, 'carácter especial'],
     ['password without uppercase', { password: 'contrasena123!' }, 'mayúscula'],
     ['password without number', { password: 'ContrasenaSegura!' }, 'número'],
-    ['birth date before 1900', { fecha_nacimiento: '1899-12-31' }, '1900'],
+    ['birth date before 1900', { fecha_nacimiento: '1899-12-31' }, 'Ingresa una fecha de nacimiento válida.'],
     ['birth date before age 18', { fecha_nacimiento: '2015-01-01' }, '18 años'],
   ])('blocks invalid input (%s) before making an API request', (_label, change, message) => {
     const fixture = TestBed.createComponent(SignupPage);
