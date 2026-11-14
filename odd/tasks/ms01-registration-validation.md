@@ -68,16 +68,16 @@ The signup page currently checks only whether required fields are present and wh
 
 ### REG-03 — Single-RUC B2B registration contract
 
-- [ ] Change B2B registration to require a valid business RUC in the single identity field, remove the duplicate RUC from the request contract, and persist the single value in both corresponding identifiers; add backend tests first.
-- Route: delegated direct; changes domain validation, request model, and tests.
-- TDD: enabled; `pnpm test` in `ms-auth`.
+- [ ] Change B2B registration to require a valid business RUC in the single identity field, relabel/validate that field conditionally, remove the duplicate form field and request property, and persist the single value in both corresponding identifiers; add backend and Angular tests first.
+- Route: delegated direct; changes domain validation, request model, signup component/template, and tests.
+- TDD: enabled; `pnpm test` in `ms-auth`; `./node_modules/.bin/ng test --watch=false` in `frontend`.
 - Verification evidence: pending.
 - Commit: pending.
 
 ### REG-04 — Stable validation layout and conditional B2B RUC UI
 
-- [ ] Reserve stable inline-error space and make the identity label/validator depend on account type; remove the second B2B RUC field; add component tests first.
-- Route: delegated direct; changes signup component/template/styles and specs.
+- [ ] Reserve stable inline-error space so validation messages do not shift signup fields; add a responsive component/style regression check first.
+- Route: delegated direct; changes signup template/styles and specs.
 - TDD: enabled; `./node_modules/.bin/ng test --watch=false` and build in `frontend`.
 - Verification evidence: pending.
 - Commit: pending.
