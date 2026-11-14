@@ -14,7 +14,9 @@ The signup page currently checks only whether required fields are present and wh
 
 - Add immediate field validation and messages to the Angular sign-up form; prevent invalid requests; give the password field a show/hide control; clear loading state after success/error/timeout.
 - Enforce the same validation rules in MS01 domain logic, including checksum-based cédula and RUC structure checks.
-- Support a personal RUC in the person identification field as a 13-digit natural-person RUC based on a valid cédula and nonzero establishment suffix; expand the persisted `person.cedula` capacity from 10 to 13. Keep the separate business-account RUC field and validate its 13-digit Ecuadorian format.
+- Support a personal RUC in the person identification field as a 13-digit natural-person RUC based on a valid cédula and nonzero establishment suffix; expand the persisted `person.cedula` capacity from 10 to 13.
+- For B2B registration, use one business RUC entry: relabel the identity input as the business RUC, validate it as a 13-digit RUC (reject a 10-digit cédula), send that value as the person identifier and business account RUC, and remove the duplicate RUC input.
+- Keep validation errors from shifting the signup grid: reserve consistent space for inline feedback across all fields and responsive widths.
 - Add TDD coverage in the existing frontend and MS01 test frameworks, plus a reversible database migration for the widened identification column.
 - Preserve all existing user changes and the current feature branch. No push, PR, or merge.
 
@@ -23,6 +25,7 @@ The signup page currently checks only whether required fields are present and wh
 - Cédula: 10 digits, Ecuador province 01–24, third digit 0–5, valid Luhn-style Ecuadorian verifier.
 - Personal RUC accepted in the identity field: 13 digits, first 10 must be a valid cédula, final 3 establishment digits must not be `000`.
 - Business RUC: 13 digits, Ecuador province and person/entity type structure, final 3 establishment digits nonzero. For natural-person RUCs validate the underlying cédula; for company RUCs follow SRI guidance that there is no specific checksum algorithm for those RUC types.
+- In B2B mode the single RUC value is stored as the person's identifier and business-account RUC, as requested; B2C continues to accept a cédula or natural-person RUC.
 - Names and surnames: 2–50 characters; Unicode letters including `ñ` and accents, with spaces, apostrophes, and hyphens between name parts; reject digits and other symbols.
 - Username: 2–32 characters, Unicode letters/numbers and `.`, `_`, `-` only.
 - Phone: 7–15 digits, optionally preceded by one `+`.
@@ -63,10 +66,27 @@ The signup page currently checks only whether required fields are present and wh
 - TDD: RED reproduced 11 failures on the previous page (invalid data was sent, password visibility/timeout were absent); GREEN focused signup tests 16/16 and full Angular suite 69/69. `./node_modules/.bin/ng build` passed with existing CSS budget warnings for home/catalog/detail.
 - Commit: `c31cbff` — `feat(auth): validate signup fields before submit`.
 
+### REG-03 — Single-RUC B2B registration contract
+
+- [ ] Change B2B registration to require a valid business RUC in the single identity field, remove the duplicate RUC from the request contract, and persist the single value in both corresponding identifiers; add backend tests first.
+- Route: delegated direct; changes domain validation, request model, and tests.
+- TDD: enabled; `pnpm test` in `ms-auth`.
+- Verification evidence: pending.
+- Commit: pending.
+
+### REG-04 — Stable validation layout and conditional B2B RUC UI
+
+- [ ] Reserve stable inline-error space and make the identity label/validator depend on account type; remove the second B2B RUC field; add component tests first.
+- Route: delegated direct; changes signup component/template/styles and specs.
+- TDD: enabled; `./node_modules/.bin/ng test --watch=false` and build in `frontend`.
+- Verification evidence: pending.
+- Commit: pending.
+
 ## Progress and next step
 
 - CodeGraph traced the Angular signup submission and MS01 identity service/domain. Current behavior sends non-empty invalid fields to the API; the loading flag only resets on response, and the UI has no complete client-side validation.
 - REG-01 now validates Ecuadorian cédula checksum and natural-person RUC, business RUC structure, requested names/user/email/phone/date/password constraints, and widens persisted person IDs to 13 digits.
 - REG-02 now performs client-side field validation before any request, exposes field messages, supports show/hide password, and reports a friendly timeout after 15 seconds while always releasing the loading state.
 - Verification: frontend suite 69/69 and build passed. MS01 suite 45/45, build, and lint passed when run with `.env.example` settings; an initial verification without environment values failed two integration test suites because database credentials and `AUTH_SESSION_SECRET` were absent. The MS01 migration was applied to the local database.
-- Next: registration validation work is complete. No additional implementation remains; the database migration is already applied in the local environment.
+- User review follow-up: the validation messages changed signup row heights and B2B asks for the RUC twice. The user authorized REG-03/REG-04 to keep error space stable and collect/validate one business RUC only.
+- Next: complete REG-03/REG-04 by TDD and commit each unit on the existing feature branch.
