@@ -69,7 +69,7 @@ The first pass used the screenshots without auditing the reference's active desi
 - Reopened because the user identified that the prior implementation did not use the reference palette, typography, or animation language.
 - Prior implementation commit: `0a77dae`; corrected verification complete.
 - Route: delegated direct; multiple non-trivial shared template/style edits.
-- Commit: pending.
+- Commit: `8157ba5` (`feat(frontend): align shared shell with brand system`).
 
 ### SVR-02 — Home hero, Heritage section, and wholesale CTA (reopened by user feedback)
 
