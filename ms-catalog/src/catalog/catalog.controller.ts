@@ -8,12 +8,14 @@ import {
   Post,
   Query,
   Req,
+  UseFilters,
   UseGuards,
 } from '@nestjs/common';
 import type { CatalogAdminRequest } from '../auth/catalog-admin.guard.js';
 import { CatalogAdminGuard } from '../auth/catalog-admin.guard.js';
-import { CatalogService } from './catalog.service.js';
-import type { ProductInput } from './catalog.service.js';
+import { CatalogService } from './application/catalog.service.js';
+import type { ProductInput } from './domain/catalog-model.js';
+import { CatalogExceptionFilter } from './catalog-exception.filter.js';
 
 function parsePage(value: string | undefined, fallback: number, field: string, max: number) {
   if (value === undefined) return fallback;
@@ -32,6 +34,7 @@ function parseBoolean(value: string | undefined, field: string) {
 }
 
 @Controller('catalog')
+@UseFilters(CatalogExceptionFilter)
 export class CatalogController {
   constructor(private readonly catalog: CatalogService) {}
 

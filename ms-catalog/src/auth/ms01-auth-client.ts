@@ -1,34 +1,26 @@
-import {
-  Injectable,
-  ForbiddenException,
-  ServiceUnavailableException,
-  UnauthorizedException,
-} from '@nestjs/common';
-import type { Request, Response as ExpressResponse } from 'express';
-
-export interface CatalogPrincipal {
-  userId: string;
-  username?: string;
-  roles: string[];
-}
+import { Injectable } from '@nestjs/common';
+import type {
+  CatalogAuthCredentials,
+  CatalogAuthPort,
+  CatalogAuthResult,
+} from '../catalog/application/catalog-auth.port.js';
+import { CatalogAuthError } from '../catalog/domain/catalog-auth-error.js';
 
 @Injectable()
-export class Ms01AuthClient {
+export class Ms01AuthClient implements CatalogAuthPort {
   private readonly baseUrl = (process.env.AUTH_SERVICE_URL ?? 'http://localhost:3001').replace(
     /\/$/,
     '',
   );
 
-  async requireAdmin(request: Request, response: ExpressResponse): Promise<CatalogPrincipal> {
-    const cookie = request.headers.cookie;
-    const authorization = request.headers.authorization;
-    if (!cookie && !authorization) {
-      throw new UnauthorizedException('Debes iniciar sesión.');
+  async requireAdmin(credentials: CatalogAuthCredentials): Promise<CatalogAuthResult> {
+    if (!credentials.cookie && !credentials.authorization) {
+      throw new CatalogAuthError('unauthorized', 'Debes iniciar sesión.');
     }
 
     const headers = new Headers();
-    if (cookie) headers.set('cookie', cookie);
-    if (authorization) headers.set('authorization', authorization);
+    if (credentials.cookie) headers.set('cookie', credentials.cookie);
+    if (credentials.authorization) headers.set('authorization', credentials.authorization);
 
     let upstream: globalThis.Response;
     try {
@@ -38,23 +30,37 @@ export class Ms01AuthClient {
         signal: AbortSignal.timeout(3000),
       });
     } catch {
-      throw new ServiceUnavailableException('El servicio de identidad no está disponible.');
+      throw new CatalogAuthError(
+        'unavailable',
+        'El servicio de identidad no está disponible.',
+      );
     }
 
-    const refreshedCookie = upstream.headers.get('set-cookie');
-    if (refreshedCookie) response.setHeader('Set-Cookie', refreshedCookie);
+    const refreshedCookie = upstream.headers.get('set-cookie') ?? undefined;
     if (upstream.status === 401) {
-      throw new UnauthorizedException('La sesión no es válida o ha expirado.');
+      throw new CatalogAuthError(
+        'unauthorized',
+        'La sesión no es válida o ha expirado.',
+        refreshedCookie,
+      );
     }
     if (!upstream.ok) {
-      throw new ServiceUnavailableException('No se pudo verificar la sesión con MS01.');
+      throw new CatalogAuthError(
+        'unavailable',
+        'No se pudo verificar la sesión con MS01.',
+        refreshedCookie,
+      );
     }
 
-    let principal: Partial<CatalogPrincipal>;
+    let principal: Partial<CatalogAuthResult['principal']>;
     try {
-      principal = (await upstream.json()) as Partial<CatalogPrincipal>;
+      principal = (await upstream.json()) as Partial<CatalogAuthResult['principal']>;
     } catch {
-      throw new ServiceUnavailableException('MS01 devolvió una respuesta de sesión inválida.');
+      throw new CatalogAuthError(
+        'unavailable',
+        'MS01 devolvió una respuesta de sesión inválida.',
+        refreshedCookie,
+      );
     }
     if (
       typeof principal.userId !== 'string' ||
@@ -62,11 +68,22 @@ export class Ms01AuthClient {
       !Array.isArray(principal.roles) ||
       !principal.roles.every((role) => typeof role === 'string')
     ) {
-      throw new ServiceUnavailableException('MS01 devolvió una respuesta de sesión inválida.');
+      throw new CatalogAuthError(
+        'unavailable',
+        'MS01 devolvió una respuesta de sesión inválida.',
+        refreshedCookie,
+      );
     }
     if (!principal.roles.includes('ADMIN')) {
-      throw new ForbiddenException('Se requiere el rol ADMIN.');
+      throw new CatalogAuthError(
+        'forbidden',
+        'Se requiere el rol ADMIN.',
+        refreshedCookie,
+      );
     }
-    return principal as CatalogPrincipal;
+    return {
+      principal: principal as CatalogAuthResult['principal'],
+      refreshedCookie,
+    };
   }
 }
