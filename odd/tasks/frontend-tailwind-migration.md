@@ -72,7 +72,7 @@ The user explicitly approved migrating the frontend gradually to Tailwind, begin
 - Auth CSS dropped from 293 to 146 lines; simple layout, spacing, and typography moved to Tailwind in login/signup templates. Theme, backgrounds, focus/hover, validation, and complex state styles remain in CSS. `git diff --check` passed; the build is pending because of concurrent TypeScript changes that were not modified here.
 - TW-04 work-unit commit: `7785475` (`style(auth): migrate page layout to Tailwind`). The later full build passed after the unrelated registration edits settled.
 - About CSS dropped from 275 to 24 lines; layout, spacing, typography, and breakpoints moved to Tailwind. Seal borders, quote backdrop, and reduced-motion CSS remain. The full frontend build passed.
-- TW-05 work-unit commit pending.
+- TW-05 work-unit commit: `a8b9f30` (`style(about): migrate layout utilities to Tailwind`).
 - The local Engram v2 CLI accepted the full task copy as observation #121, but export shows `topic: null`; the requested topic-scoped mirror remains pending.
 
 ## Next step
