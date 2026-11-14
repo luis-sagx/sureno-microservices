@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Req,
+  UseFilters,
   UseGuards,
 } from '@nestjs/common';
 import { IdentityService } from './identity.service.js';
@@ -15,6 +16,7 @@ import {
 } from '../sessions/session-auth.guard.js';
 import type { AuthenticatedRequest } from '../sessions/session-auth.guard.js';
 import { Roles } from '../sessions/roles.decorator.js';
+import { IdentityValidationExceptionFilter } from './identity-validation-exception.filter.js';
 
 type ReviewDecision = 'APPROVED' | 'REJECTED';
 
@@ -26,6 +28,7 @@ function validateDecision(value: unknown): ReviewDecision {
 }
 
 @Controller('identity/admin')
+@UseFilters(IdentityValidationExceptionFilter)
 @UseGuards(SessionAuthGuard, RolesGuard)
 @Roles('ADMIN')
 export class AdminReviewController {
@@ -41,7 +44,10 @@ export class AdminReviewController {
     @Param('personId') personId: string,
     @Body() body: { decision?: unknown },
   ) {
-    return this.identity.reviewPersonVerification(personId, validateDecision(body?.decision));
+    return this.identity.reviewPersonVerification(
+      personId,
+      validateDecision(body?.decision),
+    );
   }
 
   @Patch('business-accounts/:businessAccountId/review')
@@ -55,7 +61,8 @@ export class AdminReviewController {
       throw new BadRequestException('El motivo debe ser texto.');
     }
     const reviewerUserId = request.user?.userId;
-    if (!reviewerUserId) throw new BadRequestException('No se encontró el usuario revisor.');
+    if (!reviewerUserId)
+      throw new BadRequestException('No se encontró el usuario revisor.');
     return this.identity.reviewBusinessAccount(
       businessAccountId,
       decision,

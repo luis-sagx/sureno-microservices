@@ -37,14 +37,14 @@ No incluye cambios al frontend, a los contratos HTTP, a las migraciones/esquema,
 ## Modo de pruebas
 
 - Runner identificado: Vitest (`pnpm test`, `pnpm test:e2e` desde cada servicio); build: `pnpm build`.
-- Modo TDD: pendiente de resolver. No se encontró configuración de TDD en los manifests ni configuración local inspeccionada; no asumir TDD habilitado ni deshabilitado. Resolver antes de la primera edición de código.
+- Modo TDD: habilitado explícitamente por el usuario el 2026-11-14; fuente: respuesta del usuario. Secuencia requerida: RED → GREEN → REFACTOR. Runner exacto: Vitest (`pnpm test` desde el directorio del servicio; prueba focalizada con `pnpm exec vitest run <archivo>`).
 - Revisión por commit: `gentle-ai review mode status` no está disponible en el entorno (`gentle-ai: command not found`). RDD queda como estado no verificable; no iniciar revisión nativa sin confirmar el modo.
 
 ## Estrategia de entrega
 
 - Ruta ODD: delegated direct para las tareas que abarcan varios archivos. Evidencia: el mapeo requerido cubrió más de cuatro archivos en dos servicios; la implementación necesaria modifica múltiples archivos no triviales. No se seleccionó SDD.
 - Delegar mapeo read-only completado antes de la escritura; sus hallazgos se reconciliaron con CodeGraph.
-- Estrategia de entrega: `ask-on-risk` (predeterminada). Pronóstico preliminar: más de 400 líneas modificadas en total (aprox. 900–1400, estimación); refinar tras cada unidad, excluir archivos generados. Antes del primer commit de implementación, consultar una vez si se requiere `stacked-to-main` o `feature-branch-chain`.
+- Estrategia de entrega: `ask-on-risk` (predeterminada). Pronóstico preliminar: más de 400 líneas modificadas en total (aprox. 900–1400, estimación); refinar tras cada unidad, excluir archivos generados. La instrucción explícita del usuario de hacer todo en `feat/sureno-microservices-foundation` fija la estrategia de cadena en `feature-branch-chain`.
 - El branch actual es `feat/sureno-microservices-foundation`. No hacer push, PR ni merge.
 
 ## Tareas
@@ -59,8 +59,16 @@ No incluye cambios al frontend, a los contratos HTTP, a las migraciones/esquema,
 - Exploración: CodeGraph inicializado con `codegraph init`; consultas cubrieron controladores, módulos, servicios, entidades, validación y pruebas de ambos servicios.
 - Contratos/riesgos observados: tests de integración de `ms-auth/src/identity-registration.spec.ts`, `ms-auth/src/identity-session.spec.ts` y `ms-catalog/src/catalog.spec.ts`; esquemas se cargan con migraciones y `synchronize:false`. Mantener esas pruebas como control de compatibilidad.
 - Mapeo delegado read-only completado. No se editaron fuentes ni se ejecutaron pruebas.
-- Documentación creada; esperando revisión del usuario antes de continuar a implementación.
+- Diseño documentado en commit `d78c856` y aprobado por el usuario. La mirror Engram sigue pendiente: `engram save` no pudo abrir `/home/luissagnay/.engram/.instance-id.lock` porque la ruta es de solo lectura en este entorno.
+- **HAC-1 revisada por el padre; lista para commit de unidad, todavía sin marcar completa** porque la suite de integración no pudo iniciar la base de datos.
+- RED observado para `registration-validation.spec.ts`: la aserción esperaba `IdentityValidationError` (código `bad_request`) y obtuvo `BadRequestException`.
+- RED observado para el límite de `IdentityService`: tests ejecutaron y fallaron porque el servicio aún no delegaba al puerto y el UUID inválido emitía `BadRequestException`.
+- GREEN/foco actual: `pnpm exec vitest run src/identity/registration-validation.spec.ts src/identity/identity.service.spec.ts` — 4/4 pruebas pasan; el test verifica que la contraseña original llega al hasher y que el puerto de persistencia solo recibe datos normalizados más el hash.
+- Checks actuales: `pnpm build` y `pnpm lint` en `ms-auth` pasan; `git diff --check` pasa. `pnpm test` resulta en 3 archivos aprobados y 2 suites de integración fallidas antes de ejecutar casos: `identity-registration.spec.ts` e `identity-session.spec.ts` no conectan porque PostgreSQL recibe una contraseña no-string (`SASL: SCRAM-SERVER-FIRST-MESSAGE: client password must be a string`), seguido de timeout del `beforeAll` a 10 s.
+- HAC-1 deja en el árbol de trabajo cambios en `ms-auth/src/identity/` (controller, module, application/domain/infrastructure, exception filter, servicio barrel, hashing, validación y pruebas). Solo se tocaron archivos de identidad dentro de `ms-auth`; modificaciones previas de `frontend/`, `odd/tasks/sureno-storefront-visual-refresh.md` y assets continúan fuera de alcance.
+- Revisión del padre vía CodeGraph: domain/application no importan Nest, Express, TypeORM ni SQL; Nest conecta puertos a adaptadores; el controlador aplica el mapeo de errores y el adaptador conserva transacciones/consultas de registro y revisión. No se encontró una regresión observable en los límites revisados.
+- La mirror Engram sigue pendiente por falta de escritura en `/home/luissagnay/.engram/.instance-id.lock`; tampoco hay comando `gentle-ai` para evaluar RDD en este entorno.
 
 ## Próximo paso
 
-Revisar este diseño documentado. Tras aprobación, resolver TDD y comenzar HAC-1; antes de su commit consultar estrategia de cadena de entrega, dado el pronóstico superior a 400 líneas.
+Cometer HAC-1 como unidad en la rama actual, guardar su hash en el documento después del commit, e iniciar HAC-2 con TDD. Reintentar las suites de integración al completar los microservicios; su ejecución sigue pendiente de una conexión PostgreSQL de prueba con password string válido. Mantener las modificaciones previas ajenas a este alcance intactas.

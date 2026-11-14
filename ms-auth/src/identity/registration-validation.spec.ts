@@ -1,4 +1,3 @@
-import { BadRequestException } from '@nestjs/common';
 import { validateBusinessRequest } from './registration-validation.js';
 
 const makeCedula = () => {
@@ -13,7 +12,7 @@ const makeCedula = () => {
 };
 
 describe('business registration validation', () => {
-  it('rejects a non-string optional commercial name with a client error', () => {
+  it('reports invalid business input with a framework-independent domain error', () => {
     const input = {
       cedula: makeCedula(),
       nombres: 'Andrea',
@@ -28,6 +27,17 @@ describe('business registration validation', () => {
       direccion_negocio: 'Quito, Ecuador',
     };
 
-    expect(() => validateBusinessRequest(input as never)).toThrow(BadRequestException);
+    let caught: unknown;
+    try {
+      validateBusinessRequest(input as never);
+    } catch (error) {
+      caught = error;
+    }
+
+    expect(caught).toMatchObject({
+      name: 'IdentityValidationError',
+      code: 'bad_request',
+      message: 'El nombre comercial no es válido.',
+    });
   });
 });

@@ -1,11 +1,13 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UseFilters } from '@nestjs/common';
 import type {
   RegisterIndividualDto,
   RequestBusinessAccountDto,
 } from './dto/registration.dto.js';
 import { IdentityService } from './identity.service.js';
+import { IdentityValidationExceptionFilter } from './identity-validation-exception.filter.js';
 
 @Controller('identity')
+@UseFilters(IdentityValidationExceptionFilter)
 export class IdentityController {
   constructor(private readonly identityService: IdentityService) {}
 
