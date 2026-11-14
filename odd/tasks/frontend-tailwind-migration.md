@@ -57,7 +57,7 @@ The user explicitly approved migrating the frontend gradually to Tailwind, begin
 - [x] TW-03: Convert suitable Product detail page styles. Starting file: `frontend/src/app/features/catalog/pages/product-detail.page.css` (298 lines). Route: delegated direct; the multi-file writer trigger applies to the template and stylesheet. Checks: `pnpm run build` and `git diff --check` passed; motion, loading, interaction, and theme styles remain in CSS.
 - [x] TW-04: Convert suitable Auth page styles. Starting file: `frontend/src/app/features/auth/pages/auth.page.css` (293 lines). Route: delegated direct; the multi-file writer trigger applies to the login/signup templates and stylesheet. `git diff --check` passed; a subsequent `pnpm run build` passed after an earlier attempt encountered concurrent TypeScript edits. No tests run.
 - [x] TW-05: Convert suitable About page styles. Starting file: `frontend/src/app/features/about/pages/about.page.css` (275 lines). Route: delegated direct; the multi-file writer trigger applies to the template and stylesheet. `git diff --check` and `pnpm run build` passed; theme decoration and reduced-motion styling remain in CSS.
-- [ ] TW-06: Convert suitable shared shell styles while preserving global CSS tokens and base styles. Starting file: `frontend/src/app/core/shell/app.css` (252 lines). Route: delegated direct; the multi-file writer trigger applies to the shell template and stylesheet. Checks: build and confirm global theme styles remain intact.
+- [x] TW-06: Convert suitable shared shell styles while preserving global CSS tokens and base styles. Starting file: `frontend/src/app/core/shell/app.css` (252 lines). Route: delegated direct; the multi-file writer trigger applies to the shell template and stylesheet. `pnpm run build` and `git diff --check` passed; global `styles.css` remains untouched.
 
 ## Progress and evidence
 
@@ -73,8 +73,11 @@ The user explicitly approved migrating the frontend gradually to Tailwind, begin
 - TW-04 work-unit commit: `7785475` (`style(auth): migrate page layout to Tailwind`). The later full build passed after the unrelated registration edits settled.
 - About CSS dropped from 275 to 24 lines; layout, spacing, typography, and breakpoints moved to Tailwind. Seal borders, quote backdrop, and reduced-motion CSS remain. The full frontend build passed.
 - TW-05 work-unit commit: `a8b9f30` (`style(about): migrate layout utilities to Tailwind`).
+- Shared shell CSS dropped from 252 to 121 lines; responsive header/footer layout, desktop navigation, columns, and spacing moved to Tailwind. Theme/background, mobile overlay, interactive states, and footer decoration remain in CSS; global `styles.css` is unchanged. Build passed.
+- Across the global, shell, and feature stylesheets, CSS fell from 2,642 to 1,388 lines (1,254 fewer, about 47%). The global stylesheet remains 667 lines for shared base/theme responsibilities.
+- TW-06 work-unit commit pending.
 - The local Engram v2 CLI accepted the full task copy as observation #121, but export shows `topic: null`; the requested topic-scoped mirror remains pending.
 
 ## Next step
 
-Start TW-06 (shared shell) using the same preservation rules.
+Complete the final work-unit commit, record its identity, and retain the unrelated working-tree changes untouched.

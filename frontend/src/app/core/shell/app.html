@@ -1,93 +1,156 @@
 @if (!isAuthRoute()) {
-<header class="site-header">
-  <div class="header-inner">
-    <a class="brand" routerLink="/" aria-label="Licorería Sureño — inicio" (click)="closeMenu()">
-      <img src="/logo-text.webp" alt="Licorería Sureño" width="190" height="54" />
-    </a>
-
-    <button
-      class="menu-toggle"
-      type="button"
-      [attr.aria-expanded]="menuOpen()"
-      aria-controls="main-navigation"
-      [attr.aria-label]="menuOpen() ? 'Cerrar menú' : 'Abrir menú'"
-      (click)="toggleMenu()"
+  <header class="site-header">
+    <div
+      class="header-inner relative mx-auto flex min-h-[76px] w-[calc(100%-2rem)] max-w-[1280px] items-center justify-between gap-[clamp(1.5rem,4vw,3.5rem)] max-[760px]:min-h-[68px] max-[760px]:gap-[0.65rem]"
     >
-      <span></span><span></span><span></span>
-    </button>
-
-    <nav id="main-navigation" class="main-navigation" [class.is-open]="menuOpen()" aria-label="Navegación principal">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page" (click)="closeMenu()">Inicio</a>
-      <a routerLink="/quienes-somos" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeMenu()">Quiénes somos</a>
-      <a routerLink="/catalogo" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeMenu()">Catálogo</a>
-    </nav>
-
-    <div class="header-actions" role="group" aria-label="Acciones de cuenta y apariencia">
       <a
-        class="nav-account"
-        routerLink="/login"
-        routerLinkActive="active"
-        ariaCurrentWhenActive="page"
-        [attr.aria-label]="auth.user() ? 'Mi cuenta' : 'Iniciar sesión'"
+        class="brand inline-flex flex-none items-center"
+        routerLink="/"
+        aria-label="Licorería Sureño — inicio"
         (click)="closeMenu()"
       >
-        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="8" r="3.3" />
-          <path d="M5.5 20v-1.7a6.5 6.5 0 0 1 13 0V20z" />
-        </svg>
+        <img
+          class="block w-[clamp(150px,14vw,190px)] max-[760px]:w-[145px] max-[420px]:w-[124px]"
+          src="/logo-text.webp"
+          alt="Licorería Sureño"
+          width="190"
+          height="54"
+        />
       </a>
+
       <button
-        class="theme-toggle"
+        class="menu-toggle"
         type="button"
-        [attr.aria-label]="theme.theme() === 'light' ? 'Cambiar a modo oscuro' : 'Cambiar a modo claro'"
-        [attr.aria-pressed]="theme.theme() === 'dark'"
-        (click)="theme.toggle()"
+        [attr.aria-expanded]="menuOpen()"
+        aria-controls="main-navigation"
+        [attr.aria-label]="menuOpen() ? 'Cerrar menú' : 'Abrir menú'"
+        (click)="toggleMenu()"
       >
-        @if (theme.theme() === 'light') {
-          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
-            <path d="M20.1 15.4A8.5 8.5 0 0 1 8.6 3.9 8.5 8.5 0 1 0 20.1 15.4Z" />
-          </svg>
-        } @else {
-          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="3.8" />
-            <path d="M12 2v2.2m0 15.6V22m10-10h-2.2M4.2 12H2m17.1-7.1-1.6 1.6M6.5 17.5l-1.6 1.6m14.2 0-1.6-1.6M6.5 6.5 4.9 4.9" />
-          </svg>
-        }
+        <span></span><span></span><span></span>
       </button>
+
+      <nav
+        id="main-navigation"
+        class="main-navigation flex flex-1 items-center justify-center gap-[clamp(1.25rem,3vw,2.6rem)]"
+        [class.is-open]="menuOpen()"
+        aria-label="Navegación principal"
+      >
+        <a
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          ariaCurrentWhenActive="page"
+          (click)="closeMenu()"
+          >Inicio</a
+        >
+        <a
+          routerLink="/quienes-somos"
+          routerLinkActive="active"
+          ariaCurrentWhenActive="page"
+          (click)="closeMenu()"
+          >Quiénes somos</a
+        >
+        <a
+          routerLink="/catalogo"
+          routerLinkActive="active"
+          ariaCurrentWhenActive="page"
+          (click)="closeMenu()"
+          >Catálogo</a
+        >
+      </nav>
+
+      <div
+        class="header-actions flex flex-none items-center gap-[0.6rem]"
+        role="group"
+        aria-label="Acciones de cuenta y apariencia"
+      >
+        <a
+          class="nav-account"
+          routerLink="/login"
+          routerLinkActive="active"
+          ariaCurrentWhenActive="page"
+          [attr.aria-label]="auth.user() ? 'Mi cuenta' : 'Iniciar sesión'"
+          (click)="closeMenu()"
+        >
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="8" r="3.3" />
+            <path d="M5.5 20v-1.7a6.5 6.5 0 0 1 13 0V20z" />
+          </svg>
+        </a>
+        <button
+          class="theme-toggle"
+          type="button"
+          [attr.aria-label]="
+            theme.theme() === 'light' ? 'Cambiar a modo oscuro' : 'Cambiar a modo claro'
+          "
+          [attr.aria-pressed]="theme.theme() === 'dark'"
+          (click)="theme.toggle()"
+        >
+          @if (theme.theme() === 'light') {
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
+              <path d="M20.1 15.4A8.5 8.5 0 0 1 8.6 3.9 8.5 8.5 0 1 0 20.1 15.4Z" />
+            </svg>
+          } @else {
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="3.8" />
+              <path
+                d="M12 2v2.2m0 15.6V22m10-10h-2.2M4.2 12H2m17.1-7.1-1.6 1.6M6.5 17.5l-1.6 1.6m14.2 0-1.6-1.6M6.5 6.5 4.9 4.9"
+              />
+            </svg>
+          }
+        </button>
+      </div>
     </div>
-  </div>
-</header>
+  </header>
 }
 
-<main id="contenido-principal">
+<main class="flex-[1_0_auto]" id="contenido-principal">
   <router-outlet></router-outlet>
 </main>
 
 @if (!isAuthRoute()) {
-<footer class="site-footer">
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <img src="/logo-text.webp" alt="Licorería Sureño" width="190" height="54" loading="lazy" />
-      <span class="footer-brand-rule" aria-hidden="true"></span>
-      <span class="footer-location">Quito, Ecuador</span>
+  <footer class="site-footer mt-auto">
+    <div
+      class="footer-inner mx-auto grid w-[calc(100%-2rem)] max-w-[1280px] grid-cols-[minmax(200px,1.5fr)_repeat(3,minmax(130px,1fr))] gap-y-10 gap-x-[clamp(2rem,5vw,5rem)] pt-[clamp(3rem,6vw,5rem)] pb-6 max-[760px]:grid-cols-[repeat(2,minmax(0,1fr))] max-[760px]:gap-y-8 max-[760px]:gap-x-6 max-[420px]:grid-cols-1"
+    >
+      <div
+        class="footer-brand flex flex-col items-start gap-[0.9rem] max-[760px]:col-span-2 max-[420px]:col-auto"
+      >
+        <img
+          class="block w-[clamp(150px,14vw,190px)]"
+          src="/logo-text.webp"
+          alt="Licorería Sureño"
+          width="190"
+          height="54"
+          loading="lazy"
+        />
+        <span class="footer-brand-rule" aria-hidden="true"></span>
+        <span class="footer-location">Quito, Ecuador</span>
+      </div>
+      <div class="footer-column flex flex-col items-start gap-[0.95rem]">
+        <h2 class="font-[var(--font-label)] text-[var(--secondary)]">Empresa</h2>
+        <a routerLink="/quienes-somos">Sobre nosotros</a>
+        <a routerLink="/registro">Pedidos al mayoreo</a>
+      </div>
+      <div class="footer-column flex flex-col items-start gap-[0.95rem]">
+        <h2 class="font-[var(--font-label)] text-[var(--secondary)]">Legal</h2>
+        <p>Consumo exclusivo para mayores de 18 años.</p>
+        <p>Disfruta con responsabilidad.</p>
+      </div>
+      <div class="footer-column flex flex-col items-start gap-[0.95rem]">
+        <h2 class="font-[var(--font-label)] text-[var(--secondary)]">Soporte</h2>
+        <p>Quito, Ecuador</p>
+        <a routerLink="/catalogo">Explorar catálogo</a>
+      </div>
+      <p
+        class="footer-legal col-span-3 border-t border-[var(--line)] pt-5 max-[760px]:col-start-1 max-[760px]:col-end-2 max-[420px]:col-auto"
+      >
+        © 2026 Licorería Sureño. El consumo de alcohol es exclusivo para mayores de 18 años.
+      </p>
+      <span
+        class="footer-since self-end justify-self-end mt-4 border-t border-[var(--line)] pt-5 text-[var(--muted)] font-[var(--font-display,Georgia,serif)] text-[0.9rem] max-[760px]:col-start-2 max-[760px]:col-end-3 max-[420px]:col-auto"
+        >Desde 1998</span
+      >
     </div>
-    <div class="footer-column">
-      <h2>Empresa</h2>
-      <a routerLink="/quienes-somos">Sobre nosotros</a>
-      <a routerLink="/registro">Pedidos al mayoreo</a>
-    </div>
-    <div class="footer-column">
-      <h2>Legal</h2>
-      <p>Consumo exclusivo para mayores de 18 años.</p>
-      <p>Disfruta con responsabilidad.</p>
-    </div>
-    <div class="footer-column">
-      <h2>Soporte</h2>
-      <p>Quito, Ecuador</p>
-      <a routerLink="/catalogo">Explorar catálogo</a>
-    </div>
-    <p class="footer-legal">© 2026 Licorería Sureño. El consumo de alcohol es exclusivo para mayores de 18 años.</p>
-    <span class="footer-since">Desde 1998</span>
-  </div>
-</footer>
+  </footer>
 }
