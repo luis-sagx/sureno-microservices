@@ -4,7 +4,11 @@
   #heroSequence
   data-hero-sequence
 >
-  <div class="home-hero" #heroStage data-hero-stage>
+  <div
+    class="home-hero sticky top-[var(--header-height)] flex h-[calc(100svh-var(--header-height))] min-h-[520px] items-center overflow-hidden border-b border-[var(--line)] isolate"
+    #heroStage
+    data-hero-stage
+  >
     <div class="hero-backdrop" aria-hidden="true"></div>
     <div class="hero-bottle-stage">
       <img
@@ -16,96 +20,180 @@
         decoding="async"
       />
     </div>
-    <div class="hero-content page-container">
-      <p class="eyebrow">Quito · tradición licorera desde 1998</p>
-      <h1 class="display-title">Licores para celebrar.<br /><em>Hechos en el sur.</em></h1>
-      <p class="hero-copy">Conoce los sabores de Sureño. Explora nuestras presentaciones por unidad y por caja completa.</p>
-      <div class="hero-actions">
-        <a class="button-primary" routerLink="/catalogo">Explorar catálogo <span aria-hidden="true">↗</span></a>
-        <a class="button-secondary" routerLink="/quienes-somos">Nuestra historia</a>
+    <div class="hero-content page-container py-[clamp(5rem,12vw,10rem)]">
+      <p class="eyebrow mb-[1.8rem]">Quito · tradición licorera desde 1998</p>
+      <h1
+        class="display-title max-w-[13ch] !text-[clamp(3.25rem,7.4vw,7rem)] italic !tracking-[-0.045em] leading-[0.98] max-[760px]:max-w-[12ch] max-[760px]:!text-[clamp(3rem,10.5vw,5.2rem)] max-[420px]:!text-[clamp(2.7rem,12.5vw,3.3rem)]"
+      >
+        Licores para celebrar.<br /><em class="text-[var(--gold)] font-normal italic"
+          >Hechos en el sur.</em
+        >
+      </h1>
+      <p
+        class="hero-copy mt-[1.6rem] mb-0 max-w-[600px] text-[var(--muted)] text-[clamp(1rem,2vw,1.2rem)] leading-[1.7]"
+      >
+        Conoce los sabores de Sureño. Explora nuestras presentaciones por unidad y por caja
+        completa.
+      </p>
+      <div class="hero-actions mt-8 flex flex-wrap gap-[0.85rem]">
+        <a class="button-primary max-[420px]:w-full" routerLink="/catalogo"
+          >Explorar catálogo <span aria-hidden="true">↗</span></a
+        >
+        <a class="button-secondary max-[420px]:w-full" routerLink="/quienes-somos"
+          >Nuestra historia</a
+        >
       </div>
-      <p class="hero-note">Compra y disponibilidad por confirmar · Servicio para mayores de 18 años</p>
+      <p class="hero-note mt-8 mb-0 text-[var(--muted-dim)] text-[0.73rem] tracking-[0.02em]">
+        Compra y disponibilidad por confirmar · Servicio para mayores de 18 años
+      </p>
     </div>
     <span class="hero-index" aria-hidden="true">01 / SUREÑO</span>
     <span class="scroll-cue" aria-hidden="true">Desliza para descubrir <span>↓</span></span>
   </div>
 </section>
 
-<section class="home-intro page-container">
+<section
+  class="home-intro page-container flex items-end justify-between gap-8 pt-[clamp(4rem,8vw,7rem)] pb-10 max-[760px]:grid max-[760px]:items-start"
+>
   <div class="intro-copy">
-    <p class="eyebrow">El catálogo</p>
+    <p class="eyebrow mb-[1.2rem]">El catálogo</p>
     <h2 class="section-title">Una colección<br />para cada ocasión.</h2>
   </div>
-  <p class="intro-description">Desde nuestros aguardientes de tradición hasta cócteles frutales. Encuentra cada producto con sus presentaciones y disponibilidad informativa.</p>
+  <p class="intro-description mt-0 mb-[0.35rem] max-w-[420px] text-[var(--muted)] leading-[1.75]">
+    Desde nuestros aguardientes de tradición hasta cócteles frutales. Encuentra cada producto con
+    sus presentaciones y disponibilidad informativa.
+  </p>
 </section>
 
-<section class="featured-section">
-  <div class="featured-grid page-container">
+<section class="featured-section pt-4 pb-[clamp(4rem,8vw,7rem)]">
+  <div
+    class="featured-grid page-container grid grid-cols-[repeat(3,minmax(0,1fr))] gap-4 max-[760px]:grid-cols-1"
+  >
     @for (product of featured; track product.name; let index = $index) {
-      <a class="featured-card" routerLink="/catalogo" [queryParams]="{ q: product.name }">
-        <img [src]="product.image" [alt]="product.name" [attr.loading]="index === 0 ? 'eager' : 'lazy'" />
+      <a
+        class="featured-card group relative flex min-h-[clamp(290px,36vw,460px)] flex-col justify-between overflow-hidden border border-[var(--line)] text-[var(--paper)] no-underline bg-[var(--surface)] max-[760px]:min-h-[340px] max-[420px]:min-h-[300px]"
+        routerLink="/catalogo"
+        [queryParams]="{ q: product.name }"
+      >
+        <img
+          class="absolute inset-0 h-full w-full object-contain p-6 transition-transform duration-500 ease-[ease] group-hover:scale-[1.06]"
+          [src]="product.image"
+          [alt]="product.name"
+          [attr.loading]="index === 0 ? 'eager' : 'lazy'"
+        />
         <span class="featured-shade" aria-hidden="true"></span>
-        <span class="featured-number">0{{ index + 1 }}</span>
-        <span class="featured-caption">
+        <span
+          class="featured-number relative p-4 text-[var(--muted)] font-[var(--font-display)] text-xl"
+          >0{{ index + 1 }}</span
+        >
+        <span class="featured-caption relative grid gap-[0.55rem] p-[1.4rem]">
           <span class="eyebrow">{{ product.category }}</span>
-          <strong>{{ product.name }}</strong>
-          <span class="featured-link">Ver producto <span aria-hidden="true">↗</span></span>
+          <strong
+            class="font-[var(--font-display)] text-[clamp(1.65rem,2.8vw,2.35rem)] font-normal"
+            >{{ product.name }}</strong
+          >
+          <span
+            class="featured-link mt-[0.35rem] text-[var(--gold)] text-[0.67rem] font-bold tracking-[0.14em] uppercase"
+            >Ver producto <span aria-hidden="true">↗</span></span
+          >
         </span>
       </a>
     }
   </div>
-  <div class="featured-cta page-container">
-    <a routerLink="/catalogo">Ver todos los productos <span aria-hidden="true">→</span></a>
+  <div class="featured-cta page-container mt-5 flex justify-end">
+    <a
+      class="text-[var(--gold)] text-[0.7rem] font-bold tracking-[0.16em] no-underline uppercase"
+      routerLink="/catalogo"
+      >Ver todos los productos <span aria-hidden="true">→</span></a
+    >
   </div>
 </section>
 
-<section class="heritage-section" data-heritage-section aria-labelledby="heritage-title">
+<section
+  class="heritage-section relative overflow-hidden border-t border-[var(--line)] bg-[var(--surface)]"
+  data-heritage-section
+  aria-labelledby="heritage-title"
+>
   <span class="heritage-year" aria-hidden="true">1998</span>
-  <div class="heritage-layout page-container">
-    <div class="heritage-copy">
-      <p class="eyebrow">Herencia</p>
-      <h2 class="section-title" id="heritage-title" appScrollReveal>
+  <div
+    class="heritage-layout page-container relative grid min-h-[540px] grid-cols-[minmax(0,1fr)_360px] items-center gap-[clamp(3rem,8vw,7rem)] py-[clamp(5rem,10vw,8rem)] max-[760px]:grid-cols-1 max-[760px]:gap-6"
+  >
+    <div class="heritage-copy flex max-w-[760px] flex-col items-start gap-[1.65rem]">
+      <p class="eyebrow m-0 text-[var(--secondary)]">Herencia</p>
+      <h2
+        class="section-title max-w-[21ch] max-[760px]:max-w-[18ch]"
+        id="heritage-title"
+        appScrollReveal
+      >
         Una historia nacida en el sur de Quito.
       </h2>
-      <p class="heritage-history" appScrollReveal>
-        El 22 de mayo de 1998 nace la idea de formar una pequeña industria licorera en el sur de
-        la ciudad de Quito llamada <strong>SUREÑO</strong>, desarrollándose al principio
-        artesanalmente. Con el transcurso del tiempo evolucionó como microempresa, cumpliendo
-        siempre con las normas INEN y procesos controlados por el ARCSA.
+      <p
+        class="heritage-history m-0 max-w-[66ch] text-[var(--muted)] text-base leading-[1.8]"
+        appScrollReveal
+      >
+        El 22 de mayo de 1998 nace la idea de formar una pequeña industria licorera en el sur de la
+        ciudad de Quito llamada <strong class="text-[var(--paper)] font-bold">SUREÑO</strong>,
+        desarrollándose al principio artesanalmente. Con el transcurso del tiempo evolucionó como
+        microempresa, cumpliendo siempre con las normas INEN y procesos controlados por el ARCSA.
       </p>
-      <div class="heritage-divider" data-heritage-divider aria-hidden="true">
+      <div
+        class="heritage-divider my-2 flex w-[min(100%,20rem)] items-center gap-4"
+        data-heritage-divider
+        aria-hidden="true"
+      >
         <span></span><span></span>
       </div>
-      <p class="heritage-quote" appScrollReveal>
+      <p
+        class="heritage-quote m-0 max-w-[34ch] text-[var(--secondary)] font-[var(--font-display)] text-[clamp(1.65rem,2.4vw,2rem)] italic leading-[1.25]"
+        appScrollReveal
+      >
         “El sabor auténtico del sur de Quito, en cada botella.”
       </p>
-      <a class="heritage-link button-secondary" routerLink="/quienes-somos" appScrollReveal>
+      <a
+        class="heritage-link button-secondary mt-[0.3rem]"
+        routerLink="/quienes-somos"
+        appScrollReveal
+      >
         Nuestra historia
       </a>
     </div>
 
-    <div class="heritage-seal-stage" appScrollReveal>
+    <div
+      class="heritage-seal-stage relative flex aspect-square w-[min(100%,320px)] items-center justify-center justify-self-center max-[760px]:mt-6 max-[760px]:w-[min(72vw,280px)]"
+      appScrollReveal
+    >
       <span class="heritage-seal-glow" aria-hidden="true"></span>
       <span class="craft-line" aria-hidden="true"></span>
       <span class="craft-line craft-line-inner" aria-hidden="true"></span>
-      <img src="/logo-isotipo.png" alt="Isotipo de Sureño" width="200" height="200" loading="lazy" />
+      <img
+        src="/logo-isotipo.png"
+        alt="Isotipo de Sureño"
+        width="200"
+        height="200"
+        loading="lazy"
+      />
     </div>
   </div>
 </section>
 
 <section
-  class="horeca-cta"
+  class="horeca-cta relative overflow-hidden border-t border-[var(--line)] py-[clamp(5rem,9vw,8rem)] text-center text-[#f3eee6]"
   data-horeca-cta
   aria-labelledby="horeca-title"
 >
-  <div class="page-container horeca-content">
-    <p class="eyebrow">Horeca · Mayoreo</p>
-    <h2 class="section-title" id="horeca-title">¿Compras para tu negocio?</h2>
-    <p>
+  <div class="page-container horeca-content grid justify-items-center gap-4">
+    <p class="eyebrow text-[#b8c9d9]">Horeca · Mayoreo</p>
+    <h2 class="section-title max-w-[16ch] text-[#f5eee4]" id="horeca-title">
+      ¿Compras para tu negocio?
+    </h2>
+    <p class="m-0 max-w-[44rem] text-[#d5cbbd] text-[clamp(1rem,1.6vw,1.2rem)] leading-[1.7]">
       Registra tu bar, restaurante o tienda para solicitar una cuenta comercial. Las solicitudes
       pasan por revisión manual.
     </p>
-    <a class="button-primary" routerLink="/registro">
+    <a
+      class="button-primary !mt-1 !min-h-14 !border-[#e9c176] !text-[#412d00] !bg-[#e9c176] hover:!border-[#f1d391] hover:!bg-[#f1d391]"
+      routerLink="/registro"
+    >
       Solicita una cuenta para tu negocio <span aria-hidden="true">↗</span>
     </a>
   </div>
