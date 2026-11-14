@@ -37,6 +37,27 @@ describe('HomePage hero', () => {
     expect(cta?.textContent).not.toContain('tarifario');
   });
 
+  it('renders the complete Heritage story before the wholesale CTA', () => {
+    const fixture = TestBed.createComponent(HomePage);
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const heritage = compiled.querySelector<HTMLElement>('[data-heritage-section]');
+    const cta = compiled.querySelector<HTMLElement>('[data-horeca-cta]');
+    const historyLink = heritage?.querySelector<HTMLAnchorElement>('a[routerLink="/quienes-somos"]');
+
+    expect(heritage).toBeTruthy();
+    expect(heritage?.textContent).toContain('1998');
+    expect(heritage?.textContent).toContain('El 22 de mayo de 1998');
+    expect(heritage?.textContent).toContain('normas INEN y procesos controlados por el ARCSA');
+    expect(heritage?.textContent).toContain('El sabor auténtico del sur de Quito, en cada botella.');
+    expect(heritage?.querySelector('[data-heritage-divider]')).toBeTruthy();
+    expect(historyLink?.textContent).toContain('Nuestra historia');
+    expect(heritage?.querySelector('img[alt="Isotipo de Sureño"]')).toBeTruthy();
+    expect(heritage?.querySelectorAll('.craft-line')).toHaveLength(2);
+    expect(heritage!.compareDocumentPosition(cta!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
   it('uses the 76 source frames in ascending order, with endpoints at f0001 and f0151', () => {
     expect(HERO_FRAMES).toHaveLength(76);
     expect(HERO_FRAMES[0]).toBe('/frames_nobg/f0001.webp');

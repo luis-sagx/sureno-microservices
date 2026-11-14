@@ -59,38 +59,54 @@
   </div>
 </section>
 
-<section
-  class="border-t border-line bg-cover bg-center py-[clamp(5rem,9vw,8rem)] text-center text-[#f3eee6]"
-  style="background-image: linear-gradient(180deg, rgb(19 16 13 / 68%), rgb(19 16 13 / 84%)), url('/bg.webp')"
-  data-horeca-cta
-  aria-labelledby="horeca-title"
->
-  <div class="page-container grid justify-items-center gap-4">
-    <p class="eyebrow text-[#b8c9d9]">Horeca · Mayoreo</p>
-    <h2 class="section-title max-w-[16ch] text-[#f5eee4]" id="horeca-title">¿Compras para tu negocio?</h2>
-    <p class="m-0 max-w-[44rem] text-[clamp(1rem,1.6vw,1.2rem)] leading-[1.7] text-[#d5cbbd]">
-      Registra tu bar, restaurante o tienda para solicitar una cuenta comercial. Las solicitudes
-      pasan por revisión manual.
-    </p>
-    <a
-      class="button-primary mt-1 min-h-14 !border-[#e9c176] !bg-[#e9c176] !text-[#412d00] hover:!border-[#f1d391] hover:!bg-[#f1d391]"
-      routerLink="/registro"
-    >
-      Solicita una cuenta para tu negocio <span aria-hidden="true">↗</span>
-    </a>
+<section class="heritage-section" data-heritage-section aria-labelledby="heritage-title">
+  <span class="heritage-year" aria-hidden="true">1998</span>
+  <div class="heritage-layout page-container">
+    <div class="heritage-copy">
+      <p class="eyebrow">Herencia</p>
+      <h2 class="section-title" id="heritage-title" appScrollReveal>
+        Una historia nacida en el sur de Quito.
+      </h2>
+      <p class="heritage-history" appScrollReveal>
+        El 22 de mayo de 1998 nace la idea de formar una pequeña industria licorera en el sur de
+        la ciudad de Quito llamada <strong>SUREÑO</strong>, desarrollándose al principio
+        artesanalmente. Con el transcurso del tiempo evolucionó como microempresa, cumpliendo
+        siempre con las normas INEN y procesos controlados por el ARCSA.
+      </p>
+      <div class="heritage-divider" data-heritage-divider aria-hidden="true">
+        <span></span><span></span>
+      </div>
+      <p class="heritage-quote" appScrollReveal>
+        “El sabor auténtico del sur de Quito, en cada botella.”
+      </p>
+      <a class="heritage-link button-secondary" routerLink="/quienes-somos" appScrollReveal>
+        Nuestra historia
+      </a>
+    </div>
+
+    <div class="heritage-seal-stage" appScrollReveal>
+      <span class="heritage-seal-glow" aria-hidden="true"></span>
+      <span class="craft-line" aria-hidden="true"></span>
+      <span class="craft-line craft-line-inner" aria-hidden="true"></span>
+      <img src="/logo-isotipo.png" alt="Isotipo de Sureño" width="200" height="200" loading="lazy" />
+    </div>
   </div>
 </section>
 
-<section class="heritage-band">
-  <div class="heritage-inner page-container">
-    <div>
-      <p class="eyebrow">Herencia · 1998</p>
-      <h2 class="section-title">Una historia nacida<br />en el sur de Quito.</h2>
-    </div>
-    <div class="heritage-detail">
-      <p>El sabor auténtico del sur de Quito, en cada botella. Una tradición que sigue creciendo con cada generación.</p>
-      <a routerLink="/quienes-somos">Conoce Sureño <span aria-hidden="true">→</span></a>
-    </div>
-    <img class="heritage-mark" src="/logo-isotipo.png" alt="" aria-hidden="true" loading="lazy" />
+<section
+  class="horeca-cta"
+  data-horeca-cta
+  aria-labelledby="horeca-title"
+>
+  <div class="page-container horeca-content">
+    <p class="eyebrow">Horeca · Mayoreo</p>
+    <h2 class="section-title" id="horeca-title">¿Compras para tu negocio?</h2>
+    <p>
+      Registra tu bar, restaurante o tienda para solicitar una cuenta comercial. Las solicitudes
+      pasan por revisión manual.
+    </p>
+    <a class="button-primary" routerLink="/registro">
+      Solicita una cuenta para tu negocio <span aria-hidden="true">↗</span>
+    </a>
   </div>
 </section>

@@ -193,45 +193,188 @@
   text-transform: uppercase;
 }
 
-.heritage-band {
-  border-block: 1px solid var(--line);
+.heritage-section {
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid var(--line);
   background: var(--surface);
 }
 
-.heritage-inner {
+.heritage-year {
+  position: absolute;
+  top: -0.18em;
+  right: max(-0.08em, calc((100% - 1280px) / 2));
+  color: var(--secondary);
+  font-family: var(--font-display);
+  font-size: clamp(10rem, 23vw, 18rem);
+  font-style: italic;
+  line-height: 1;
+  opacity: 0.1;
+  pointer-events: none;
+  user-select: none;
+}
+
+.heritage-layout {
   position: relative;
   display: grid;
-  min-height: 330px;
-  grid-template-columns: 1.2fr 0.8fr;
+  min-height: 540px;
+  grid-template-columns: minmax(0, 1fr) 360px;
   align-items: center;
-  gap: 2rem;
-  overflow: hidden;
-  padding-block: 4rem;
+  gap: clamp(3rem, 8vw, 7rem);
+  padding-block: clamp(5rem, 10vw, 8rem);
 }
 
-.heritage-inner .eyebrow {
-  margin-bottom: 1rem;
+.heritage-copy {
+  display: flex;
+  max-width: 760px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.65rem;
 }
 
-.heritage-detail {
-  position: relative;
-  z-index: 1;
-  max-width: 410px;
+.heritage-copy .eyebrow {
+  margin: 0;
+  color: var(--secondary);
 }
 
-.heritage-detail p {
-  margin: 0 0 1.4rem;
+.heritage-copy .section-title {
+  max-width: 21ch;
+}
+
+.heritage-history {
+  max-width: 66ch;
+  margin: 0;
   color: var(--muted);
-  font-family: var(--font-display);
-  font-size: 1.45rem;
-  line-height: 1.5;
+  font-size: 1rem;
+  line-height: 1.8;
 }
 
-.heritage-mark {
+.heritage-history strong {
+  color: var(--paper);
+  font-weight: 700;
+}
+
+.heritage-divider {
+  display: flex;
+  width: min(100%, 20rem);
+  align-items: center;
+  gap: 1rem;
+  margin-block: 0.5rem;
+}
+
+.heritage-divider span:first-child {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 auto;
+  transform: rotate(45deg);
+  border: 1px solid var(--line-strong);
+  background: color-mix(in srgb, var(--secondary), transparent 85%);
+}
+
+.heritage-divider span:last-child {
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(90deg, var(--line), transparent);
+}
+
+.heritage-quote {
+  max-width: 34ch;
+  margin: 0;
+  color: var(--secondary);
+  font-family: var(--font-display);
+  font-size: clamp(1.65rem, 2.4vw, 2rem);
+  font-style: italic;
+  line-height: 1.25;
+}
+
+.heritage-link {
+  margin-top: 0.3rem;
+}
+
+.heritage-seal-stage {
+  position: relative;
+  display: flex;
+  width: min(100%, 320px);
+  aspect-ratio: 1;
+  align-items: center;
+  justify-content: center;
+  justify-self: center;
+}
+
+.heritage-seal-glow {
   position: absolute;
-  right: 6%;
-  width: min(20vw, 210px);
-  opacity: 0.12;
+  inset: 8%;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--secondary), transparent 84%), transparent 68%);
+  filter: blur(1.1rem);
+}
+
+.heritage-seal-stage .craft-line {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+}
+
+.heritage-seal-stage .craft-line-inner {
+  inset: 1.75rem;
+  opacity: 0.6;
+}
+
+.heritage-seal-stage img {
+  position: relative;
+  width: 48%;
+  height: 48%;
+  object-fit: contain;
+  opacity: 0.95;
+}
+
+.horeca-cta {
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid var(--line);
+  padding-block: clamp(5rem, 9vw, 8rem);
+  color: #f3eee6;
+  text-align: center;
+  background-image: linear-gradient(180deg, rgb(19 16 13 / 68%), rgb(19 16 13 / 84%)), url('/bg.webp');
+  background-position: center;
+  background-size: cover;
+}
+
+.horeca-content {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+}
+
+.horeca-content .eyebrow {
+  color: #b8c9d9;
+}
+
+.horeca-content .section-title {
+  max-width: 16ch;
+  color: #f5eee4;
+}
+
+.horeca-content > p:not(.eyebrow) {
+  max-width: 44rem;
+  margin: 0;
+  color: #d5cbbd;
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  line-height: 1.7;
+}
+
+.horeca-content .button-primary {
+  min-height: 56px;
+  margin-top: 0.25rem;
+  border-color: #e9c176;
+  color: #412d00;
+  background: #e9c176;
+}
+
+.horeca-content .button-primary:hover {
+  border-color: #f1d391;
+  background: #f1d391;
 }
 
 @media (max-width: 760px) {
@@ -262,15 +405,24 @@
     min-height: 340px;
   }
 
-  .heritage-inner {
+  .heritage-layout {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
 
-  .heritage-mark {
-    right: -2rem;
-    bottom: 1rem;
-    width: 150px;
+  .heritage-copy .section-title {
+    max-width: 18ch;
+  }
+
+  .heritage-seal-stage {
+    width: min(72vw, 280px);
+    margin-top: 1.5rem;
+  }
+
+  .heritage-year {
+    top: 0;
+    right: -0.06em;
+    font-size: clamp(8rem, 35vw, 12rem);
   }
 }
 

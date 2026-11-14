@@ -11,6 +11,7 @@ import {
   signal,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { RevealOnScrollDirective } from '../core/reveal-on-scroll.directive';
 
 export const HERO_FRAMES = Array.from(
   { length: 76 },
@@ -24,7 +25,7 @@ export function heroFrameIndex(progress: number): number {
 
 @Component({
   selector: 'app-home-page',
-  imports: [RouterLink],
+  imports: [RouterLink, RevealOnScrollDirective],
   templateUrl: './home.page.html',
   styleUrl: './home.page.css',
 })
