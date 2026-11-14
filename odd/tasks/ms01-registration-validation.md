@@ -58,13 +58,15 @@ The signup page currently checks only whether required fields are present and wh
 
 ### REG-02 — Angular validation, password visibility, and bounded submission
 
-- [ ] Add synchronous UI field validation/errors, disable/reject invalid submits, add password visibility control, and bound API wait with deterministic loading cleanup; add component tests first.
+- [x] Add synchronous UI field validation/errors, disable/reject invalid submits, add password visibility control, and bound API wait with deterministic loading cleanup; add component tests first.
 - Route: delegated direct; this unit changes the page, template/styles, client behavior, and specs.
-- Verification evidence: pending.
-- Commit: pending.
+- TDD: RED reproduced 11 failures on the previous page (invalid data was sent, password visibility/timeout were absent); GREEN focused signup tests 16/16 and full Angular suite 69/69. `./node_modules/.bin/ng build` passed with existing CSS budget warnings for home/catalog/detail.
+- Commit: `c31cbff` — `feat(auth): validate signup fields before submit`.
 
 ## Progress and next step
 
 - CodeGraph traced the Angular signup submission and MS01 identity service/domain. Current behavior sends non-empty invalid fields to the API; the loading flag only resets on response, and the UI has no complete client-side validation.
 - REG-01 now validates Ecuadorian cédula checksum and natural-person RUC, business RUC structure, requested names/user/email/phone/date/password constraints, and widens persisted person IDs to 13 digits.
-- Next: implement REG-02 using delegated direct TDD, then verify the frontend suite/build and commit the UI work unit.
+- REG-02 now performs client-side field validation before any request, exposes field messages, supports show/hide password, and reports a friendly timeout after 15 seconds while always releasing the loading state.
+- Verification: frontend suite 69/69 and build passed. MS01 suite 45/45, build, and lint passed when run with `.env.example` settings; an initial verification without environment values failed two integration test suites because database credentials and `AUTH_SESSION_SECRET` were absent. The MS01 migration was applied to the local database.
+- Next: registration validation work is complete. No additional implementation remains; the database migration is already applied in the local environment.
