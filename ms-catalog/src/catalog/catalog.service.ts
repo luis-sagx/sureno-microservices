@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
-import { DataSource } from 'typeorm';
+import { DataSource, In } from 'typeorm';
 import { AvailabilityChange } from './entities/availability-change.entity.js';
 import { Category } from './entities/category.entity.js';
 import { Presentation } from './entities/presentation.entity.js';
@@ -56,11 +56,9 @@ export class CatalogService {
     const builder = this.dataSource
       .getRepository(Product)
       .createQueryBuilder('product')
-      .innerJoinAndSelect('product.category', 'category')
-      .leftJoinAndSelect('product.presentaciones', 'presentation');
-    builder.where('(presentation.activo = true OR presentation.id IS NULL)');
+      .innerJoinAndSelect('product.category', 'category');
     if (!query.incluir_inactivos) {
-      builder.andWhere('product.activo = true').andWhere('category.activo = true');
+      builder.where('product.activo = true').andWhere('category.activo = true');
     }
 
     if (query.q) {
@@ -76,13 +74,26 @@ export class CatalogService {
 
     const [products, total] = await builder
       .orderBy('product.nombre', 'ASC')
-      .addOrderBy('presentation.tipo', 'ASC')
       .skip((query.page - 1) * query.page_size)
       .take(query.page_size)
       .getManyAndCount();
+    const presentations = products.length
+      ? await this.dataSource.getRepository(Presentation).find({
+          where: { product_id: In(products.map((product) => product.id)), activo: true },
+          order: { tipo: 'ASC' },
+        })
+      : [];
+    const presentationsByProduct = new Map<string, Presentation[]>();
+    for (const presentation of presentations) {
+      const group = presentationsByProduct.get(presentation.product_id) ?? [];
+      group.push(presentation);
+      presentationsByProduct.set(presentation.product_id, group);
+    }
 
     return {
-      items: products.map((product) => this.productResponse(product)),
+      items: products.map((product) =>
+        this.productResponse(product, presentationsByProduct.get(product.id) ?? []),
+      ),
       total,
       page: query.page,
       page_size: query.page_size,
@@ -331,17 +342,19 @@ export class CatalogService {
     };
   }
 
-  private productResponse(product: Product) {
+  private productResponse(product: Product, presentations = product.presentaciones ?? []) {
     return {
       id: product.id,
       category_id: product.category_id,
-      categoria: product.category ? this.categoryResponse(product.category) : undefined,
+      categoria: product.category
+        ? this.categoryResponse(product.category as Category)
+        : undefined,
       nombre: product.nombre,
       descripcion: product.descripcion,
       volumen_ml: product.volumen_ml,
       disponible: product.disponible,
       activo: product.activo,
-      presentaciones: (product.presentaciones ?? [])
+      presentaciones: presentations
         .filter((presentation) => presentation.activo)
         .sort((a, b) => a.tipo.localeCompare(b.tipo))
         .map((presentation) => ({

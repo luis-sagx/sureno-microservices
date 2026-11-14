@@ -12,7 +12,7 @@ export class Product {
 
   @ManyToOne(() => Category, (category) => category.products, { onDelete: 'RESTRICT' })
   @JoinColumn({ name: 'category_id' })
-  category!: Category;
+  category!: object;
 
   @Column({ type: 'varchar', length: 160 })
   nombre!: string;

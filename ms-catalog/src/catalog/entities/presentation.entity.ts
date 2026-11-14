@@ -11,7 +11,7 @@ export class Presentation {
 
   @ManyToOne(() => Product, (product) => product.presentaciones, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'product_id' })
-  product!: Product;
+  product!: object;
 
   @Column({ type: 'varchar', length: 10 })
   tipo!: 'UNIDAD' | 'CAJA';

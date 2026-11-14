@@ -11,7 +11,7 @@ export class AvailabilityChange {
 
   @ManyToOne(() => Product, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'product_id' })
-  product!: Product;
+  product!: object;
 
   @Column({ type: 'boolean', name: 'estado_anterior' })
   estado_anterior!: boolean;
