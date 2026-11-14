@@ -85,7 +85,7 @@ No incluye cambios al frontend, a los contratos HTTP, a las migraciones/esquema,
 - La guía `docs/architecture/hexagonal-auth-catalog.md` describe el flujo de dependencias, ubicación por capa, puertos, aplicación de SOLID y comandos de verificación; `README.md` enlaza la guía.
 - HAC-4 comprometida como `b477686` (`docs: document hexagonal service boundaries`). El assessment/preflight RDD quedó no disponible (`gentle-ai: command not found`); no se infirió nivel de riesgo ni se alteró consentimiento/autoridad.
 - El diff de HAC-4 contiene únicamente `README.md`, `docs/architecture/hexagonal-auth-catalog.md` y este documento. Se preservan sin stage los cambios preexistentes de frontend y otros archivos fuera de alcance.
-- La copia Engram se guarda en el topic `odd/hexagonal-auth-catalog/tasks`; la primera observación se creó, pero el CLI la clasificó como manual y no como topic. Se actualizará con `--topic` para que la copia quede en la ubicación requerida.
+- La copia íntegra de este documento se guardó en Engram con `--topic odd/hexagonal-auth-catalog/tasks` después de corregir la primera escritura, que omitió ese argumento.
 
 ## Próximo paso
 
