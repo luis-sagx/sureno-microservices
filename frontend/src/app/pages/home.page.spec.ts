@@ -23,6 +23,20 @@ describe('HomePage hero', () => {
     expect(frame?.getAttribute('loading')).toBe('eager');
   });
 
+  it('offers a business account request without promising unavailable wholesale pricing', () => {
+    const fixture = TestBed.createComponent(HomePage);
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const cta = compiled.querySelector<HTMLElement>('[data-horeca-cta]');
+    const link = cta?.querySelector<HTMLAnchorElement>('a');
+
+    expect(cta?.textContent).toContain('¿Compras para tu negocio?');
+    expect(link?.getAttribute('href')).toBe('/registro');
+    expect(link?.textContent).toContain('Solicita una cuenta para tu negocio');
+    expect(cta?.textContent).not.toContain('tarifario');
+  });
+
   it('uses the 76 source frames in ascending order, with endpoints at f0001 and f0151', () => {
     expect(HERO_FRAMES).toHaveLength(76);
     expect(HERO_FRAMES[0]).toBe('/frames_nobg/f0001.webp');

@@ -57,10 +57,11 @@ The current site has a wide, tall catalog introduction and verbose product cards
 
 ### SVR-02 — Home hero and wholesale CTA
 
-- [ ] Refine the home hero typography/composition and add a wholesale CTA to the existing business-account request flow.
-- Check: focused Angular tests (RED/GREEN/REFACTOR), `npm run build`, `git diff --check`.
+- [x] Refine the home hero typography/composition and add a wholesale CTA to the existing business-account request flow. CTA says applications are manually reviewed and links to `/registro`; no tariff or price promise is made.
+- Check: RED observed (new CTA assertion failed; 28 passed); GREEN `npm test -- --watch=false` passed (6 files, 29 tests); `npm run build` passed and prerendered 5 routes; `git diff --check` passed. Only the pre-existing catalog CSS budget warning remains (5.44 KB vs 4 KB). Font assets from the reference are not local, so the current Georgia display fallback is retained.
 - Route: delegated direct; component template/style and behavior coverage span multiple files.
-- Commit: pending.
+- Commit: pending parent escalation because `.git` is read-only in the sandbox.
+- Receipt-driven review: disabled/unmanaged; no native assessment or approval claimed.
 
 ### SVR-03 — Login and registration presentation
 
@@ -81,4 +82,5 @@ The current site has a wide, tall catalog introduction and verbose product cards
 - Exploration confirms the relevant Angular files are under `frontend/src/app`; the visual source project is Next.js under `/home/luissagnay/Desktop/ls/projects/sureno`.
 - Business rules permit removing the generic infrastructure notice but require preserving truthful availability and price states.
 - SVR-01 implementation, checks, and work-unit commit are complete.
-- Next: implement SVR-02.
+- SVR-02 implementation and checks are complete; its work-unit commit and commit identity record remain.
+- Next: close SVR-02, then implement SVR-03.
