@@ -64,6 +64,7 @@ The user explicitly approved migrating the frontend gradually to Tailwind, begin
 - CodeGraph was consulted first. It does not expose CSS/template structure usefully; a delegated read-only map found no Tailwind utility classes in templates, confirmed Tailwind v4 is configured via `@tailwindcss/postcss`, and measured 2,642 CSS lines across global, shell, and pages.
 - Recommended migration order: Home, Catalog, Product detail, Auth, About, shared shell. Global `styles.css` stays mostly CSS because it contains global/theme responsibilities.
 - Home component CSS dropped from 441 to 112 lines; static layout, spacing, typography, and responsive rules moved to Tailwind classes in its template. Angular bindings and content were preserved.
+- TW-01 work-unit commit: `92abaed` (`style(home): migrate layout utilities to Tailwind`).
 - The local Engram v2 CLI accepted the full task copy as observation #121, but export shows `topic: null`; the requested topic-scoped mirror remains pending.
 
 ## Next step
