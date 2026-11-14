@@ -29,6 +29,19 @@ const text = (value: unknown, field: string, max: number): string => {
   return trimmed;
 };
 
+const PERSON_NAME_PATTERN =
+  /^\p{L}[\p{L}\p{M}]*(?:[ '\u2019-]\p{L}[\p{L}\p{M}]*)*$/u;
+const USERNAME_PATTERN = /^[\p{L}\p{N}][\p{L}\p{M}\p{N}._-]*$/u;
+
+function personName(value: unknown, field: string): string {
+  const name = text(value, field, 50);
+  const length = Array.from(name).length;
+  if (length < 2 || !PERSON_NAME_PATTERN.test(name)) {
+    throw new IdentityValidationError(`${field} no es válido.`);
+  }
+  return name;
+}
+
 const optionalText = (
   value: unknown,
   field: string,
@@ -46,17 +59,11 @@ const optionalText = (
   return trimmed;
 };
 
-export function validateCedula(value: unknown): string {
-  const cedula = text(value, 'La cédula', 10);
-  if (!/^\d{10}$/.test(cedula)) {
-    throw new IdentityValidationError('La cédula debe tener 10 dígitos.');
-  }
-
+function isValidNaturalPersonCedula(cedula: string): boolean {
+  if (!/^\d{10}$/.test(cedula)) return false;
   const province = Number(cedula.slice(0, 2));
   const thirdDigit = Number(cedula[2]);
-  if (province < 1 || province > 24 || thirdDigit > 5) {
-    throw new IdentityValidationError('La cédula no es válida.');
-  }
+  if (province < 1 || province > 24 || thirdDigit > 5) return false;
 
   const sum = cedula
     .slice(0, 9)
@@ -65,11 +72,43 @@ export function validateCedula(value: unknown): string {
       const value = Number(digit) * (index % 2 === 0 ? 2 : 1);
       return total + (value > 9 ? value - 9 : value);
     }, 0);
-  const checkDigit = (10 - (sum % 10)) % 10;
-  if (checkDigit !== Number(cedula[9])) {
-    throw new IdentityValidationError('La cédula no es válida.');
+  return (10 - (sum % 10)) % 10 === Number(cedula[9]);
+}
+
+export function validateCedula(value: unknown): string {
+  const identityNumber = text(value, 'La cédula o RUC', 13);
+  if (isValidNaturalPersonCedula(identityNumber)) return identityNumber;
+
+  if (
+    /^\d{13}$/.test(identityNumber) &&
+    identityNumber.slice(10) !== '000' &&
+    isValidNaturalPersonCedula(identityNumber.slice(0, 10))
+  ) {
+    return identityNumber;
   }
-  return cedula;
+  throw new IdentityValidationError('La cédula o RUC de persona natural no es válido.');
+}
+
+function validateBusinessRuc(value: unknown): string {
+  const ruc = text(value, 'El RUC', 13);
+  if (!/^\d{13}$/.test(ruc) || ruc.slice(10) === '000') {
+    throw new IdentityValidationError('El RUC debe tener 13 dígitos válidos.');
+  }
+
+  const province = Number(ruc.slice(0, 2));
+  const personType = Number(ruc[2]);
+  if (province < 1 || province > 24) {
+    throw new IdentityValidationError('El RUC debe tener 13 dígitos válidos.');
+  }
+
+  if (personType <= 5) {
+    if (!isValidNaturalPersonCedula(ruc.slice(0, 10))) {
+      throw new IdentityValidationError('El RUC debe tener 13 dígitos válidos.');
+    }
+  } else if (personType !== 6 && personType !== 9) {
+    throw new IdentityValidationError('El RUC debe tener 13 dígitos válidos.');
+  }
+  return ruc;
 }
 
 function validateAdultBirthDate(value: unknown): string {
@@ -85,6 +124,11 @@ function validateAdultBirthDate(value: unknown): string {
     parsed.toISOString().slice(0, 10) !== date
   ) {
     throw new IdentityValidationError('La fecha de nacimiento no es válida.');
+  }
+  if (date < '1900-01-01') {
+    throw new IdentityValidationError(
+      'La fecha de nacimiento no puede ser anterior al 01/01/1900.',
+    );
   }
 
   const today = new Date();
@@ -112,36 +156,45 @@ export function validateRegistration(input: unknown): RegistrationInput {
       'Los datos de registro son obligatorios.',
     );
   }
-  const email =
-    input.email_contacto === undefined || input.email_contacto === null
-      ? null
-      : text(input.email_contacto, 'El correo electrónico', 255).toLowerCase();
-  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  const email = optionalText(
+    input.email_contacto,
+    'El correo electrónico',
+    255,
+  )?.toLowerCase() ?? null;
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
     throw new IdentityValidationError('El correo electrónico no es válido.');
   }
-  const username = text(
-    input.username,
-    'El nombre de usuario',
-    80,
-  ).toLowerCase();
-  if (username.length < 3 || !/^[a-z0-9._-]+$/.test(username)) {
+  const username = text(input.username, 'El nombre de usuario', 32).toLowerCase();
+  if (
+    username.length < 2 ||
+    !USERNAME_PATTERN.test(username) ||
+    username.endsWith('.') ||
+    username.endsWith('-') ||
+    username.endsWith('_')
+  ) {
     throw new IdentityValidationError('El nombre de usuario no es válido.');
   }
-  if (typeof input.password !== 'string' || input.password.length < 12) {
+  if (
+    typeof input.password !== 'string' ||
+    input.password.length < 12 ||
+    !/\p{Lu}/u.test(input.password) ||
+    !/\p{N}/u.test(input.password) ||
+    !/[^\p{L}\p{M}\p{N}\s]/u.test(input.password)
+  ) {
     throw new IdentityValidationError(
-      'La contraseña debe tener al menos 12 caracteres.',
+      'La contraseña debe tener al menos 12 caracteres, una mayúscula, un número y un carácter especial.',
     );
   }
 
-  const telefono = text(input.telefono, 'El teléfono', 20);
-  if (!/^[+\d ()-]{7,20}$/.test(telefono)) {
+  const telefono = text(input.telefono, 'El teléfono', 16);
+  if (!/^\+?\d{7,15}$/.test(telefono)) {
     throw new IdentityValidationError('El teléfono no es válido.');
   }
 
   return {
     cedula: validateCedula(input.cedula),
-    nombres: text(input.nombres, 'Los nombres', 100),
-    apellidos: text(input.apellidos, 'Los apellidos', 100),
+    nombres: personName(input.nombres, 'Los nombres'),
+    apellidos: personName(input.apellidos, 'Los apellidos'),
     fecha_nacimiento: validateAdultBirthDate(input.fecha_nacimiento),
     telefono,
     email_contacto: email,
@@ -159,10 +212,7 @@ export function validateBusinessRequest(
     );
   }
   const registration = validateRegistration(input);
-  const ruc = text(input.ruc, 'El RUC', 13);
-  if (!/^\d{13}$/.test(ruc) || ruc.endsWith('000')) {
-    throw new IdentityValidationError('El RUC debe tener 13 dígitos válidos.');
-  }
+  const ruc = validateBusinessRuc(input.ruc);
   return {
     ...registration,
     ruc,

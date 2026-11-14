@@ -5,7 +5,7 @@ export class Person {
   @PrimaryColumn('uuid')
   id!: string;
 
-  @Column({ type: 'varchar', length: 10, unique: true })
+  @Column({ type: 'varchar', length: 13, unique: true })
   cedula!: string;
 
   @Column({ type: 'varchar', length: 100 })
