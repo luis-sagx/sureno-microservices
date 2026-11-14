@@ -27,6 +27,10 @@ The host ports default to PostgreSQL `5432` and MongoDB `27017`; override them w
 
 The bootstrap accounts are `POSTGRES_ADMIN_USER` / `POSTGRES_ADMIN_PASSWORD` and `MONGO_ROOT_USERNAME` / `MONGO_ROOT_PASSWORD`. Do not put bootstrap credentials in application database URLs.
 
+## Architecture
+
+See [the hexagonal architecture guide](docs/architecture/hexagonal-auth-catalog.md) for the layer boundaries, dependency direction, extension points, and verification commands for `ms-auth` and `ms-catalog`.
+
 ## Database contract smoke test
 
 Run the local provisioning contract checks with:
