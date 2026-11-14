@@ -76,9 +76,9 @@ The first pass used the screenshots without auditing the reference's active desi
 - [x] Restored the full Heritage composition after featured categories and before HORECA, with the 1998 year, full history copy, divider, quote, history link, isotipo seal, and Angular scroll reveals. The 76-frame hero remains and the business CTA still leads to registration/manual review.
 - Check: focused Home suite 8/8; aggregate suite 7 files/38 tests passed after the shell correction; `npm run build` passed and prerendered five routes; `git diff --check` passed. Home CSS budget warning remains at 6.44 KB vs 4 KB.
 - Reopened because Heritage was reduced and placed after HORECA, and the page lacks the reference's reveal animations and active font.
-- Prior implementation commit: `74ce5a2`; corrected verification complete.
+- Prior implementation commit: `74ce5a2`; corrected and verified in `66cfdab` (`feat(frontend): restore animated home heritage section`).
 - Route: delegated direct; component template/style and behavior coverage span multiple files.
-- Commit: pending.
+- Commit: `66cfdab` (`feat(frontend): restore animated home heritage section`).
 
 ### SVR-03 — Login and registration themes (reopened by user feedback)
 
