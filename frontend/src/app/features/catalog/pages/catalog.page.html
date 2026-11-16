@@ -1,4 +1,4 @@
-<section class="catalog-intro border-b border-[var(--line)]" data-catalog-intro>
+<section data-catalog-intro>
   <div class="page-container pt-[clamp(1.25rem,3vw,2.5rem)] pb-3">
     <p class="eyebrow mb-[0.8rem]">La colección</p>
     <h1 class="display-title max-w-[20ch] text-[clamp(2.4rem,5vw,4.5rem)]! leading-none!">
@@ -96,12 +96,6 @@
       </p>
     </div>
   } @else if (products().length > 0) {
-    <p
-      class="result-count m-0 mb-[0.9rem] text-[var(--secondary)] text-[0.65rem] font-bold tracking-[0.15em] uppercase"
-      aria-live="polite"
-    >
-      {{ products().length }} {{ products().length === 1 ? 'producto' : 'productos' }}
-    </p>
     <div
       class="product-grid grid grid-cols-3 gap-4 max-[980px]:grid-cols-2 max-[680px]:grid-cols-1"
     >

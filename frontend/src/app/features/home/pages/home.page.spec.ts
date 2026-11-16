@@ -94,6 +94,11 @@ describe('HomePage hero', () => {
     });
 
     fixture.detectChanges();
+    const animationFrames: FrameRequestCallback[] = [];
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => {
+      animationFrames.push(callback);
+      return animationFrames.length;
+    });
     const sequence = compiled.querySelector<HTMLElement>('[data-hero-sequence]')!;
     const stage = compiled.querySelector<HTMLElement>('[data-hero-stage]')!;
     Object.defineProperty(sequence, 'offsetHeight', { configurable: true, value: 2000 });
@@ -117,17 +122,102 @@ describe('HomePage hero', () => {
 
     scrollY = 600;
     scrollTargets['scroll'](new Event('scroll'));
+    while (animationFrames.length > 0) animationFrames.shift()?.(0);
     fixture.detectChanges();
     expect(compiled.querySelector('[data-hero-frame]')?.getAttribute('src')).toBe(HERO_FRAMES[38]);
 
     scrollY = 1100;
     scrollTargets['scroll'](new Event('scroll'));
+    while (animationFrames.length > 0) animationFrames.shift()?.(0);
     fixture.detectChanges();
     expect(compiled.querySelector('[data-hero-frame]')?.getAttribute('src')).toBe(HERO_FRAMES[75]);
 
     fixture.destroy();
     expect(scrollCleanup).toHaveBeenCalledOnce();
     expect(resizeCleanup).toHaveBeenCalledOnce();
+  });
+
+  it('coalesces scroll events into one animation frame using the latest scroll position', () => {
+    const fixture = TestBed.createComponent(HomePage);
+    const component = fixture.componentInstance as unknown as { currentFrame: () => string };
+    const compiled = fixture.nativeElement as HTMLElement;
+    const scrollTargets: Record<string, (event: Event) => void> = {};
+    const renderer = fixture.debugElement.injector.get(Renderer2);
+    vi.spyOn(renderer, 'listen').mockImplementation((_target, eventName, callback) => {
+      if (eventName === 'scroll' || eventName === 'resize') scrollTargets[eventName] = callback;
+      return vi.fn();
+    });
+    fixture.detectChanges();
+    const animationFrames: { id: number; callback: FrameRequestCallback }[] = [];
+    let nextAnimationFrameId = 0;
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => {
+      const id = ++nextAnimationFrameId;
+      animationFrames.push({ id, callback });
+      return id;
+    });
+    const sequence = compiled.querySelector<HTMLElement>('[data-hero-sequence]')!;
+    const stage = compiled.querySelector<HTMLElement>('[data-hero-stage]')!;
+    Object.defineProperty(sequence, 'offsetHeight', { configurable: true, value: 2000 });
+    Object.defineProperty(stage, 'offsetHeight', { configurable: true, value: 1000 });
+    let scrollY = 100;
+    Object.defineProperty(window, 'scrollY', { configurable: true, get: () => scrollY });
+    vi.spyOn(sequence, 'getBoundingClientRect').mockImplementation(() => ({
+      top: 100 - scrollY,
+      bottom: 2100 - scrollY,
+      left: 0,
+      right: 1280,
+      width: 1280,
+      height: 2000,
+      x: 0,
+      y: 100 - scrollY,
+      toJSON: () => ({}),
+    }));
+
+    scrollY = 400;
+    scrollTargets['scroll'](new Event('scroll'));
+    scrollY = 600;
+    scrollTargets['scroll'](new Event('scroll'));
+
+    expect(animationFrames).toHaveLength(1);
+    expect(component.currentFrame()).toBe(HERO_FRAMES[0]);
+
+    animationFrames[0].callback(0);
+    fixture.detectChanges();
+    const firstStep = HERO_FRAMES.indexOf(component.currentFrame());
+    expect(firstStep).toBeGreaterThan(0);
+    expect(firstStep).toBeLessThanOrEqual(2);
+
+    let callbacks = 0;
+    while (animationFrames.length > 0 && callbacks < HERO_FRAMES.length) {
+      animationFrames.shift()!.callback(0);
+      fixture.detectChanges();
+      callbacks += 1;
+    }
+    expect(component.currentFrame()).toBe(HERO_FRAMES[38]);
+    expect(compiled.querySelector('[data-hero-frame]')?.getAttribute('src')).toBe(HERO_FRAMES[38]);
+
+    const cancelAnimationFrame = vi.spyOn(window, 'cancelAnimationFrame');
+    scrollY = 700;
+    scrollTargets['scroll'](new Event('scroll'));
+    const pendingFrameId = animationFrames.at(-1)!.id;
+    fixture.destroy();
+    expect(cancelAnimationFrame).toHaveBeenCalledWith(pendingFrameId);
+  });
+
+  it('preloads the remaining hero frames at low priority and releases requests on destroy', () => {
+    const fixture = TestBed.createComponent(HomePage);
+    const component = fixture.componentInstance as unknown as {
+      preloadingFrames: Set<HTMLImageElement>;
+    };
+
+    fixture.detectChanges();
+
+    const preloadedFrames = [...component.preloadingFrames];
+    expect(preloadedFrames).toHaveLength(HERO_FRAMES.length - 1);
+    expect(preloadedFrames.map((image) => image.getAttribute('src'))).toEqual(HERO_FRAMES.slice(1));
+    expect(preloadedFrames.every((image) => image.fetchPriority === 'low')).toBe(true);
+    fixture.destroy();
+    expect(component.preloadingFrames.size).toBe(0);
   });
 
   it('keeps the first frame still and registers no scroll handlers for reduced motion', () => {

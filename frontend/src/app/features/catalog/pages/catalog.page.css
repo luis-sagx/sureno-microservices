@@ -1,13 +1,3 @@
-.catalog-intro {
-  background:
-    radial-gradient(
-      90% 90% at 10% 0%,
-      color-mix(in srgb, var(--navy), transparent 90%),
-      transparent 70%
-    ),
-    var(--surface);
-}
-
 .search-form input:focus-visible {
   outline-offset: -2px;
 }
