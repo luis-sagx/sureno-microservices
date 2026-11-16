@@ -43,4 +43,5 @@ Keep the existing utility-first page structure. Reduce the intro title cap and v
 - Strategy: `ask-on-risk` (default); forecast remains below the approximate 400-line delivery budget.
 - Branch: `feat/catalog-header-compact`.
 - Work-unit commit: `a4d02a7` (`fix(frontend): compact catalog header and clean Tailwind styles`).
-- Next step: record the CAT-02 work-unit commit and resynchronize this document in Engram.
+- CAT-02 work-unit commit: `6d71ac6` (`fix(frontend): scale catalog product images`).
+- Next step: none; implementation and applicable verification are complete. Native review status remains unavailable in this environment.
