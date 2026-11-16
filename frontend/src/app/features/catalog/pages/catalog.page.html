@@ -1,13 +1,13 @@
-<section class="catalog-intro border-b border-[var(--line)]" data-catalog-intro>
-  <div class="page-container pt-[clamp(2rem,4.5vw,3.75rem)] pb-6">
+<section data-catalog-intro>
+  <div class="page-container pt-[clamp(1.25rem,3vw,2.5rem)] pb-3">
     <p class="eyebrow mb-[0.8rem]">La colección</p>
-    <h1 class="display-title max-w-[20ch] !text-[clamp(2.8rem,6.5vw,6rem)] !leading-none">
+    <h1 class="display-title max-w-[20ch] text-[clamp(2.4rem,5vw,4.5rem)]! leading-none!">
       Catálogo de <em class="text-[var(--gold)] font-normal">productos.</em>
     </h1>
   </div>
 </section>
 
-<section class="catalog-content page-container pt-6 pb-16">
+<section class="catalog-content page-container pt-4 pb-16">
   @if (isApprovedBusiness) {
     <div class="notice profile-notice mb-6">
       Cuenta B2B aprobada: puedes consultar presentaciones por caja completa. La tarifa mayorista
@@ -96,12 +96,6 @@
       </p>
     </div>
   } @else if (products().length > 0) {
-    <p
-      class="result-count m-0 mb-[0.9rem] text-[var(--secondary)] text-[0.65rem] font-bold tracking-[0.15em] uppercase"
-      aria-live="polite"
-    >
-      {{ products().length }} {{ products().length === 1 ? 'producto' : 'productos' }}
-    </p>
     <div
       class="product-grid grid grid-cols-3 gap-4 max-[980px]:grid-cols-2 max-[680px]:grid-cols-1"
     >
