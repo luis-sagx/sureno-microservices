@@ -17,6 +17,9 @@
 }
 
 .product-image-wrap img {
+  width: auto;
+  height: 84%;
+  max-width: 84%;
   transition: transform 320ms var(--ease-entrance, cubic-bezier(0.16, 1, 0.3, 1));
 }
 
